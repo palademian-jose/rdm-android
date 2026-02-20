@@ -1,0 +1,14 @@
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/deps/thiserror-00f521987eccdd21.d: /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/thiserror-536df9df0d5f732f/out/private.rs
+
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/deps/libthiserror-00f521987eccdd21.rlib: /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/thiserror-536df9df0d5f732f/out/private.rs
+
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/deps/libthiserror-00f521987eccdd21.rmeta: /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs /home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/thiserror-536df9df0d5f732f/out/private.rs
+
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/lib.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/aserror.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/display.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/var.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-2.0.18/src/private.rs:
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/thiserror-536df9df0d5f732f/out/private.rs:
+
+# env-dep:OUT_DIR=/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/thiserror-536df9df0d5f732f/out

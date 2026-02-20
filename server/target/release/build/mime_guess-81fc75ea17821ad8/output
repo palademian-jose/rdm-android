@@ -1,0 +1,1 @@
+cargo:rustc-env=MIME_TYPES_GENERATED_PATH=/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/mime_guess-81fc75ea17821ad8/out/mime_types_generated.rs

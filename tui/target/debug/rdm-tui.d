@@ -1,0 +1,1 @@
+/home/deimos/.openclaw/workspace/remote-device-manager/tui/target/debug/rdm-tui: /home/deimos/.openclaw/workspace/remote-device-manager/tui/src/client.rs /home/deimos/.openclaw/workspace/remote-device-manager/tui/src/main.rs /home/deimos/.openclaw/workspace/remote-device-manager/tui/src/monitor.rs /home/deimos/.openclaw/workspace/remote-device-manager/tui/src/ui.rs

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDM Server</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .info {
+            background: #f0f0f0;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .value {
+            color: #333;
+            font-family: monospace;
+            font-size: 1.1em;
+            background: #f5f5f5;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .instructions h2 {
+            color: #856404;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .step:before {
+            content: "📱";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            width: 100%;
+            margin: 15px 0;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .output {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.9em;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            color: #e91e63;
+        }
+
+        .success {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .ip-display {
+            font-size: 2em;
+            text-align: center;
+            color: #667eea;
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀</h1>
+
+        <div class="ip-display">
+            192.168.1.85
+        </div>
+
+        <div class="info">
+            <div class="info-item">
+                <span class="label">Status:</span>
+                <span class="value success">✅ ONLINE</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Port:</span>
+                <span class="value">8443</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Network:</span>
+                <span class="value">WiFi (192.168.1.x)</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>📱 From Your Phone:</h2>
+            <div class="step">Connect to the same WiFi network</div>
+            <div class="step">Open this page in your phone's browser</div>
+            <div class="step">Use <code>http://192.168.1.85:8443</code> in your Android app</div>
+        </div>
+
+        <div class="test-section">
+            <button onclick="window.location.reload()">🔄 Refresh Page</button>
+        </div>
+
+        <div id="output" class="output"></div>
+
+        <footer>
+            <p>💡 Your phone and computer must be on the same WiFi network!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Auto-test connection on page load
+        setTimeout(function() {
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    const output = document.getElementById('output');
+                    output.style.display = 'block';
+                    output.innerHTML = '<strong>✅ Connection Successful!</strong><br>' +
+                        'Service: ' + data.service + '<br>' +
+                        'Status: ' + data.status + '<br>' +
+                        'Version: ' + data.version;
+                })
+                .catch(error => {
+                    const output = document.getElementById('output');
+                    output.style.display = 'block';
+                    output.innerHTML = '<strong>❌ Connection Failed</strong><br>' + error.message;
+                });
+        }, 500);
+    </script>
+</body>
+</html>

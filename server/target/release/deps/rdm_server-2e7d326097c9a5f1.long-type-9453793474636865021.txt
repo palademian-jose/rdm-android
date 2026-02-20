@@ -1,0 +1,1 @@
+std::option::Option<Rc<(dyn for<'a, 'b> Fn(&'a std::path::Path, &'b RequestHead) -> bool + 'static)>>

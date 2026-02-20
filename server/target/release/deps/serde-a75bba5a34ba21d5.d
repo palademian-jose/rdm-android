@@ -1,0 +1,14 @@
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/deps/serde-a75bba5a34ba21d5.d: /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/serde-d350d75a9156aa91/out/private.rs
+
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/deps/libserde-a75bba5a34ba21d5.rlib: /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/serde-d350d75a9156aa91/out/private.rs
+
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/deps/libserde-a75bba5a34ba21d5.rmeta: /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/serde-d350d75a9156aa91/out/private.rs
+
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/deimos/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/serde-d350d75a9156aa91/out/private.rs:
+
+# env-dep:OUT_DIR=/home/deimos/.openclaw/workspace/remote-device-manager/server/target/release/build/serde-d350d75a9156aa91/out

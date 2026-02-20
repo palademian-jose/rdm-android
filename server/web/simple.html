@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDM Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f0f0f0;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .box {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.5em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #28a745;
+        }
+
+        .error {
+            background: #dc3545;
+        }
+
+        .info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info h3 {
+            color: #856404;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .data {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .data-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-item:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .data-value {
+            color: #333;
+            font-family: monospace;
+            float: right;
+        }
+
+        .test-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 10px 5px;
+            font-weight: bold;
+        }
+
+        .test-link:hover {
+            background: #5568d3;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status success">
+            ✅ CONNECTION OK
+        </div>
+
+        <div class="box">
+            <h2>Server Information</h2>
+            <div class="data">
+                <div class="data-item">
+                    <span class="data-label">IP Address:</span>
+                    <span class="data-value">192.168.1.85</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Port:</span>
+                    <span class="data-value">8443</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Protocol:</span>
+                    <span class="data-value">HTTP</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-label">Network:</span>
+                    <span class="data-value">Local WiFi</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>📱 From Your Phone:</h3>
+            <p style="margin: 10px 0;"><strong>Good news!</strong> You can reach the server!</p>
+            <p style="margin: 10px 0;"><strong>Use this URL in your Android app:</strong></p>
+            <div style="text-align: center; margin: 20px 0;">
+                <code style="background: #f0f0f0; color: #667eea; padding: 15px 20px; border-radius: 5px; font-size: 1.2em;">http://192.168.1.85:8443</code>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/health" class="test-link">Test Health API</a>
+            <a href="/api/devices" class="test-link">Test API</a>
+        </div>
+
+        <footer>
+            <p>✅ Server is working correctly!</p>
+            <p>💡 Update your Android app with this URL</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple test - no dependencies
+        window.onload = function() {
+            console.log('Page loaded successfully');
+            // Try a simple API call
+            fetch('/health')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log('Health check:', data);
+                    var statusEl = document.querySelector('.status');
+                    if (data && data.status === 'ok') {
+                        statusEl.className = 'status success';
+                        statusEl.textContent = '✅ API OK';
+                    } else {
+                        statusEl.className = 'status error';
+                        statusEl.textContent = '❌ API ERROR';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('API error:', error);
+                });
+        };
+    </script>
+</body>
+</html>

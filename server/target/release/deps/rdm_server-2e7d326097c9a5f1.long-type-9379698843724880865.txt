@@ -1,0 +1,1 @@
+Rc<(dyn for<'a, 'b> Fn(&'a Directory, &'b HttpRequest) -> Result<ServiceResponse, std::io::Error> + 'static)>

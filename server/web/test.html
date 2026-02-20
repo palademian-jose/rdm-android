@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDM Server - Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .info {
+            background: #f0f0f0;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .value {
+            color: #333;
+            font-family: monospace;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .instructions h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .step:before {
+            content: counter(step);
+            counter-increment: step;
+            background: #ffc107;
+            color: white;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .test-section {
+            margin-top: 30px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .output {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 RDM Server</h1>
+
+        <div class="status">
+            ✅ SERVER RUNNING
+        </div>
+
+        <div class="info">
+            <div class="info-item">
+                <span class="label">Status:</span>
+                <span class="value">✅ Online</span>
+            </div>
+            <div class="info-item">
+                <span class="label">IP Address:</span>
+                <span class="value">192.168.1.85</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Port:</span>
+                <span class="value">8443</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Network:</span>
+                <span class="value">Local (192.168.1.x)</span>
+            </div>
+            <div class="info-item">
+                <span class="label">URL:</span>
+                <span class="value">http://192.168.1.85:8443</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📱 To Connect from Your Phone:</h3>
+            <div class="step">Make sure your phone is on the same WiFi network as your computer</div>
+            <div class="step">Open this page in your phone's browser</div>
+            <div class="step">If you see this page, you're connected!</div>
+        </div>
+
+        <div class="test-section">
+            <button onclick="testConnection()">Test Connection</button>
+            <button onclick="testAPI()">Test API</button>
+
+            <div id="output" class="output" style="display: none;">
+                <strong>Test Results:</strong><br>
+            </div>
+        </div>
+
+        <footer>
+            <p>💡 Tip: Use this URL in your Android app: <code>http://192.168.1.85:8443</code></p>
+        </footer>
+    </div>
+
+    <script>
+        const SERVER_URL = 'http://192.168.1.85:8443';
+
+        async function testConnection() {
+            const output = document.getElementById('output');
+            output.style.display = 'block';
+            output.innerHTML = '<strong>Testing connection...</strong><br>';
+
+            try {
+                const response = await fetch(`${SERVER_URL}/health`);
+                const data = await response.json();
+
+                output.innerHTML = `
+                    <strong>✅ Connection Successful!</strong><br>
+                    Status: ${data.status}<br>
+                    Service: ${data.service}<br>
+                    Version: ${data.version}<br>
+                    Latency: ${new Date().getMilliseconds()}ms
+                `;
+            } catch (error) {
+                output.innerHTML = `<strong>❌ Connection Failed!</strong><br>Error: ${error.message}<br><br>Make sure you're on the same WiFi network.`;
+            }
+        }
+
+        async function testAPI() {
+            const output = document.getElementById('output');
+            output.style.display = 'block';
+            output.innerHTML = '<strong>Testing API...</strong><br>';
+
+            try {
+                const response = await fetch(`${SERVER_URL}/api/devices`);
+                const data = await response.json();
+
+                output.innerHTML = `
+                    <strong>✅ API Working!</strong><br>
+                    Devices connected: ${data.length}<br>
+                    Response time: ${new Date().getMilliseconds()}ms
+                `;
+            } catch (error) {
+                output.innerHTML = `<strong>❌ API Test Failed!</strong><br>Error: ${error.message}<br><br>Server might not have any devices yet.`;
+            }
+        }
+
+        // Auto-test on page load
+        setTimeout(testConnection, 500);
+    </script>
+</body>
+</html>
