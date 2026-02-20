@@ -8,7 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -87,7 +86,8 @@ class MainActivity : AppCompatActivity() {
         webSocketClient.onMessage = { message ->
             runOnUiThread {
                 // Handle incoming messages
-                when (val type = message.get("type")?.asString) {
+                val type = message.get("type")?.asString
+                when (type) {
                     "command" -> {
                         // Command received from server
                         val command = message.get("command")?.asString
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                         tvDeviceInfo.text = result.error ?: "Unknown error"
                     }
                 }
-            } check catch(e: Exception) {
+            } catch (e: Exception) {
                 Log.e(TAG, "Test command error", e)
                 Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
@@ -183,9 +183,9 @@ class MainActivity : AppCompatActivity() {
                         Model: ${deviceInfo.model}
                         Android: ${deviceInfo.android_version} (API ${deviceInfo.api_level})
                         CPU: ${deviceInfo.cpu_info.cores} cores - ${deviceInfo.cpu_info.model}
-                        RAM: ${deviceInfo.memory_info.available / 1024 / 1024} MB free
-                        Storage: ${deviceInfo.storage_info.available / 1024 / 1024 / 1024} GB free
-                        Battery: ${deviceInfo.battery_info.percentage}%
+                        RAM: ${(deviceInfo.memory_info.available / 1024 / 1024).toInt()} MB free
+                        Storage: ${(deviceInfo.storage_info.available / 1024 / 1024 / 1024).toInt()} GB free
+                        Battery: ${(deviceInfo.battery_info.percentage).toInt()}%
                         Apps: ${deviceInfo.installed_apps.size} installed
                         Device ID: $deviceId
                     """.trimIndent()
