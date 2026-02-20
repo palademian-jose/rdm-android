@@ -1,4 +1,4 @@
-name: Build Android APK (Minimal)
+name: Build Android APK
 
 on:
   push:
@@ -20,25 +20,12 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          api-level: 34
-          build-tools: 34.0.0
-
       - name: Grant execute permission for gradlew
         run: chmod +x android-app/gradlew
 
       - name: Build Debug APK
         working-directory: ./android-app
-        run: ./gradlew assembleDebug --stacktrace --info --debug 2>&1 | tee build.log
-
-      - name: Upload full build log
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: android-app/build.log
-          retention-days: 7
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
