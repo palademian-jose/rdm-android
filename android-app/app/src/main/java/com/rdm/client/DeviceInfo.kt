@@ -1,9 +1,13 @@
 package com.rdm.client
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Environment
 import android.provider.Settings
+import android.telephony.TelephonyManager
+import android.accounts.AccountManager
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -90,7 +94,7 @@ data class UserData(
     val google_accounts: List<String>,
     val phone_number: String?,
     val email_accounts: List<String>,
-    const val SIM_info: SIMInfo?
+    val SIM_info: SIMInfo?
 )
 
 data class SIMInfo(
@@ -101,154 +105,156 @@ data class SIMInfo(
 )
 
 object DeviceInfoCollector {
-
-    suspend fun collect(context: Context): DeviceInfo = withContext(Dispatchers.IO) {
-        val packageManager = context.packageManager
-        val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
-
-        // Generate unique device ID
-        val deviceId = Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ANDROID_ID
-        ) ?: generateDeviceId()
-
-        DeviceInfo(
-            id = deviceId,
-            name = getDeviceName(),
-            model = Build.MODEL,
-            manufacturer = Build.MANUFACTURER,
-            android_version = Build.VERSION.RELEASE,
-            api_level = Build.VERSION.SDK_INT,
-            architecture = System.getProperty("os.arch") ?: "unknown",
-            serial = getSerial(),
-            device_type = getDeviceType(),
-            screen_info = collectScreenInfo(context),
-            network_info = collectNetworkInfo(context),
-            storage_info = collectStorageInfo(),
-            memory_info = collectMemoryInfo(),
-            cpu_info = collectCpuInfo(),
-            battery_info = collectBatteryInfo(context),
-            installed_apps = collectInstalledApps(context),
-            user_data = collectUserData(context),
-            created_at = System.currentTimeMillis().toString()
-        )
-    }
-
-    private fun getDeviceName(): String {
-        return "${Build.MANUFACTURER} ${Build.MODEL}"
-    }
-
-    private fun getSerial(): String {
-        return try {
-            Build.getSerial()
-        } catch (e: Exception) {
-            "unknown"
+    suspend fun collect(context: Context): DeviceInfo {
+        return withContext(Dispatchers.IO) {
+            DeviceInfo(
+                id = getDeviceId(context),
+                name = getDeviceName(),
+                model = android.os.Build.MODEL,
+                manufacturer = android.os.Build.MANUFACTURER,
+                android_version = android.os.Build.VERSION.RELEASE,
+                api_level = android.os.Build.VERSION.SDK_INT,
+                architecture = getArchitecture(),
+                serial = android.os.Build.getSerial(),
+                device_type = getDeviceType(),
+                screen_info = getScreenInfo(context),
+                network_info = getNetworkInfo(context),
+                storage_info = getStorageInfo(context),
+                memory_info = getMemoryInfo(context),
+                cpu_info = getCpuInfo(),
+                battery_info = getBatteryInfo(context),
+                installed_apps = getInstalledApps(context),
+                user_data = collectUserData(context),
+                created_at = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(java.util.Date())
+            )
         }
     }
 
-    private fun generateDeviceId(): String {
-        return "rdm_${(Math.random() * 1000000).toInt()}"
+    private fun getDeviceId(context: Context): String {
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID) ?: "unknown"
+    }
+
+    private fun getDeviceName(): String {
+        return "${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}"
+    }
+
+    private fun getArchitecture(): String {
+        return android.os.Build.SUPPORTED_ABIS[0]
     }
 
     private fun getDeviceType(): String {
         return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-                when {
-                    Build.PRODUCT.contains("tv") -> "tv"
-                    Build.PRODUCT.contains("watch") -> "watch"
-                    Build.PRODUCT.contains("automotive") -> "automotive"
-                    else -> "phone"
-                }
-            }
-            else -> "phone"
+            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R -> "Tablet"
+            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S -> "Large Tablet"
+            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB -> "Tablet"
+            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.DONUT -> "Phone"
+            else -> "Phone"
         }
     }
 
-    private fun collectScreenInfo(context: Context): ScreenInfo {
-        val displayMetrics = context.resources.displayMetrics
+    private fun getScreenInfo(context: Context): ScreenInfo {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as android.view.WindowManager
-        val display = windowManager.defaultDisplay
-        val rotation = display.rotation
+        val displayMetrics = android.util.DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
 
         return ScreenInfo(
             width = displayMetrics.widthPixels,
             height = displayMetrics.heightPixels,
             density = displayMetrics.density,
-            orientation = rotation
+            orientation = displayMetrics.rotation
         )
     }
 
-    private fun collectNetworkInfo(context: Context): NetworkInfo {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
-            as android.net.ConnectivityManager
+    private fun getNetworkInfo(context: Context): NetworkInfo {
+        try {
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+            val activeNetwork = connectivityManager.activeNetworkInfo
+            val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as android.net.wifi.WifiManager
 
-        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE)
-            as android.net.wifi.WifiManager
+            val ipAddress = when (activeNetwork) {
+                is android.net.NetworkInfo -> {
+                    val address = java.net.InetAddress.getByAddress(activeNetwork.linkProperties.linkAddresses[0].address).hostAddress
+                    address?.hostAddress
+                }
+                else -> null
+            }
 
-        val wifiInfo = wifiManager.connectionInfo
-        val ipAddress = wifiInfo?.ipAddress?.let { formatIpAddress(it) }
-        val macAddress = wifiInfo?.macAddress
-        val ssid = wifiInfo?.ssid?.replace("\"", "")
+            val macAddress = when (activeNetwork) {
+                is android.net.NetworkInfo -> {
+                    val address = activeNetwork.linkProperties.linkAddresses[0].linkAddress
+                    address?.hostAddress
+                }
+                else -> null
+            }
 
-        return NetworkInfo(
-            ip_address = ipAddress,
-            mac_address = macAddress,
-            wifi_ssid = ssid,
-            network_type = connectivityManager.activeNetworkInfo?.typeName ?: "unknown"
-        )
+            val wifiSSID = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                wifiManager?.currentNetwork?.ssid
+            } else {
+                @Suppress("DEPRECATION")
+                wifiManager?.connectionInfo?.ssid
+            }
+
+            return NetworkInfo(
+                ip_address = ipAddress,
+                mac_address = macAddress,
+                wifi_ssid = wifiSSID?.removeSurrounding("\""),
+                network_type = activeNetwork?.type?.name ?: "unknown"
+            )
+        } catch (e: Exception) {
+            return NetworkInfo(null, null, null, "unknown")
+        }
     }
 
-    private fun formatIpAddress(ip: Int): String {
-        return String.format(
-            "%d.%d.%d.%d",
-            ip and 0xFF,
-            ip shr 8 and 0xFF,
-            ip shr 16 and 0xFF,
-            ip shr 24 and 0xFF
-        )
-    }
-
-    private fun collectStorageInfo(): StorageInfo {
-        val root = android.os.Environment.getExternalStorageDirectory()
-        val stat = android.os.StatFs(root.path)
-
-        val total = stat.totalBytes
-        val available = stat.availableBytes
+    private fun getStorageInfo(context: Context): StorageInfo {
+        val total = getTotalStorage()
+        val available = getAvailableStorage()
         val used = total - available
-        val percentage = (used.toFloat() / total * 100)
 
         return StorageInfo(
             total = total,
             used = used,
             available = available,
-            percentage_used = percentage
+            percentage_used = if (total > 0) (used * 100f / total) else 0f
         )
     }
 
-    private fun collectMemoryInfo(): MemoryInfo {
-        val activityManager = android.app.ActivityManager.MemoryInfo()
-        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE)
-            as android.app.ActivityManager
-        activityManager.getMemoryInfo(activityManager)
+    private fun getTotalStorage(): Long {
+        return if (android.os.Environment.getExternalStorageState() == android.os.Environment.MEDIA_MOUNTED) {
+            val stat = android.os.StatFs.getExternalStorageDirectory()
+            stat.blockSizeLong * stat.blockCount
+        } else {
+            0L
+        }
+    }
 
-        val total = activityManager.totalMem
-        val available = activityManager.availMem
-        val used = total - available
-        val percentage = (used.toFloat() / total * 100)
+    private fun getAvailableStorage(): Long {
+        return try {
+            val stat = android.os.StatFs.getExternalStorageDirectory()
+            stat.availableBlocksLong * stat.blockSizeLong
+        } catch (e: Exception) {
+            0L
+        }
+    }
+
+    private fun getMemoryInfo(context: Context): MemoryInfo {
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+        val memoryInfo = android.app.ActivityManager.MemoryInfo()
+
+        val total = memoryInfo.totalMem
+        val available = memoryInfo.availMem
 
         return MemoryInfo(
             total = total,
-            used = used,
             available = available,
-            percentage_used = percentage
+            used = total - available,
+            percentage_used = if (total > 0) ((total - available) * 100f / total) else 0f
         )
     }
 
-    private fun collectCpuInfo(): CpuInfo {
+    private fun getCpuInfo(): CpuInfo {
         val cores = Runtime.getRuntime().availableProcessors()
-        val cpuInfo = readFile("/proc/cpuinfo") ?: ""
-        val model = extractCpuModel(cpuInfo)
-        val usage = calculateCpuUsage()
+        val model = android.os.Build.SUPPORTED_ABIS[0]
+        val usage = 0.0f // Placeholder for actual usage
 
         return CpuInfo(
             cores = cores,
@@ -257,124 +263,52 @@ object DeviceInfoCollector {
         )
     }
 
-    private fun calculateCpuUsage(): Float {
+    private fun getBatteryInfo(context: Context): BatteryInfo {
         try {
-            val stat = readFile("/proc/stat") ?: return 0f
-            val lines = stat.split("\n")
-            if (lines.isEmpty()) return 0f
+            val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as android.os.BatteryManager
+            val batteryStatus: android.os.BatteryManager.BatteryStatus? = batteryManager.getCurrentBatteryProperty(android.os.BatteryManager.BATTERY_PROPERTY_STATUS)
 
-            val cpuLine = lines[0]
-            val values = cpuLine.split(" ")
-                .filter { it.isNotEmpty() }
-                .drop(1) // Skip "cpu"
-
-            if (values.size < 4) return 0f
-
-            val user = values[0].toLongOrNull() ?: 0
-            val nice = values[1].toLongOrNull() ?: 0
-            val system = values[2].toLongOrNull() ?: 0
-            val idle = values[3].toLongOrNull() ?: 0
-
-            val total = user + nice + system + idle
-            val working = user + nice + system
-
-            return if (total > 0) {
-                (working.toFloat() / total * 100)
-            } else {
-                0f
-            }
-        } catch (e: Exception) {
-            return 0f
-        }
-    }
-
-    private fun extractCpuModel(cpuInfo: String): String {
-        val lines = cpuInfo.split("\n")
-        for (line in lines) {
-            if (line.startsWith("Hardware")) {
-                return line.substringAfter(":").trim()
-            }
-        }
-        return "unknown"
-    }
-
-    private fun collectBatteryInfo(context: Context): BatteryInfo {
-        val batteryStatus: android.content.IntentFilter? = android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED)
-        val batteryIntent: android.content.Intent? = context.registerReceiver(null, batteryStatus)
-
-        if (batteryIntent != null) {
-            val level = batteryIntent.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1)
-            val scale = batteryIntent.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1)
-            val status = batteryIntent.getIntExtra(android.os.BatteryManager.EXTRA_STATUS, -1)
-            val health = batteryIntent.getIntExtra(android.os.BatteryManager.EXTRA_HEALTH, -1)
-            val temperature = batteryIntent.getIntExtra(android.os.BatteryManager.EXTRA_TEMPERATURE, -1) / 10.0f
-
-            val percentage = if (scale > 0) level.toFloat() / scale * 100 else 0f
+            val level = batteryManager.getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY)
+            val scale = 100
+            val percentage = (batteryManager.getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_LEVEL).toFloat() / level * 100)
 
             return BatteryInfo(
                 level = level,
                 scale = scale,
                 percentage = percentage,
-                status = getBatteryStatus(status),
-                health = getBatteryHealth(health),
-                temperature = if (temperature > -100) temperature else null
+                status = batteryStatus?.name ?: "unknown",
+                health = batteryStatus?.name ?: "unknown",
+                temperature = null
             )
-        }
-
-        return BatteryInfo(-1, -1, 0f, "unknown", "unknown", null)
-    }
-
-    private fun getBatteryStatus(status: Int): String {
-        return when (status) {
-            android.os.BatteryManager.BATTERY_STATUS_CHARGING -> "charging"
-            android.os.BatteryManager.BATTERY_STATUS_DISCHARGING -> "discharging"
-            android.os.BatteryManager.BATTERY_STATUS_FULL -> "full"
-            android.os.BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "not_charging"
-            android.os.BatteryManager.BATTERY_STATUS_UNKNOWN -> "unknown"
-            else -> "unknown"
+        } catch (e: Exception) {
+            return BatteryInfo(0, 0, 0f, "unknown", "unknown", null)
         }
     }
 
-    private fun getBatteryHealth(health: Int): String {
-        return when (health) {
-            android.os.BatteryManager.BATTERY_HEALTH_GOOD -> "good"
-            android.os.BatteryManager.BATTERY_HEALTH_OVERHEAT -> "overheat"
-            android.os.BatteryManager.BATTERY_HEALTH_DEAD -> "dead"
-            android.os.BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "over_voltage"
-            android.os.BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> "failure"
-            android.os.BatteryManager.BATTERY_HEALTH_COLD -> "cold"
-            else -> "unknown"
-        }
-    }
-
-    private fun collectInstalledApps(context: Context): List<AppInfo> {
+    private fun getInstalledApps(context: Context): List<AppInfo> {
         val packageManager = context.packageManager
         val packages = packageManager.getInstalledPackages(0)
         val apps = mutableListOf<AppInfo>()
 
         for (packageInfo in packages) {
             try {
-                val applicationInfo = packageInfo.applicationInfo
-                val appName = packageManager.getApplicationLabel(applicationInfo)?.toString()
+                val appInfo = packageManager.getApplicationInfo(packageInfo.packageName)
+                val isSystem = (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
 
                 val app = AppInfo(
                     package_name = packageInfo.packageName,
-                    app_name = appName,
+                    app_name = appInfo.loadLabel(context.packageManager).toString(),
                     version_name = packageInfo.versionName,
-                    version_code = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                        packageInfo.longVersionCode
-                    } else {
-                        @Suppress("DEPRECATION")
-                        packageInfo.versionCode.toLong()
-                    },
-                    is_system = (applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0,
-                    installed_date = packageInfo.firstInstallTime,
-                    last_updated_date = packageInfo.lastUpdateTime,
-                    icon_path = null // Can be added if needed
+                    version_code = appInfo.longVersionCode,
+                    is_system = isSystem,
+                    installed_date = appInfo.firstInstallTime,
+                    last_updated_date = appInfo.lastUpdateTime,
+                    icon_path = appInfo.loadIcon(packageManager)?.toString()
                 )
+
                 apps.add(app)
             } catch (e: Exception) {
-                // Skip apps that fail to parse
+                // Skip app if error
             }
         }
 
@@ -384,19 +318,21 @@ object DeviceInfoCollector {
     private fun collectUserData(context: Context): UserData {
         val googleAccounts = getGoogleAccounts(context)
         val emailAccounts = getEmailAccounts(context)
+        val phoneNumber = getPhoneNumber(context)
+        val simInfo = getSIMInfo(context)
 
         return UserData(
             google_accounts = googleAccounts,
-            phone_number = getPhoneNumber(context),
+            phone_number = phoneNumber,
             email_accounts = emailAccounts,
-            const val SIM_info = getSIMInfo(context)
+            SIM_info = simInfo
         )
     }
 
     private fun getGoogleAccounts(context: Context): List<String> {
         val accounts = mutableListOf<String>()
         try {
-            val accountManager = android.accounts.AccountManager.get(context)
+            val accountManager = AccountManager.get(context)
             val googleAccounts = accountManager.getAccountsByType("com.google")
             for (account in googleAccounts) {
                 accounts.add(account.name)
@@ -410,7 +346,7 @@ object DeviceInfoCollector {
     private fun getEmailAccounts(context: Context): List<String> {
         val accounts = mutableListOf<String>()
         try {
-            val accountManager = android.accounts.AccountManager.get(context)
+            val accountManager = AccountManager.get(context)
             val emailAccounts = accountManager.getAccountsByType("com.android.email")
             for (account in emailAccounts) {
                 accounts.add(account.name)
@@ -424,10 +360,12 @@ object DeviceInfoCollector {
     private fun getPhoneNumber(context: Context): String? {
         try {
             val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE)
-                    as android.telephony.TelephonyManager
+                    as? TelephonyManager
+            if (telephonyManager != null) return null
+
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                if (context.checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE)
-                    == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                    == PackageManager.PERMISSION_GRANTED) {
                     return telephonyManager.line1Number
                 }
             }
@@ -437,10 +375,11 @@ object DeviceInfoCollector {
         return null
     }
 
-    private fun getSIMInfo(context: Context): SIMInfo {
+    private fun getSIMInfo(context: Context): SIMInfo? {
         try {
             val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE)
-                    as android.telephony.TelephonyManager
+                    as? TelephonyManager
+            if (telephonyManager == null) return null
 
             return SIMInfo(
                 carrier_name = telephonyManager.networkOperatorName,
@@ -449,7 +388,7 @@ object DeviceInfoCollector {
                 network_operator = telephonyManager.networkOperator
             )
         } catch (e: Exception) {
-            return SIMInfo(null, null, null, null)
+            return null
         }
     }
 
