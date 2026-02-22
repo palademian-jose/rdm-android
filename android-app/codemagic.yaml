@@ -1,0 +1,36 @@
+name: Remote Device Manager
+config_version: 2
+
+# Workflows
+workflows:
+  android-workflow:
+    name: Android Build
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      android_signing:
+        - keystore_reference
+      vars:
+        # Add your keystore alias and passwords here
+        KEYSTORE_ALIAS: ""
+        KEYSTORE_PASSWORD: ""
+        KEY_PASSWORD: ""
+    scripts:
+      - name: Build Debug APK
+        test: false
+        script: |
+          ./gradlew assembleDebug
+      - name: Build Release APK
+        test: false
+        script: |
+          ./gradlew assembleRelease
+    artifacts:
+      - app/build/outputs/apk/**/*.apk
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
+      # Uncomment and configure if you want to publish to Google Play
+      # google_play:
+      #   track: internal
+      #   submit_as_draft: true
