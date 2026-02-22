@@ -102,7 +102,9 @@ class WebSocketClient(
                 val commandId = json.optString("id")
                 val command = json.optString("command")
                 val sudo = json.optBoolean("sudo", false)
-                executeCommand(commandId, command, sudo)
+                scope.launch {
+                    executeCommand(commandId, command, sudo)
+                }
             }
             else -> {
                 // Pass to handler
