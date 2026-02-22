@@ -9,12 +9,11 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 60
     environment:
-      android_signing:
-        - keystore_reference: rdm-keystore
       vars:
-        KEYSTORE_ALIAS: rdm
-        KEYSTORE_PASSWORD: $CM_KEYSTORE_PASSWORD
-        KEY_PASSWORD: $CM_KEY_PASSWORD
+        CM_KEYSTORE_PATH: rdm-release.keystore
+        CM_KEYSTORE_PASSWORD: rdmStorePass2024!
+        CM_KEY_ALIAS: rdm
+        CM_KEY_PASSWORD: rdmStorePass2024!
     scripts:
       - name: Build Debug APK
         test: false
