@@ -5,6 +5,7 @@ config_version: 2
 workflows:
   android-workflow:
     name: Android Build
+    working_directory: android-app
     instance_type: mac_mini_m2
     max_build_duration: 60
     environment:
