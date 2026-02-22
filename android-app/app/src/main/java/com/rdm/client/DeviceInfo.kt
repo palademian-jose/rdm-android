@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.accounts.AccountManager
 import android.net.ConnectivityManager
+import android.net.LinkAddress
 import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -176,13 +177,13 @@ object DeviceInfoCollector {
 
         val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             try {
-                windowManager.defaultDisplay.rotation
+                display.rotation
             } catch (e: Exception) {
                 0
             }
         } else {
             @Suppress("DEPRECATION")
-            val windowParams = windowManager.defaultDisplay.attributes
+            val windowParams = display.attributes
             windowParams.rotation
         }
 
@@ -204,46 +205,30 @@ object DeviceInfoCollector {
                 val linkProperties = connectivityManager.getLinkProperties(activeNetwork)
                 val addresses = linkProperties?.linkAddresses
                 addresses?.firstOrNull()?.let { addr ->
-                    val address = InetAddress.getByAddress(addr.address)
-                    address?.hostAddress
+                    val address = addr.address
+                    address.hostAddress
                 }
             } else {
                 @Suppress("DEPRECATION")
                 val networkInfo = connectivityManager.activeNetworkInfo
                 networkInfo?.let {
-                    val linkProperties = connectivityManager.getLinkProperties(connectivityManager.activeNetwork)
+                    val activeNetwork = connectivityManager.activeNetwork
+                    val linkProperties = activeNetwork?.let { connectivityManager.getLinkProperties(it) }
                     val addresses = linkProperties?.linkAddresses
                     addresses?.firstOrNull()?.let { addr ->
-                        val address = InetAddress.getByAddress(addr.address)
-                        address?.hostAddress
+                        val address = addr.address
+                        address.hostAddress
                     }
                 }
             }
 
-            val macAddress = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val activeNetwork = connectivityManager.activeNetwork
-                val linkProperties = activeNetwork?.let { connectivityManager.getLinkProperties(it) }
-                linkProperties?.linkAddresses?.firstOrNull()?.interfaceAddress?.hostAddress
-            } else {
+            val macAddress: String? = null // MAC address not accessible in modern Android
+
+            val wifiSSID = try {
+                @Suppress("DEPRECATION")
+                wifiManager?.connectionInfo?.ssid?.removeSurrounding("\"")
+            } catch (e: Exception) {
                 null
-            }
-
-            val wifiSSID = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                try {
-                    wifiManager?.currentNetwork?.let { network ->
-                        val wifiInfo = wifiManager.getConnectionInfo()
-                        wifiInfo.ssid.removeSurrounding("\"")
-                    }
-                } catch (e: Exception) {
-                    null
-                }
-            } else {
-                try {
-                    @Suppress("DEPRECATION")
-                    wifiManager?.connectionInfo?.ssid?.removeSurrounding("\"")
-                } catch (e: Exception) {
-                    null
-                }
             }
 
             val networkType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -383,12 +368,13 @@ object DeviceInfoCollector {
         for (packageInfo in packages) {
             try {
                 val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    PackageManager.ApplicationInfoFlags.of(0L)
+                    @Suppress("DEPRECATION")
+                    0
                 } else {
                     @Suppress("DEPRECATION")
                     0
                 }
-                val appInfo = packageManager.getApplicationInfo(packageInfo.packageName, flags)
+                val appInfo = packageManager.getApplicationInfo(packageInfo.packageName, 0)
                 val isSystem = (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
 
                 val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
