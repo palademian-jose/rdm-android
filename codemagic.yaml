@@ -15,14 +15,8 @@ workflows:
         CM_KEY_ALIAS: rdm
         CM_KEY_PASSWORD: rdmStorePass2024!
     scripts:
-      - name: Build Debug APK
-        test: false
-        script: |
-          ./gradlew assembleDebug
-      - name: Build Release APK
-        test: false
-        script: |
-          ./gradlew assembleRelease
+      - ./gradlew assembleDebug
+      - ./gradlew assembleRelease
     artifacts:
       - app/build/outputs/apk/**/*.apk
     publishing:
