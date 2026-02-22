@@ -175,16 +175,10 @@ object DeviceInfoCollector {
         val metrics = android.util.DisplayMetrics()
         display.getMetrics(metrics)
 
-        val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                display.rotation
-            } catch (e: Exception) {
-                0
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            val windowParams = display.attributes
-            windowParams.rotation
+        val rotation = try {
+            display.rotation
+        } catch (e: Exception) {
+            0
         }
 
         return ScreenInfo(
@@ -367,27 +361,20 @@ object DeviceInfoCollector {
 
         for (packageInfo in packages) {
             try {
-                val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    @Suppress("DEPRECATION")
-                    0
-                } else {
-                    @Suppress("DEPRECATION")
-                    0
-                }
-                val appInfo = packageManager.getApplicationInfo(packageInfo.packageName, 0)
+                val appInfo = packageInfo.applicationInfo
                 val isSystem = (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
 
                 val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    appInfo.longVersionCode
+                    packageInfo.longVersionCode
                 } else {
                     @Suppress("DEPRECATION")
-                    appInfo.versionCode.toLong()
+                    packageInfo.versionCode.toLong()
                 }
 
                 val app = AppInfo(
                     package_name = packageInfo.packageName,
                     app_name = appInfo.loadLabel(packageManager)?.toString(),
-                    version_name = appInfo.versionName,
+                    version_name = packageInfo.versionName,
                     version_code = versionCode,
                     is_system = isSystem,
                     installed_date = appInfo.firstInstallTime,
