@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var isServiceRunning = false
 
     private val TAG = "MainActivity"
-    private val SERVER_URL = "wss://your-server.com:8443/ws/device" // Replace with your server URL
+    private val SERVER_URL = "ws://192.168.1.85:8443/ws/device" // Replace with your server URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
