@@ -1,1 +1,17 @@
+# Keystore
 rdm-release.keystore
+
+# Build outputs
+server/target/
+android-app/app/build/
+android-app/.gradle/
+android-app/local.properties
+android-app/.idea/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.iml
