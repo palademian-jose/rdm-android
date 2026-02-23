@@ -377,8 +377,8 @@ object DeviceInfoCollector {
                     version_name = packageInfo.versionName,
                     version_code = versionCode,
                     is_system = isSystem,
-                    installed_date = appInfo.firstInstallTime,
-                    last_updated_date = appInfo.lastUpdateTime,
+                    installed_date = packageInfo.firstInstallTime,
+                    last_updated_date = packageInfo.lastUpdateTime,
                     icon_path = appInfo.loadIcon(packageManager)?.toString()
                 )
 
