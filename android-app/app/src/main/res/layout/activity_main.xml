@@ -18,6 +18,18 @@
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/white"/>
 
+    <EditText
+        android:id="@+id/etServerUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Server URL (e.g., ws://192.168.1.85:8443/ws/device)"
+        android:text="ws://192.168.1.85:8443/ws/device"
+        android:inputType="textUri"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/edit_text"
+        android:textSize="14sp"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

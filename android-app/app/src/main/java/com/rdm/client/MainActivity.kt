@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,13 +17,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnConnect: Button
     private lateinit var btnDisconnect: Button
     private lateinit var btnTestCommand: Button
+    private lateinit var etServerUrl: EditText
 
     private lateinit var webSocketClient: WebSocketClient
     private lateinit var deviceId: String
     private var isServiceRunning = false
 
     private val TAG = "MainActivity"
-    private val SERVER_URL = "ws://192.168.1.85:8443/ws/device" // Replace with your server URL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +41,10 @@ class MainActivity : AppCompatActivity() {
         btnConnect = findViewById(R.id.btnConnect)
         btnDisconnect = findViewById(R.id.btnDisconnect)
         btnTestCommand = findViewById(R.id.btnTestCommand)
+        etServerUrl = findViewById(R.id.etServerUrl)
 
-        // Initialize WebSocket client
-        webSocketClient = WebSocketClient(this, SERVER_URL, deviceId)
+        // Initialize WebSocket client (will be replaced on connect)
+        webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device", deviceId)
 
         // Setup listeners
         setupWebSocketListeners()
@@ -123,6 +125,19 @@ class MainActivity : AppCompatActivity() {
     private fun connectToServer() {
         lifecycleScope.launch {
             try {
+                val serverUrl = etServerUrl.text.toString().trim()
+                if (serverUrl.isEmpty()) {
+                    Toast.makeText(this@MainActivity, "Please enter a server URL", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                // Disconnect existing client if any
+                webSocketClient.disconnect()
+
+                // Create new WebSocket client with the URL from input
+                webSocketClient = WebSocketClient(this@MainActivity, serverUrl, deviceId)
+                setupWebSocketListeners()
+
                 webSocketClient.connect()
                 Toast.makeText(this@MainActivity, "Connecting...", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
