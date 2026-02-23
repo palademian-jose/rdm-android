@@ -126,6 +126,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val serverUrl = etServerUrl.text.toString().trim()
+                Log.d(TAG, "Server URL from input: '$serverUrl'")
+                
                 if (serverUrl.isEmpty()) {
                     Toast.makeText(this@MainActivity, "Please enter a server URL", Toast.LENGTH_SHORT).show()
                     return@launch
@@ -138,6 +140,7 @@ class MainActivity : AppCompatActivity() {
                 webSocketClient = WebSocketClient(this@MainActivity, serverUrl, deviceId)
                 setupWebSocketListeners()
 
+                Log.d(TAG, "Connecting to: $serverUrl")
                 webSocketClient.connect()
                 Toast.makeText(this@MainActivity, "Connecting...", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
