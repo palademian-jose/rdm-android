@@ -28,6 +28,7 @@ class WebSocketClient(
 
     private var webSocket: WebSocket? = null
     private var isConnected = false
+    private var isAuthenticated = false
     private var reconnectJob: Job? = null
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -48,10 +49,15 @@ class WebSocketClient(
                     override fun onOpen(ws: WebSocket, response: Response) {
                         Log.d(TAG, "WebSocket connected")
                         isConnected = true
+                        isAuthenticated = false
                         onConnected?.invoke()
-                        // Send auth first, then device info
-                        sendAuth("default_token") // TODO: Make this configurable or use real auth
-                        sendDeviceInfo()
+
+                        // Send auth first, then wait a bit before sending device info
+                        scope.launch {
+                            sendAuth(authToken)
+                            delay(200) // Small delay to let server process auth
+                            sendDeviceInfo()
+                        }
                     }
 
                     override fun onMessage(ws: WebSocket, text: String) {
