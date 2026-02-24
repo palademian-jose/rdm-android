@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">RDM Client</string>
+    <string name="status_online">Online</string>
+    <string name="status_offline">Offline</string>
+    <string name="status_connecting">Connecting…</string>
+    <string name="label_server_config">Server Configuration</string>
+    <string name="label_device_info">Device Information</string>
+    <string name="label_device_id">Device ID</string>
+    <string name="hint_server_url">WebSocket Server URL</string>
+    <string name="label_append_device_id">Append Device ID</string>
+    <string name="hint_append_device_id">Auto-append /{device_id} to URL</string>
+    <string name="btn_connect">Connect</string>
+    <string name="btn_disconnect">Disconnect</string>
+    <string name="btn_test_command">Run Root Command Test</string>
 </resources>

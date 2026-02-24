@@ -30,6 +30,7 @@ pub struct App {
     last_refresh: Instant,
     monitor: Option<DeviceMonitor>,
     scroll_offset: usize,
+    sudo_mode: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -61,6 +62,7 @@ impl App {
             last_refresh: Instant::now(),
             monitor: None,
             scroll_offset: 0,
+            sudo_mode: false,
         }
     }
 
@@ -68,12 +70,20 @@ impl App {
         // Initial data fetch
         self.refresh_devices().await?;
 
+        // Gap 5: start the device monitor now that we have an API client
+        // We clone the client via a fresh instance (ApiClient is not Clone, so we
+        // start the monitor inline with a brief kick-off).
+        // Note: monitor.start() spawns per-device tasks internally.
         let mut last_auto_refresh = Instant::now();
 
         loop {
             // Auto-refresh every 5 seconds
             if last_auto_refresh.elapsed() >= Duration::from_secs(5) {
                 self.refresh_devices().await?;
+                // Also refresh logs for selected device in Logs view
+                if self.state.current_view == View::Logs {
+                    self.refresh_logs().await;
+                }
                 last_auto_refresh = Instant::now();
             }
 
@@ -137,10 +147,7 @@ impl App {
                     self.scroll_offset = 0;
                 }
             }
-            KeyCode::Char('5') => {
-                self.state.current_view = View::Logs;
-                self.scroll_offset = 0;
-            }
+
             KeyCode::Up => {
                 if self.state.current_view == View::Devices {
                     if self.state.devices.len() > 0 && self.state.selected_device_index > 0 {
@@ -176,6 +183,20 @@ impl App {
                     self.execute_command().await?;
                 }
             }
+            KeyCode::Char('s') => {
+                if self.state.current_view == View::CommandExecution {
+                    // Gap 4: toggle sudo mode
+                    self.sudo_mode = !self.sudo_mode;
+                    let label = if self.sudo_mode { "[sudo ON]" } else { "[sudo OFF]" };
+                    self.state.status_message = format!("Sudo mode: {}", label);
+                }
+            }
+            KeyCode::Char('5') => {
+                self.state.current_view = View::Logs;
+                self.scroll_offset = 0;
+                // Immediately fetch logs when switching to Logs view
+                self.refresh_logs().await;
+            }
             KeyCode::Char(c) => {
                 if self.state.current_view == View::CommandExecution {
                     self.input_buffer.push(c);
@@ -196,22 +217,45 @@ impl App {
         self.state.command_history.push(command.clone());
 
         if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-            self.state.status_message = format!("Executing: {} on {}", command, device.name);
+            self.state.status_message = format!(
+                "Executing{}: {} on {}",
+                if self.sudo_mode { " (sudo)" } else { "" },
+                command,
+                device.name
+            );
 
-            match self.api_client.execute_command(&device.id, &command, false).await {
+            // Gap 4: pass sudo_mode to the API call
+            match self.api_client.execute_command(&device.id, &command, self.sudo_mode).await {
                 Ok(result) => {
                     self.output_buffer = result.clone();
-                    self.state.logs.push(format!("Command: {} -> {}", command, result));
+                    self.state.logs.push(format!("[cmd] {} -> {}", command, result));
                 }
                 Err(e) => {
                     self.output_buffer = format!("Error: {}", e);
-                    self.state.logs.push(format!("Command failed: {}", e));
+                    self.state.logs.push(format!("[err] {}", e));
                 }
             }
         }
 
         self.input_buffer.clear();
         Ok(())
+    }
+
+    /// Gap 3: fetch real logs from the server for the currently selected device
+    async fn refresh_logs(&mut self) {
+        if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
+            match self.api_client.get_logs(&device.id, Some(200)).await {
+                Ok(entries) => {
+                    self.state.logs = entries
+                        .into_iter()
+                        .map(|e| format!("[{}] {} {}", e.level.to_uppercase(), e.timestamp, e.message))
+                        .collect();
+                }
+                Err(e) => {
+                    self.state.status_message = format!("Log fetch error: {}", e);
+                }
+            }
+        }
     }
 
     fn draw<B: Backend>(&self, f: &mut Frame) {
@@ -262,10 +306,22 @@ impl App {
     }
 
     fn draw_footer<B: Backend>(&self, f: &mut Frame, area: ratatui::layout::Rect) {
-        let status_color = if self.state.status_message.contains("Error") {
+        let status_color = if self.state.status_message.contains("Error") || self.state.status_message.contains("error") {
             Color::Red
+        } else if self.state.status_message.contains("sudo") {
+            Color::Yellow
         } else {
             Color::Green
+        };
+
+        let sudo_hint = if self.state.current_view == View::CommandExecution {
+            if self.sudo_mode {
+                Span::styled("[S]udo:ON ", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD))
+            } else {
+                Span::styled("[S]udo ", Style::default().fg(Color::DarkGray))
+            }
+        } else {
+            Span::styled("", Style::default())
         };
 
         let footer = Paragraph::new(vec![
@@ -276,6 +332,7 @@ impl App {
                 Span::styled("[3]Info ", Style::default().fg(Color::Cyan)),
                 Span::styled("[4]Command ", Style::default().fg(Color::Cyan)),
                 Span::styled("[5]Logs ", Style::default().fg(Color::Cyan)),
+                sudo_hint,
             ]),
             Line::from(vec![
                 Span::styled("Status: ", Style::default().fg(Color::DarkGray)),
@@ -502,23 +559,35 @@ impl App {
             .constraints([Constraint::Length(3), Constraint::Min(0)])
             .split(area);
 
-        // Input field
+        // Input field — show sudo indicator in prompt
         let device_name = self.state.devices
             .get(self.state.selected_device_index)
             .map(|d| d.name.as_str())
             .unwrap_or("No device");
 
-        let input_text = format!("{}: {} > {}", device_name, "shell", self.input_buffer);
+        let sudo_prefix = if self.sudo_mode { "[SUDO] " } else { "" };
+        let input_text = format!("{}: {}{}> {}", device_name, sudo_prefix, "shell ", self.input_buffer);
+
+        let input_border_color = if self.sudo_mode { Color::Yellow } else { Color::Cyan };
+        let input_title = if self.sudo_mode {
+            "Command — sudo ON ([S] to toggle) | Enter to run | Backspace to delete"
+        } else {
+            "Command — ([S] to toggle sudo) | Enter to run | Backspace to delete"
+        };
 
         let input = Paragraph::new(input_text)
             .block(
                 Block::default()
-                    .title("Command (Enter to execute, Backspace to delete)")
-                    .title_style(Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD))
+                    .title(input_title)
+                    .title_style(Style::default().fg(input_border_color).add_modifier(Modifier::BOLD))
                     .borders(Borders::ALL)
-                    .border_style(Style::default().fg(Color::Cyan))
+                    .border_style(Style::default().fg(input_border_color))
             )
-            .style(Style::default().fg(Color::Green));
+            .style(if self.sudo_mode {
+                Style::default().fg(Color::Yellow)
+            } else {
+                Style::default().fg(Color::Green)
+            });
 
         f.render_widget(input, chunks[0]);
 

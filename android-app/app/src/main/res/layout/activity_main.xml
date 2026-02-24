@@ -283,16 +283,147 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Test Command Button -->
+    <!-- ─── Shell Command Card (Gap 6: ad-hoc command input) ─── -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#1E2035"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#303450"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SHELL COMMAND"
+                android:textSize="11sp"
+                android:textColor="#8890BB"
+                android:letterSpacing="0.12"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter shell command"
+                app:boxBackgroundColor="#252640"
+                app:boxStrokeColor="#00D4FF"
+                app:boxStrokeWidth="1dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:hintTextColor="#8890BB"
+                android:textColorHint="#555A7A"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCommand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    android:hint="e.g. ls -la /data"
+                    android:textColor="#EAEAF5"
+                    android:textSize="13sp"
+                    android:fontFamily="monospace"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/editbox_background"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginEnd="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Run as root"
+                            android:textSize="13sp"
+                            android:textColor="#EAEAF5"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchSudo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            app:thumbTint="#0F1019"
+                            app:trackTint="#00D4FF" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Execute with su/sudo"
+                        android:textSize="10sp"
+                        android:textColor="#8890BB"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRunCommand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="52dp"
+                    android:text="Run"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    app:icon="@android:drawable/ic_media_play"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:backgroundTint="#00D4FF"
+                    android:textColor="#0F1019"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.Material3.Button" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Test Root Command Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnTestCommand"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="Test Root Command"
-        android:textSize="14sp"
+        android:text="Test Root Command (ls -la /system/app)"
+        android:textSize="13sp"
         app:backgroundTint="#3D1A5E"
         android:textColor="#BB86FC"
         style="@style/Widget.Material3.Button.TonalButton"
         app:cornerRadius="10dp" />
 
 </LinearLayout>
+

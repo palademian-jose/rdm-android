@@ -15,7 +15,11 @@ class WebSocketClient(
     private val context: Context,
     private val serverUrl: String,
     private val deviceId: String,
-    private val authToken: String = "default_token"
+    // TODO (Gap 2): This token is currently a static secret shared between the app and server.
+    // It should be replaced with a real JWT obtained via POST /api/auth/login with
+    // the admin username/password credentials before opening the WebSocket connection.
+    // Store the token securely (e.g. EncryptedSharedPreferences) after login.
+    private val authToken: String = "admin123"
 ) {
     private val TAG = "WebSocketClient"
     private val gson = Gson()

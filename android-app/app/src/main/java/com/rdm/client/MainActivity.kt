@@ -1,28 +1,36 @@
 package com.rdm.client
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.CompoundButton
-import android.widget.EditText
-import android.widget.Switch
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var tvStatus: TextView
     private lateinit var tvDeviceInfo: TextView
     private lateinit var tvDeviceInfoHint: TextView
-    private lateinit var btnConnect: Button
-    private lateinit var btnDisconnect: Button
-    private lateinit var btnTestCommand: Button
-    private lateinit var etServerUrl: EditText
-    private lateinit var switchAppendDeviceId: Switch
+    private lateinit var btnConnect: MaterialButton
+    private lateinit var btnDisconnect: MaterialButton
+    private lateinit var btnTestCommand: MaterialButton
+    private lateinit var etServerUrl: TextInputEditText
+    private lateinit var switchAppendDeviceId: MaterialSwitch
+    private lateinit var statusPill: LinearLayout
+    private lateinit var ivStatusDot: ImageView
 
     private lateinit var webSocketClient: WebSocketClient
     private lateinit var deviceId: String
@@ -49,49 +57,100 @@ class MainActivity : AppCompatActivity() {
         btnTestCommand = findViewById(R.id.btnTestCommand)
         etServerUrl = findViewById(R.id.etServerUrl)
         switchAppendDeviceId = findViewById(R.id.switchAppendDeviceId)
+        statusPill = findViewById(R.id.statusPill)
+        ivStatusDot = findViewById(R.id.ivStatusDot)
 
-        // Set device ID hint
-        tvDeviceInfoHint.text = "Device ID: $deviceId"
+        // Set device ID
+        tvDeviceInfoHint.text = deviceId
 
-        // Initialize WebSocket client (will be replaced on connect)
+        // Initialize WebSocket client (placeholder until connect)
         webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device", deviceId, "admin123")
 
-        // Setup listeners
+        // Setup
         setupWebSocketListeners()
         setupSwitchListener()
-
-        // Setup button listeners
         setupButtonListeners()
-
-        // Start service
         startRdmService()
-
-        // Update UI
         updateDeviceInfo()
+
+        // Initial status: disconnected
+        setStatus(ConnectionStatus.DISCONNECTED)
     }
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Status UI
+    // ──────────────────────────────────────────────────────────────────────
+
+    enum class ConnectionStatus { CONNECTED, DISCONNECTED, CONNECTING, ERROR }
+
+    private fun setStatus(status: ConnectionStatus) {
+        val (label, textColor, bgDrawable, dotColor) = when (status) {
+            ConnectionStatus.CONNECTED -> Quadruple(
+                "Online",
+                R.color.status_connected,
+                R.drawable.bg_status_connected,
+                R.color.status_connected
+            )
+            ConnectionStatus.DISCONNECTED -> Quadruple(
+                "Offline",
+                R.color.status_disconnected,
+                R.drawable.bg_status_disconnected,
+                R.color.status_disconnected
+            )
+            ConnectionStatus.CONNECTING -> Quadruple(
+                "Connecting…",
+                R.color.status_connecting,
+                R.drawable.bg_status_connecting,
+                R.color.status_connecting
+            )
+            ConnectionStatus.ERROR -> Quadruple(
+                "Error",
+                R.color.status_disconnected,
+                R.drawable.bg_status_disconnected,
+                R.color.status_disconnected
+            )
+        }
+
+        tvStatus.text = label
+        tvStatus.setTextColor(ContextCompat.getColor(this, textColor))
+        statusPill.background = ContextCompat.getDrawable(this, bgDrawable)
+
+        // Tint the dot
+        val dotDrawable = ivStatusDot.background.mutate() as GradientDrawable
+        dotDrawable.setColor(ContextCompat.getColor(this, dotColor))
+        ivStatusDot.background = dotDrawable
+
+        // Pulse animation only when connecting
+        if (status == ConnectionStatus.CONNECTING) {
+            val pulse = AnimationUtils.loadAnimation(this, R.anim.pulse)
+            ivStatusDot.startAnimation(pulse)
+        } else {
+            ivStatusDot.clearAnimation()
+            // Fade-in the pill for a nice transition
+            val fadeIn = ObjectAnimator.ofFloat(statusPill, "alpha", 0.6f, 1f).apply {
+                duration = 300
+            }
+            fadeIn.start()
+        }
+    }
+
+    // Simple data holder (Kotlin doesn't have built-in Quadruple)
+    data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Listeners
+    // ──────────────────────────────────────────────────────────────────────
 
     private fun setupSwitchListener() {
-        switchAppendDeviceId.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            updateServerUrlHint(isChecked)
+        switchAppendDeviceId.setOnCheckedChangeListener { _, isChecked ->
+            Log.d(TAG, "Append Device ID: $isChecked")
         }
-    }
-
-    private fun updateServerUrlHint(appendDeviceId: Boolean) {
-        val currentUrl = etServerUrl.text.toString()
-        if (appendDeviceId) {
-            etServerUrl.hint = "Server URL (device ID will be appended automatically)"
-        } else {
-            etServerUrl.hint = "Server URL (include device ID in URL)"
-        }
-        Log.d(TAG, "Append Device ID: $appendDeviceId")
     }
 
     private fun setupWebSocketListeners() {
         webSocketClient.onConnected = {
             runOnUiThread {
-                tvStatus.text = "✓ Connected"
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_green_dark))
-                tvStatus.setTextColor(Color.WHITE)
+                setStatus(ConnectionStatus.CONNECTED)
                 btnConnect.isEnabled = false
                 btnDisconnect.isEnabled = true
                 Toast.makeText(this@MainActivity, "Connected to server", Toast.LENGTH_SHORT).show()
@@ -100,9 +159,7 @@ class MainActivity : AppCompatActivity() {
 
         webSocketClient.onDisconnected = {
             runOnUiThread {
-                tvStatus.text = "✗ Disconnected"
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_red_dark))
-                tvStatus.setTextColor(Color.WHITE)
+                setStatus(ConnectionStatus.DISCONNECTED)
                 btnConnect.isEnabled = true
                 btnDisconnect.isEnabled = false
             }
@@ -110,27 +167,29 @@ class MainActivity : AppCompatActivity() {
 
         webSocketClient.onError = { exception ->
             runOnUiThread {
-                tvStatus.text = "⚠ Error: ${exception.message}"
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_orange_dark))
-                tvStatus.setTextColor(Color.WHITE)
-                Toast.makeText(this@MainActivity, "Connection error: ${exception.message}", Toast.LENGTH_LONG).show()
+                setStatus(ConnectionStatus.ERROR)
+                tvStatus.text = "Error"
+                btnConnect.isEnabled = true
+                btnDisconnect.isEnabled = false
+                Toast.makeText(
+                    this@MainActivity,
+                    "Connection error: ${exception.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
         webSocketClient.onMessage = { message ->
             runOnUiThread {
-                // Handle incoming messages
                 val type = message.get("type")?.asString
                 when (type) {
                     "command" -> {
-                        // Command received from server
                         val command = message.get("command")?.asString
                         val commandId = message.get("id")?.asString
                         Log.d(TAG, "Command received: $command (ID: $commandId)")
-                        Toast.makeText(this@MainActivity, "Command: $command", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "⚡ Command: $command", Toast.LENGTH_SHORT).show()
                     }
                     "log_request" -> {
-                        // Server requesting logs
                         Log.d(TAG, "Log request received")
                     }
                     else -> {
@@ -142,18 +201,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtonListeners() {
-        btnConnect.setOnClickListener {
-            connectToServer()
-        }
-
-        btnDisconnect.setOnClickListener {
-            disconnectFromServer()
-        }
-
-        btnTestCommand.setOnClickListener {
-            testCommand()
-        }
+        btnConnect.setOnClickListener { connectToServer() }
+        btnDisconnect.setOnClickListener { disconnectFromServer() }
+        btnTestCommand.setOnClickListener { testCommand() }
     }
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Actions
+    // ──────────────────────────────────────────────────────────────────────
 
     private fun connectToServer() {
         lifecycleScope.launch {
@@ -161,42 +216,35 @@ class MainActivity : AppCompatActivity() {
                 val serverUrl = etServerUrl.text.toString().trim()
                 val appendDeviceId = switchAppendDeviceId.isChecked
 
-                Log.d(TAG, "Server URL from input: '$serverUrl'")
-                Log.d(TAG, "Append Device ID: $appendDeviceId")
-
                 if (serverUrl.isEmpty()) {
                     Toast.makeText(this@MainActivity, "Please enter a server URL", Toast.LENGTH_SHORT).show()
                     return@launch
                 }
 
-                // Build final URL based on switch state
+                // Build final URL
                 val finalUrl = if (appendDeviceId) {
-                    if (!serverUrl.endsWith(deviceId)) {
-                        "$serverUrl/$deviceId"
-                    } else {
-                        serverUrl
-                    }
+                    if (!serverUrl.endsWith(deviceId)) "$serverUrl/$deviceId" else serverUrl
                 } else {
                     serverUrl
                 }
 
-                // Disconnect existing client if any
+                // Disconnect existing client
                 webSocketClient.disconnect()
 
-                // Create new WebSocket client with the final URL and auth token
+                // Create new client
                 webSocketClient = WebSocketClient(this@MainActivity, finalUrl, deviceId, "admin123")
                 setupWebSocketListeners()
 
                 Log.d(TAG, "Connecting to: $finalUrl")
-                tvStatus.text = "⏳ Connecting..."
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_blue_dark))
-                tvStatus.setTextColor(Color.WHITE)
+                runOnUiThread { setStatus(ConnectionStatus.CONNECTING) }
 
                 webSocketClient.connect()
-                Toast.makeText(this@MainActivity, "Connecting to server...", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "Connection error", e)
-                Toast.makeText(this@MainActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
+                runOnUiThread {
+                    setStatus(ConnectionStatus.ERROR)
+                    Toast.makeText(this@MainActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -204,7 +252,9 @@ class MainActivity : AppCompatActivity() {
     private fun disconnectFromServer() {
         lifecycleScope.launch {
             webSocketClient.disconnect()
-            Toast.makeText(this@MainActivity, "Disconnected from server", Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                Toast.makeText(this@MainActivity, "Disconnected", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -225,7 +275,9 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Test command error", e)
-                Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -247,34 +299,43 @@ class MainActivity : AppCompatActivity() {
                 val deviceInfo = DeviceInfoCollector.collect(this@MainActivity)
 
                 runOnUiThread {
-                    val infoText = """
-                        ┌─────────────────────────────────┐
-                        │  Device Information           │
-                        ├─────────────────────────────────┤
-                        │  Name: ${deviceInfo.name.padEnd(22)}│
-                        │  Model: ${deviceInfo.model.padEnd(22)}│
-                        │  Android: ${deviceInfo.android_version.padEnd(19)}│
-                        │  API: ${deviceInfo.api_level.toString().padEnd(24)}│
-                        │  CPU: ${deviceInfo.cpu_info.cores} cores - ${deviceInfo.cpu_info.model.padEnd(8)}│
-                        │  RAM: ${(deviceInfo.memory_info.available / 1024 / 1024).toInt()} MB free${" ".repeat(13)}│
-                        │  Storage: ${(deviceInfo.storage_info.available / 1024 / 1024 / 1024).toInt()} GB free${" ".repeat(11)}│
-                        │  Battery: ${(deviceInfo.battery_info.percentage).toInt()}%${" ".repeat(25)}│
-                        │  Apps: ${deviceInfo.installed_apps.size} installed${" ".repeat(14)}│
-                        └─────────────────────────────────┘
-                        
-                        Device ID: $deviceId
-                    """.trimIndent()
+                    val ramFree = (deviceInfo.memory_info.available / 1024 / 1024).toInt()
+                    val storageFree = (deviceInfo.storage_info.available / 1024 / 1024 / 1024).toInt()
+                    val batteryPct = deviceInfo.battery_info.percentage.toInt()
+
+                    val infoText = buildString {
+                        appendLine("# System Overview")
+                        appendLine("  name     : ${deviceInfo.name}")
+                        appendLine("  model    : ${deviceInfo.model}")
+                        appendLine("  android  : ${deviceInfo.android_version} (API ${deviceInfo.api_level})")
+                        appendLine()
+                        appendLine("# Hardware")
+                        appendLine("  cpu      : ${deviceInfo.cpu_info.cores} cores · ${deviceInfo.cpu_info.model}")
+                        appendLine("  ram      : $ramFree MB free")
+                        appendLine("  storage  : $storageFree GB free")
+                        appendLine("  battery  : $batteryPct%")
+                        appendLine()
+                        appendLine("# Software")
+                        appendLine("  apps     : ${deviceInfo.installed_apps.size} installed")
+                        appendLine()
+                        appendLine("# Identity")
+                        append("  id       : $deviceId")
+                    }
 
                     tvDeviceInfo.text = infoText
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error collecting device info", e)
                 runOnUiThread {
-                    tvDeviceInfo.text = "Failed to load device info: ${e.message}"
+                    tvDeviceInfo.text = "# Error\n  ${e.message}"
                 }
             }
         }
     }
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Lifecycle
+    // ──────────────────────────────────────────────────────────────────────
 
     override fun onResume() {
         super.onResume()
