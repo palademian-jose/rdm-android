@@ -1,4 +1,5 @@
-use anyhow::{anyhow, Result};
+use actix_web::{web, HttpResponse, Responder};
+use anyhow::Result;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{Pool, SqlitePool, Sqlite};
@@ -49,10 +50,18 @@ pub struct Database {
 impl Database {
     pub async fn new(database_path: &str) -> Self {
         let database_url = format!("sqlite:{}", database_path);
+        eprintln!("Database URL: {}", database_url);
 
-        let pool = SqlitePool::connect(&database_url)
-            .await
-            .expect("Failed to create database pool");
+        let pool = match SqlitePool::connect(&database_url).await {
+            Ok(pool) => pool,
+            Err(e) => {
+                eprintln!("Warning: Failed to connect to database at {}: {:?}. Using in-memory database.", database_url, e);
+                // Fallback to in-memory database
+                SqlitePool::connect("sqlite::memory:")
+                    .await
+                    .expect("Failed to create in-memory database")
+            }
+        };
 
         Database { pool }
     }
@@ -199,13 +208,24 @@ impl Database {
 
     pub async fn get_logs(
         &self,
-        _device_id: Option<&str>,
-        _limit: Option<i64>,
+        device_id: Option<&str>,
+        limit: Option<i64>,
         _offset: Option<i64>,
     ) -> Result<Vec<LogEntry>> {
-        let logs = sqlx::query_as::<_, LogEntry>("SELECT * FROM logs ORDER BY timestamp DESC LIMIT 100")
+        let logs = if let Some(device_id) = device_id {
+            sqlx::query_as::<_, LogEntry>(
+                "SELECT * FROM logs WHERE device_id = ?1 ORDER BY timestamp DESC LIMIT ?2"
+            )
+            .bind(device_id)
+            .bind(limit.unwrap_or(100))
             .fetch_all(&self.pool)
-            .await?;
+            .await?
+        } else {
+            sqlx::query_as::<_, LogEntry>("SELECT * FROM logs ORDER BY timestamp DESC LIMIT ?1")
+            .bind(limit.unwrap_or(100))
+            .fetch_all(&self.pool)
+            .await?
+        };
 
         Ok(logs)
     }
