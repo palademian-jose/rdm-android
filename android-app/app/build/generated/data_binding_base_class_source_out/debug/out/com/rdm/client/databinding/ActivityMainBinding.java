@@ -4,13 +4,15 @@ package com.rdm.client.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
+import com.google.android.material.button.MaterialButton;
 import com.rdm.client.R;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -21,28 +23,42 @@ public final class ActivityMainBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnConnect;
+  public final MaterialButton btnConnect;
 
   @NonNull
-  public final Button btnDisconnect;
+  public final MaterialButton btnDisconnect;
 
   @NonNull
-  public final Button btnTestCommand;
+  public final MaterialButton btnTestCommand;
+
+  @NonNull
+  public final EditText etServerUrl;
+
+  @NonNull
+  public final Switch switchAppendDeviceId;
 
   @NonNull
   public final TextView tvDeviceInfo;
 
   @NonNull
+  public final TextView tvDeviceInfoHint;
+
+  @NonNull
   public final TextView tvStatus;
 
-  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull Button btnConnect,
-      @NonNull Button btnDisconnect, @NonNull Button btnTestCommand, @NonNull TextView tvDeviceInfo,
+  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull MaterialButton btnConnect,
+      @NonNull MaterialButton btnDisconnect, @NonNull MaterialButton btnTestCommand,
+      @NonNull EditText etServerUrl, @NonNull Switch switchAppendDeviceId,
+      @NonNull TextView tvDeviceInfo, @NonNull TextView tvDeviceInfoHint,
       @NonNull TextView tvStatus) {
     this.rootView = rootView;
     this.btnConnect = btnConnect;
     this.btnDisconnect = btnDisconnect;
     this.btnTestCommand = btnTestCommand;
+    this.etServerUrl = etServerUrl;
+    this.switchAppendDeviceId = switchAppendDeviceId;
     this.tvDeviceInfo = tvDeviceInfo;
+    this.tvDeviceInfoHint = tvDeviceInfoHint;
     this.tvStatus = tvStatus;
   }
 
@@ -74,26 +90,44 @@ public final class ActivityMainBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btnConnect;
-      Button btnConnect = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnConnect = ViewBindings.findChildViewById(rootView, id);
       if (btnConnect == null) {
         break missingId;
       }
 
       id = R.id.btnDisconnect;
-      Button btnDisconnect = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnDisconnect = ViewBindings.findChildViewById(rootView, id);
       if (btnDisconnect == null) {
         break missingId;
       }
 
       id = R.id.btnTestCommand;
-      Button btnTestCommand = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnTestCommand = ViewBindings.findChildViewById(rootView, id);
       if (btnTestCommand == null) {
+        break missingId;
+      }
+
+      id = R.id.etServerUrl;
+      EditText etServerUrl = ViewBindings.findChildViewById(rootView, id);
+      if (etServerUrl == null) {
+        break missingId;
+      }
+
+      id = R.id.switchAppendDeviceId;
+      Switch switchAppendDeviceId = ViewBindings.findChildViewById(rootView, id);
+      if (switchAppendDeviceId == null) {
         break missingId;
       }
 
       id = R.id.tvDeviceInfo;
       TextView tvDeviceInfo = ViewBindings.findChildViewById(rootView, id);
       if (tvDeviceInfo == null) {
+        break missingId;
+      }
+
+      id = R.id.tvDeviceInfoHint;
+      TextView tvDeviceInfoHint = ViewBindings.findChildViewById(rootView, id);
+      if (tvDeviceInfoHint == null) {
         break missingId;
       }
 
@@ -104,7 +138,8 @@ public final class ActivityMainBinding implements ViewBinding {
       }
 
       return new ActivityMainBinding((LinearLayout) rootView, btnConnect, btnDisconnect,
-          btnTestCommand, tvDeviceInfo, tvStatus);
+          btnTestCommand, etServerUrl, switchAppendDeviceId, tvDeviceInfo, tvDeviceInfoHint,
+          tvStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -30,7 +30,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:persistent="true"
-        android:theme="@style/Theme.RdmClient" >
+        android:theme="@style/Theme.RdmClient"
+        android:usesCleartextTraffic="true" >
         <activity
             android:name="com.rdm.client.MainActivity"
             android:exported="true"

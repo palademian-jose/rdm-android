@@ -8,11 +8,15 @@ color purple_700
 color teal_200
 color teal_700
 color white
+drawable editbox_background
 drawable ic_launcher_foreground
 id btnConnect
 id btnDisconnect
 id btnTestCommand
+id etServerUrl
+id switchAppendDeviceId
 id tvDeviceInfo
+id tvDeviceInfoHint
 id tvStatus
 layout activity_main
 mipmap ic_launcher
