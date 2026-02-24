@@ -14,7 +14,8 @@ import java.util.concurrent.TimeUnit
 class WebSocketClient(
     private val context: Context,
     private val serverUrl: String,
-    private val deviceId: String
+    private val deviceId: String,
+    private val authToken: String = "default_token"
 ) {
     private val TAG = "WebSocketClient"
     private val gson = Gson()
@@ -48,6 +49,8 @@ class WebSocketClient(
                         Log.d(TAG, "WebSocket connected")
                         isConnected = true
                         onConnected?.invoke()
+                        // Send auth first, then device info
+                        sendAuth("default_token") // TODO: Make this configurable or use real auth
                         sendDeviceInfo()
                     }
 

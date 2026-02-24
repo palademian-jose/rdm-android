@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         tvDeviceInfoHint.text = "Device ID: $deviceId"
 
         // Initialize WebSocket client (will be replaced on connect)
-        webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device", deviceId)
+        webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device", deviceId, "admin123")
 
         // Setup listeners
         setupWebSocketListeners()
@@ -183,8 +183,8 @@ class MainActivity : AppCompatActivity() {
                 // Disconnect existing client if any
                 webSocketClient.disconnect()
 
-                // Create new WebSocket client with the final URL
-                webSocketClient = WebSocketClient(this@MainActivity, finalUrl, deviceId)
+                // Create new WebSocket client with the final URL and auth token
+                webSocketClient = WebSocketClient(this@MainActivity, finalUrl, deviceId, "admin123")
                 setupWebSocketListeners()
 
                 Log.d(TAG, "Connecting to: $finalUrl")
