@@ -29,8 +29,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnTestCommand: MaterialButton
     private lateinit var etServerUrl: TextInputEditText
     private lateinit var switchAppendDeviceId: MaterialSwitch
-    private lateinit var statusPill: LinearLayout
-    private lateinit var ivStatusDot: ImageView
 
     private lateinit var webSocketClient: WebSocketClient
     private lateinit var deviceId: String
@@ -57,8 +55,6 @@ class MainActivity : AppCompatActivity() {
         btnTestCommand = findViewById(R.id.btnTestCommand)
         etServerUrl = findViewById(R.id.etServerUrl)
         switchAppendDeviceId = findViewById(R.id.switchAppendDeviceId)
-        statusPill = findViewById(R.id.statusPill)
-        ivStatusDot = findViewById(R.id.ivStatusDot)
 
         // Set device ID
         tvDeviceInfoHint.text = deviceId
@@ -84,58 +80,16 @@ class MainActivity : AppCompatActivity() {
     enum class ConnectionStatus { CONNECTED, DISCONNECTED, CONNECTING, ERROR }
 
     private fun setStatus(status: ConnectionStatus) {
-        val (label, textColor, bgDrawable, dotColor) = when (status) {
-            ConnectionStatus.CONNECTED -> Quadruple(
-                "Online",
-                R.color.status_connected,
-                R.drawable.bg_status_connected,
-                R.color.status_connected
-            )
-            ConnectionStatus.DISCONNECTED -> Quadruple(
-                "Offline",
-                R.color.status_disconnected,
-                R.drawable.bg_status_disconnected,
-                R.color.status_disconnected
-            )
-            ConnectionStatus.CONNECTING -> Quadruple(
-                "Connecting…",
-                R.color.status_connecting,
-                R.drawable.bg_status_connecting,
-                R.color.status_connecting
-            )
-            ConnectionStatus.ERROR -> Quadruple(
-                "Error",
-                R.color.status_disconnected,
-                R.drawable.bg_status_disconnected,
-                R.color.status_disconnected
-            )
+        val (label, textColor) = when (status) {
+            ConnectionStatus.CONNECTED -> Pair("Online", R.color.status_connected)
+            ConnectionStatus.DISCONNECTED -> Pair("Offline", R.color.status_disconnected)
+            ConnectionStatus.CONNECTING -> Pair("Connecting…", R.color.status_connecting)
+            ConnectionStatus.ERROR -> Pair("Error", R.color.status_disconnected)
         }
 
-        tvStatus.text = label
+        tvStatus.text = "● $label"
         tvStatus.setTextColor(ContextCompat.getColor(this, textColor))
-        statusPill.background = ContextCompat.getDrawable(this, bgDrawable)
-
-        // Tint the dot
-        val dotDrawable = ivStatusDot.background.mutate() as GradientDrawable
-        dotDrawable.setColor(ContextCompat.getColor(this, dotColor))
-        ivStatusDot.background = dotDrawable
-
-        // Pulse animation only when connecting
-        if (status == ConnectionStatus.CONNECTING) {
-            val pulse = AnimationUtils.loadAnimation(this, R.anim.pulse)
-            ivStatusDot.startAnimation(pulse)
-        } else {
-            ivStatusDot.clearAnimation()
-            // Fade-in the pill for a nice transition
-            val fadeIn = ObjectAnimator.ofFloat(statusPill, "alpha", 0.6f, 1f).apply {
-                duration = 300
-            }
-            fadeIn.start()
-        }
     }
-
-    // Simple data holder (Kotlin doesn't have built-in Quadruple)
-    data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
 
     // ──────────────────────────────────────────────────────────────────────
     // Listeners
