@@ -58,14 +58,21 @@ class AppUsageTracker(
 
         val events = usageStatsManager.queryEvents(startTime, endTime)
 
+        // Iterate through events using hasNextEvent/getNextEvent
         val eventList = mutableListOf<UsageEvents.Event>()
-        events.forEachTo(object : UsageEvents.Event() {
-            override fun onEvent(event: UsageEvents.Event) {
-                eventList.add(event)
+        val eventInstance = UsageEvents.Event()
+        while (events.hasNextEvent()) {
+            events.getNextEvent(eventInstance)
+            // Copy event data to new instance
+            val eventCopy = UsageEvents.Event().apply {
+                packageName = eventInstance.packageName
+                eventType = eventInstance.eventType
+                timeStamp = eventInstance.timeStamp
             }
-        })
+            eventList.add(eventCopy)
+        }
 
-        // Find the most recent foreground event
+        // Find most recent foreground event
         var latestForegroundApp: String? = null
         var latestTimestamp = 0L
 
@@ -104,13 +111,19 @@ class AppUsageTracker(
         val startTime = endTime - 60 * 1000 // Check last minute
 
         val events = usageStatsManager.queryEvents(startTime, endTime)
-        val eventList = mutableListOf<UsageEvents.Event>()
 
-        events.forEachTo(object : UsageEvents.Event() {
-            override fun onEvent(event: UsageEvents.Event) {
-                eventList.add(event)
+        // Iterate through events
+        val eventList = mutableListOf<UsageEvents.Event>()
+        val eventInstance = UsageEvents.Event()
+        while (events.hasNextEvent()) {
+            events.getNextEvent(eventInstance)
+            val eventCopy = UsageEvents.Event().apply {
+                packageName = eventInstance.packageName
+                eventType = eventInstance.eventType
+                timeStamp = eventInstance.timeStamp
             }
-        })
+            eventList.add(eventCopy)
+        }
 
         // Find most recent foreground event
         var latestApp: String? = null
