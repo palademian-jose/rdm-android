@@ -1,9 +1,12 @@
 package com.rdm.client
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.animation.AnimationUtils
@@ -11,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -36,10 +40,55 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
 
+    // Permission request launcher
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val allGranted = permissions.values.all { it }
+        if (allGranted) {
+            Log.d(TAG, "All permissions granted")
+            initializeApp()
+        } else {
+            Log.d(TAG, "Some permissions denied - app will work with limited functionality")
+            initializeApp()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Request permissions first
+        requestPermissions()
+    }
+
+    private fun requestPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
+        // READ_PHONE_STATE - for phone number and SIM info
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+            != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.READ_PHONE_STATE)
+        }
+
+        // READ_PHONE_NUMBERS - for getting phone number (Android 8.0+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS)
+                != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.READ_PHONE_NUMBERS)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            Log.d(TAG, "Requesting permissions: $permissionsToRequest")
+            requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
+        } else {
+            Log.d(TAG, "All permissions already granted")
+            initializeApp()
+        }
+    }
+
+    private fun initializeApp() {
         // Get device ID
         deviceId = android.provider.Settings.Secure.getString(
             contentResolver,
