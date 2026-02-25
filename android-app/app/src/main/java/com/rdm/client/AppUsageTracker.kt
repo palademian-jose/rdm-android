@@ -63,12 +63,11 @@ class AppUsageTracker(
         val eventInstance = UsageEvents.Event()
         while (events.hasNextEvent()) {
             events.getNextEvent(eventInstance)
-            // Copy event data to new instance
-            val eventCopy = UsageEvents.Event().apply {
-                packageName = eventInstance.packageName
-                eventType = eventInstance.eventType
-                timeStamp = eventInstance.timeStamp
-            }
+            // Create a new instance with copied data
+            val eventCopy = UsageEvents.Event()
+            eventCopy.packageName = eventInstance.packageName
+            eventCopy.eventType = eventInstance.eventType
+            eventCopy.timeStamp = eventInstance.timeStamp
             eventList.add(eventCopy)
         }
 
@@ -117,11 +116,11 @@ class AppUsageTracker(
         val eventInstance = UsageEvents.Event()
         while (events.hasNextEvent()) {
             events.getNextEvent(eventInstance)
-            val eventCopy = UsageEvents.Event().apply {
-                packageName = eventInstance.packageName
-                eventType = eventInstance.eventType
-                timeStamp = eventInstance.timeStamp
-            }
+            // Create a new instance with copied data
+            val eventCopy = UsageEvents.Event()
+            eventCopy.packageName = eventInstance.packageName
+            eventCopy.eventType = eventInstance.eventType
+            eventCopy.timeStamp = eventInstance.timeStamp
             eventList.add(eventCopy)
         }
 

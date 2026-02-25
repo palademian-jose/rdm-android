@@ -249,5 +249,9 @@ class WebSocketClient(
         }
     }
 
+    fun send(message: String) {
+        sendMessage(message)
+    }
+
     fun isConnected(): Boolean = isConnected
 }
