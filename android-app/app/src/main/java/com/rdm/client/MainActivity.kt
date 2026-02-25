@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webSocketClient: WebSocketClient
     private lateinit var deviceId: String
     private var isServiceRunning = false
+    private var appUsageTracker: AppUsageTracker? = null
 
     private val TAG = "MainActivity"
 
@@ -79,6 +80,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // PACKAGE_USAGE_STATS - for app usage tracking
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.PACKAGE_USAGE_STATS)
+                != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.PACKAGE_USAGE_STATS)
+            }
+        }
+
         if (permissionsToRequest.isNotEmpty()) {
             Log.d(TAG, "Requesting permissions: $permissionsToRequest")
             requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
@@ -94,6 +103,14 @@ class MainActivity : AppCompatActivity() {
             contentResolver,
             android.provider.Settings.Secure.ANDROID_ID
         ) ?: "unknown"
+
+        // Initialize app usage tracker
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            appUsageTracker = AppUsageTracker(this) { packageName, eventType, timestamp ->
+                sendAppUsageEvent(packageName, eventType, timestamp)
+            }
+            appUsageTracker?.startTracking()
+        }
 
         // Initialize views
         tvStatus = findViewById(R.id.tvStatus)
@@ -120,6 +137,26 @@ class MainActivity : AppCompatActivity() {
 
         // Initial status: disconnected
         setStatus(ConnectionStatus.DISCONNECTED)
+    }
+
+    private fun sendAppUsageEvent(packageName: String, eventType: String, timestamp: Long) {
+        try {
+            val appName = appUsageTracker?.getAppName(packageName) ?: packageName
+
+            val eventData = mapOf(
+                "type" to "app_usage",
+                "event_type" to eventType,
+                "package_name" to packageName,
+                "app_name" to appName,
+                "timestamp" to timestamp
+            )
+
+            val json = org.json.JSONObject(eventData).toString()
+            webSocketClient.send(json)
+            Log.d(TAG, "App usage event sent: $eventType - $appName")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to send app usage event", e)
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────────

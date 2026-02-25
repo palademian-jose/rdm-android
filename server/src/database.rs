@@ -48,6 +48,17 @@ pub struct LogEntry {
     pub timestamp: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
+pub struct AppUsageEvent {
+    pub id: String,
+    pub device_id: String,
+    pub event_type: String,
+    pub package_name: String,
+    pub app_name: String,
+    pub timestamp: String,
+    pub created_at: String,
+}
+
 pub struct Database {
     pool: Pool<Sqlite>,
 }
@@ -110,6 +121,16 @@ impl Database {
                 message TEXT NOT NULL,
                 data TEXT,
                 timestamp TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS app_usage_events (
+                id TEXT PRIMARY KEY,
+                device_id TEXT NOT NULL,
+                event_type TEXT NOT NULL,
+                package_name TEXT NOT NULL,
+                app_name TEXT NOT NULL,
+                timestamp TEXT NOT NULL,
+                created_at TEXT NOT NULL
             );
         "#)
         .execute(&self.pool)
@@ -236,6 +257,24 @@ impl Database {
         .bind(&log.message)
         .bind(&log.data)
         .bind(&log.timestamp)
+        .execute(&self.pool)
+        .await?;
+
+        Ok(())
+    }
+
+    pub async fn save_app_usage_event(&self, event: &AppUsageEvent) -> Result<()> {
+        sqlx::query(r#"
+            INSERT INTO app_usage_events (id, device_id, event_type, package_name, app_name, timestamp, created_at)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+        "#)
+        .bind(&event.id)
+        .bind(&event.device_id)
+        .bind(&event.event_type)
+        .bind(&event.package_name)
+        .bind(&event.app_name)
+        .bind(&event.timestamp)
+        .bind(&event.created_at)
         .execute(&self.pool)
         .await?;
 

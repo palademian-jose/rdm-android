@@ -39,6 +39,14 @@ pub enum WsMessage {
         device_id: String,
         timestamp: i64,
     },
+    #[serde(rename = "app_usage")]
+    AppUsage {
+        device_id: String,
+        event_type: String,
+        package_name: String,
+        app_name: String,
+        timestamp: i64,
+    },
     #[serde(rename = "error")]
     Error {
         code: String,

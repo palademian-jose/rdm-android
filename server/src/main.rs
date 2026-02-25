@@ -193,6 +193,19 @@ async fn ws_device(
                                                 };
                                                 let _ = app_state_clone.db.save_log(&log_entry).await;
                                             }
+                                            websocket::WsMessage::AppUsage { device_id: d_id, event_type, package_name, app_name, timestamp } => {
+                                                info!("App usage from {}: {} - {}", d_id, event_type, app_name);
+                                                let app_usage_event = database::AppUsageEvent {
+                                                    id: uuid::Uuid::new_v4().to_string(),
+                                                    device_id: d_id.clone(),
+                                                    event_type: event_type.clone(),
+                                                    package_name: package_name.clone(),
+                                                    app_name: app_name.clone(),
+                                                    timestamp: chrono::Utc::now().to_rfc3339(),
+                                                    created_at: chrono::Utc::now().to_rfc3339(),
+                                                };
+                                                let _ = app_state_clone.db.save_app_usage_event(&app_usage_event).await;
+                                            }
                                             websocket::WsMessage::Error { .. } => {
                                                 error!("Error message received from device: {}", device_id);
                                             }
