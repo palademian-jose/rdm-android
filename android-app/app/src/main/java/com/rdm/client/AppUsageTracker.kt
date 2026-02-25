@@ -9,6 +9,8 @@ import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.util.*
 
+private data class AppEvent(val packageName: String, val eventType: Int, val timeStamp: Long)
+
 class AppUsageTracker(
     private val context: Context,
     private val onAppEvent: (String, String, Long) -> Unit // (packageName, eventType, timestamp)
@@ -59,16 +61,11 @@ class AppUsageTracker(
         val events = usageStatsManager.queryEvents(startTime, endTime)
 
         // Iterate through events using hasNextEvent/getNextEvent
-        val eventList = mutableListOf<UsageEvents.Event>()
+        val eventList = mutableListOf<AppEvent>()
         val eventInstance = UsageEvents.Event()
         while (events.hasNextEvent()) {
             events.getNextEvent(eventInstance)
-            // Create a new instance with copied data
-            val eventCopy = UsageEvents.Event()
-            eventCopy.packageName = eventInstance.packageName
-            eventCopy.eventType = eventInstance.eventType
-            eventCopy.timeStamp = eventInstance.timeStamp
-            eventList.add(eventCopy)
+            eventList.add(AppEvent(eventInstance.packageName, eventInstance.eventType, eventInstance.timeStamp))
         }
 
         // Find most recent foreground event
@@ -112,16 +109,11 @@ class AppUsageTracker(
         val events = usageStatsManager.queryEvents(startTime, endTime)
 
         // Iterate through events
-        val eventList = mutableListOf<UsageEvents.Event>()
+        val eventList = mutableListOf<AppEvent>()
         val eventInstance = UsageEvents.Event()
         while (events.hasNextEvent()) {
             events.getNextEvent(eventInstance)
-            // Create a new instance with copied data
-            val eventCopy = UsageEvents.Event()
-            eventCopy.packageName = eventInstance.packageName
-            eventCopy.eventType = eventInstance.eventType
-            eventCopy.timeStamp = eventInstance.timeStamp
-            eventList.add(eventCopy)
+            eventList.add(AppEvent(eventInstance.packageName, eventInstance.eventType, eventInstance.timeStamp))
         }
 
         // Find most recent foreground event
