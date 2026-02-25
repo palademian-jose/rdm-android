@@ -46,49 +46,4 @@
         <item name="android:textColorHint">@color/text_hint</item>
     </style>
 
-    <!-- Section header -->
-    <style name="TextStyle.SectionHeader" parent="TextAppearance.Material3.LabelSmall">
-        <item name="android:textColor">@color/text_secondary</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:letterSpacing">0.12</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <!-- Terminal text -->
-    <style name="TextStyle.Terminal" parent="TextAppearance.Material3.BodySmall">
-        <item name="android:textColor">@color/text_terminal</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:fontFamily">monospace</item>
-        <item name="android:lineSpacingMultiplier">1.4</item>
-    </style>
-
-    <!-- Primary button -->
-    <style name="ButtonStyle.Primary" parent="Widget.Material3.Button">
-        <item name="backgroundTint">@color/accent_cyan</item>
-        <item name="android:textColor">@color/bg_primary</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:letterSpacing">0.05</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <!-- Outlined button (Disconnect) -->
-    <style name="ButtonStyle.Outlined" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="strokeColor">@color/status_disconnected</item>
-        <item name="android:textColor">@color/status_disconnected</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:letterSpacing">0.05</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <!-- Tonal button (Test) -->
-    <style name="ButtonStyle.Tonal" parent="Widget.Material3.Button.TonalButton">
-        <item name="backgroundTint">@color/accent_purple_dim</item>
-        <item name="android:textColor">@color/accent_purple</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:letterSpacing">0.05</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
 </resources>
