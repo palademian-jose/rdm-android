@@ -129,6 +129,11 @@ async fn ws_device(
                                                         platform: android_version.clone(),
                                                         status: "online".to_string(),
                                                         last_seen: chrono::Utc::now().to_rfc3339(),
+                                                        latitude: None,
+                                                        longitude: None,
+                                                        battery_level: None,
+                                                        storage_free: None,
+                                                        ram_free: None,
                                                     };
 
                                                     if let Ok(mut devices) = app_state_clone.devices.write() {
@@ -148,6 +153,11 @@ async fn ws_device(
                                                         user_data: "{}".to_string(),
                                                         last_seen: chrono::Utc::now().to_rfc3339(),
                                                         created_at: chrono::Utc::now().to_rfc3339(),
+                                                        latitude: None,
+                                                        longitude: None,
+                                                        battery_level: None,
+                                                        storage_free: None,
+                                                        ram_free: None,
                                                     };
 
                                                     if let Err(e) = app_state_clone.db.save_device(&db_device).await {
