@@ -18,6 +18,11 @@ pub struct Device {
     pub user_data: String,
     pub last_seen: String,
     pub created_at: String,
+    pub latitude: Option<f64>,
+    pub longitude: Option<f64>,
+    pub battery_level: Option<i32>,
+    pub storage_free: Option<i64>,
+    pub ram_free: Option<i64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
@@ -78,7 +83,12 @@ impl Database {
                 device_info TEXT NOT NULL,
                 user_data TEXT NOT NULL,
                 last_seen TEXT NOT NULL,
-                created_at TEXT NOT NULL
+                created_at TEXT NOT NULL,
+                latitude REAL,
+                longitude REAL,
+                battery_level INTEGER,
+                storage_free INTEGER,
+                ram_free INTEGER
             );
 
             CREATE TABLE IF NOT EXISTS commands (
@@ -105,14 +115,35 @@ impl Database {
         .execute(&self.pool)
         .await?;
 
+        // Add new columns if they don't exist (for existing databases)
+        sqlx::query(r#"
+            ALTER TABLE devices ADD COLUMN latitude REAL;
+        "#).execute(&self.pool).await.ok();
+
+        sqlx::query(r#"
+            ALTER TABLE devices ADD COLUMN longitude REAL;
+        "#).execute(&self.pool).await.ok();
+
+        sqlx::query(r#"
+            ALTER TABLE devices ADD COLUMN battery_level INTEGER;
+        "#).execute(&self.pool).await.ok();
+
+        sqlx::query(r#"
+            ALTER TABLE devices ADD COLUMN storage_free INTEGER;
+        "#).execute(&self.pool).await.ok();
+
+        sqlx::query(r#"
+            ALTER TABLE devices ADD COLUMN ram_free INTEGER;
+        "#).execute(&self.pool).await.ok();
+
         Ok(())
     }
 
     pub async fn save_device(&self, device: &Device) -> Result<()> {
         sqlx::query(r#"
             INSERT OR REPLACE INTO devices
-            (id, name, model, android_version, api_level, architecture, device_info, user_data, last_seen, created_at)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
+            (id, name, model, android_version, api_level, architecture, device_info, user_data, last_seen, created_at, latitude, longitude, battery_level, storage_free, ram_free)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15)
         "#)
         .bind(&device.id)
         .bind(&device.name)
@@ -124,6 +155,11 @@ impl Database {
         .bind(&device.user_data)
         .bind(&device.last_seen)
         .bind(&device.created_at)
+        .bind(device.latitude)
+        .bind(device.longitude)
+        .bind(device.battery_level)
+        .bind(device.storage_free)
+        .bind(device.ram_free)
         .execute(&self.pool)
         .await?;
 

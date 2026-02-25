@@ -22,6 +22,11 @@ pub struct Device {
     pub user_data: String,
     pub last_seen: String,
     pub created_at: String,
+    pub latitude: Option<f64>,
+    pub longitude: Option<f64>,
+    pub battery_level: Option<i32>,
+    pub storage_free: Option<i64>,
+    pub ram_free: Option<i64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
