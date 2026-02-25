@@ -126,7 +126,7 @@ async fn ws_device(
                                                         id: d_id.clone(),
                                                         name: name.clone(),
                                                         model: model.clone(),
-                                                        platform: android_version.clone(),
+                                                        android_version: android_version.clone(),
                                                         status: "online".to_string(),
                                                         last_seen: chrono::Utc::now().to_rfc3339(),
                                                         latitude: None,
