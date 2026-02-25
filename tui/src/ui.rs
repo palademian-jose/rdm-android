@@ -80,9 +80,54 @@ impl App {
             // Auto-refresh every 5 seconds
             if last_auto_refresh.elapsed() >= Duration::from_secs(5) {
                 self.refresh_devices().await?;
-                // Also refresh logs for selected device in Logs view
-                if self.state.current_view == View::Logs {
-                    self.refresh_logs().await;
+                
+                // Refresh based on current view
+                match self.state.current_view {
+                    View::Logs => {
+                        self.refresh_logs().await;
+                    }
+                    View::CommandExecution => {
+                        // Refresh command results for selected device
+                        if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
+                            match self.api_client.get_commands(&device.id, Some(5)).await {
+                                Ok(commands) => {
+                                    if !commands.is_empty() {
+                                        // Get the most recent command and its result
+                                        if let Some(cmd) = commands.first() {
+                                            let status = if cmd.status == "completed" {
+                                                "✓"
+                                            } else if cmd.status == "failed" {
+                                                "✗"
+                                            } else {
+                                                "⟳"
+                                            };
+                                            
+                                            let output_text = match &cmd.output {
+                                                Some(output) => output.clone(),
+                                                None => "[No output yet]".to_string(),
+                                            };
+                                            
+                                            self.output_buffer = format!(
+                                                "{} {}:\nOutput:\n{}",
+                                                status, cmd.command, output_text
+                                            );
+                                            
+                                            self.state.status_message = format!(
+                                                "Last updated: {}",
+                                                chrono::Local::now().format("%H:%M:%S")
+                                            );
+                                        } else {
+                                            self.state.status_message = "No commands found".to_string();
+                                        }
+                                    }
+                                }
+                                Err(e) => {
+                                    self.state.status_message = format!("Command fetch error: {}", e);
+                                }
+                            }
+                        }
+                    }
+                    _ => {}
                 }
                 last_auto_refresh = Instant::now();
             }
@@ -514,15 +559,15 @@ impl App {
         }
 
         if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-            let api_level = device.api_level.to_string();
+            let api_level = device.api_level.map(|l| l.to_string()).unwrap_or_else(|| "N/A".to_string());
 
             let rows = vec![
                 Row::new(vec!["Name", device.name.as_str()]),
                 Row::new(vec!["Model", device.model.as_str()]),
-                Row::new(vec!["Android", device.android_version.as_str()]),
+                Row::new(vec!["Android", device.android_version.as_deref().unwrap_or("N/A")]),
                 Row::new(vec!["API Level", api_level.as_str()]),
-                Row::new(vec!["Architecture", device.architecture.as_str()]),
-                Row::new(vec!["Last Seen", device.last_seen.as_str()]),
+                Row::new(vec!["Architecture", device.architecture.as_deref().unwrap_or("N/A")]),
+                Row::new(vec!["Last Seen", device.last_seen.as_deref().unwrap_or("N/A")]),
                 Row::new(vec!["Device ID", device.id.as_str()]),
             ];
 

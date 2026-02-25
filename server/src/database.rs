@@ -100,8 +100,12 @@ impl Database {
                 battery_level INTEGER,
                 storage_free INTEGER,
                 ram_free INTEGER
-            );
+            )
+        "#)
+        .execute(&self.pool)
+        .await?;
 
+        sqlx::query(r#"
             CREATE TABLE IF NOT EXISTS commands (
                 id TEXT PRIMARY KEY,
                 device_id TEXT NOT NULL,
@@ -112,8 +116,12 @@ impl Database {
                 status TEXT NOT NULL,
                 created_at TEXT NOT NULL,
                 completed_at TEXT
-            );
+            )
+        "#)
+        .execute(&self.pool)
+        .await?;
 
+        sqlx::query(r#"
             CREATE TABLE IF NOT EXISTS logs (
                 id TEXT PRIMARY KEY,
                 device_id TEXT NOT NULL,
@@ -121,8 +129,12 @@ impl Database {
                 message TEXT NOT NULL,
                 data TEXT,
                 timestamp TEXT NOT NULL
-            );
+            )
+        "#)
+        .execute(&self.pool)
+        .await?;
 
+        sqlx::query(r#"
             CREATE TABLE IF NOT EXISTS app_usage_events (
                 id TEXT PRIMARY KEY,
                 device_id TEXT NOT NULL,
@@ -131,7 +143,7 @@ impl Database {
                 app_name TEXT NOT NULL,
                 timestamp TEXT NOT NULL,
                 created_at TEXT NOT NULL
-            );
+            )
         "#)
         .execute(&self.pool)
         .await?;
@@ -303,5 +315,32 @@ impl Database {
         };
 
         Ok(logs)
+    }
+
+    pub async fn get_commands(
+        &self,
+        device_id: &str,
+        limit: Option<i64>,
+    ) -> Result<Vec<Command>> {
+        let commands = sqlx::query_as::<_, Command>(
+            "SELECT * FROM commands WHERE device_id = ?1 ORDER BY created_at DESC LIMIT ?2"
+        )
+        .bind(device_id)
+        .bind(limit.unwrap_or(50))
+        .fetch_all(&self.pool)
+        .await?;
+
+        Ok(commands)
+    }
+
+    pub async fn get_command_by_id(&self, command_id: &str) -> Result<Option<Command>> {
+        let command = sqlx::query_as::<_, Command>(
+            "SELECT * FROM commands WHERE id = ?1"
+        )
+        .bind(command_id)
+        .fetch_optional(&self.pool)
+        .await?;
+
+        Ok(command)
     }
 }

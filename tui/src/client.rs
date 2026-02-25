@@ -13,15 +13,26 @@ pub struct ApiClient {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Device {
     pub id: String,
+    #[serde(default)]
     pub name: String,
+    #[serde(default)]
     pub model: String,
-    pub android_version: String,
-    pub api_level: i32,
-    pub architecture: String,
-    pub device_info: String,
-    pub user_data: String,
-    pub last_seen: String,
-    pub created_at: String,
+    #[serde(default)]
+    pub android_version: Option<String>,
+    #[serde(default)]
+    pub status: Option<String>,
+    #[serde(default)]
+    pub api_level: Option<i32>,
+    #[serde(default)]
+    pub architecture: Option<String>,
+    #[serde(default)]
+    pub device_info: Option<String>,
+    #[serde(default)]
+    pub user_data: Option<String>,
+    #[serde(default)]
+    pub last_seen: Option<String>,
+    #[serde(default)]
+    pub created_at: Option<String>,
     pub latitude: Option<f64>,
     pub longitude: Option<f64>,
     pub battery_level: Option<i32>,
@@ -194,12 +205,22 @@ impl ApiClient {
     }
 
     pub async fn get_logs(&self, device_id: &str, limit: Option<i64>) -> Result<Vec<LogEntry>> {
+        #[derive(Deserialize)]
+        struct LogsResponse {
+            data: Option<LogsData>,
+        }
+        #[derive(Deserialize)]
+        struct LogsData {
+            logs: Vec<LogEntry>,
+        }
+
         // Correct endpoint: GET /api/devices/{device_id}/logs
         let mut url = format!("/api/devices/{}/logs", device_id);
         if let Some(l) = limit {
             url.push_str(&format!("?limit={}", l));
         }
-        self.get(&url).await
+        let response: LogsResponse = self.get(&url).await?;
+        Ok(response.data.map(|d| d.logs).unwrap_or_default())
     }
 
     pub async fn get_commands(&self, device_id: &str, limit: Option<i64>) -> Result<Vec<Command>> {
