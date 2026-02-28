@@ -13,13 +13,220 @@ use std::time::{Instant, Duration};
 use crate::client::{ApiClient, Device};
 use crate::monitor::DeviceMonitor;
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CommandCategory {
+    DeviceInfo,
+    AppManagement,
+    System,
+    Connectivity,
+}
+
+#[derive(Debug, Clone)]
+pub struct PredefinedCommand {
+    pub id: String,
+    pub name: String,
+    pub command: String,
+    pub category: CommandCategory,
+    pub requires_sudo: bool,
+    pub description: String,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum View {
     Dashboard,
     Devices,
     DeviceInfo,
+    CommandList,
     CommandExecution,
     Logs,
+}
+
+impl CommandCategory {
+    pub fn display_name(&self) -> &str {
+        match self {
+            CommandCategory::DeviceInfo => "Device Info",
+            CommandCategory::AppManagement => "App Management",
+            CommandCategory::System => "System",
+            CommandCategory::Connectivity => "Connectivity",
+        }
+    }
+}
+
+pub fn get_predefined_commands() -> Vec<PredefinedCommand> {
+    vec![
+        // Device Info
+        PredefinedCommand {
+            id: "getprop".to_string(),
+            name: "Get Device Properties".to_string(),
+            command: "getprop".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Get all device properties".to_string(),
+        },
+        PredefinedCommand {
+            id: "ip_addr".to_string(),
+            name: "Get Network Info".to_string(),
+            command: "ip addr show".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Show network interface information".to_string(),
+        },
+        PredefinedCommand {
+            id: "ps_aux".to_string(),
+            name: "Get Process List".to_string(),
+            command: "ps aux".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "List all running processes".to_string(),
+        },
+        PredefinedCommand {
+            id: "meminfo".to_string(),
+            name: "Get Memory Info".to_string(),
+            command: "cat /proc/meminfo".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Show memory usage information".to_string(),
+        },
+        PredefinedCommand {
+            id: "cpuinfo".to_string(),
+            name: "Get CPU Info".to_string(),
+            command: "cat /proc/cpuinfo".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Show CPU information".to_string(),
+        },
+        PredefinedCommand {
+            id: "df_h".to_string(),
+            name: "Get Storage Info".to_string(),
+            command: "df -h".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Show disk space usage".to_string(),
+        },
+        PredefinedCommand {
+            id: "battery".to_string(),
+            name: "Get Battery Info".to_string(),
+            command: "dumpsys battery".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Show battery status".to_string(),
+        },
+        PredefinedCommand {
+            id: "foreground_app".to_string(),
+            name: "Get Foreground App".to_string(),
+            command: "dumpsys activity activities | grep 'mResumedActivity'".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Get currently running app".to_string(),
+        },
+        PredefinedCommand {
+            id: "activity_stack".to_string(),
+            name: "Get Activity Stack".to_string(),
+            command: "dumpsys activity activities".to_string(),
+            category: CommandCategory::DeviceInfo,
+            requires_sudo: false,
+            description: "Get full activity stack".to_string(),
+        },
+        // App Management
+        PredefinedCommand {
+            id: "pm_list_3".to_string(),
+            name: "List Installed Apps".to_string(),
+            command: "pm list packages -3".to_string(),
+            category: CommandCategory::AppManagement,
+            requires_sudo: false,
+            description: "List third-party installed apps".to_string(),
+        },
+        PredefinedCommand {
+            id: "pm_list_s".to_string(),
+            name: "List System Apps".to_string(),
+            command: "pm list packages -s".to_string(),
+            category: CommandCategory::AppManagement,
+            requires_sudo: false,
+            description: "List system apps".to_string(),
+        },
+        PredefinedCommand {
+            id: "force_stop".to_string(),
+            name: "Force Stop App".to_string(),
+            command: "am force-stop <package>".to_string(),
+            category: CommandCategory::AppManagement,
+            requires_sudo: true,
+            description: "Force stop an app (replace <package>)".to_string(),
+        },
+        PredefinedCommand {
+            id: "pm_clear".to_string(),
+            name: "Clear App Data".to_string(),
+            command: "pm clear <package>".to_string(),
+            category: CommandCategory::AppManagement,
+            requires_sudo: true,
+            description: "Clear app data (replace <package>)".to_string(),
+        },
+        PredefinedCommand {
+            id: "pm_uninstall".to_string(),
+            name: "Uninstall App".to_string(),
+            command: "pm uninstall <package>".to_string(),
+            category: CommandCategory::AppManagement,
+            requires_sudo: true,
+            description: "Uninstall an app (replace <package>)".to_string(),
+        },
+        PredefinedCommand {
+            id: "pm_list_all".to_string(),
+            name: "List All Apps".to_string(),
+            command: "pm list packages".to_string(),
+            category: CommandCategory::AppManagement,
+            requires_sudo: false,
+            description: "List all installed apps".to_string(),
+        },
+        // System
+        PredefinedCommand {
+            id: "reboot".to_string(),
+            name: "Reboot Device".to_string(),
+            command: "reboot".to_string(),
+            category: CommandCategory::System,
+            requires_sudo: true,
+            description: "Reboot the device".to_string(),
+        },
+        PredefinedCommand {
+            id: "brightness".to_string(),
+            name: "Set Screen Brightness".to_string(),
+            command: "settings put system screen_brightness <level>".to_string(),
+            category: CommandCategory::System,
+            requires_sudo: true,
+            description: "Set brightness 0-255 (replace <level>)".to_string(),
+        },
+        // Connectivity
+        PredefinedCommand {
+            id: "wifi_enable".to_string(),
+            name: "Enable WiFi".to_string(),
+            command: "svc wifi enable".to_string(),
+            category: CommandCategory::Connectivity,
+            requires_sudo: true,
+            description: "Enable WiFi".to_string(),
+        },
+        PredefinedCommand {
+            id: "wifi_disable".to_string(),
+            name: "Disable WiFi".to_string(),
+            command: "svc wifi disable".to_string(),
+            category: CommandCategory::Connectivity,
+            requires_sudo: true,
+            description: "Disable WiFi".to_string(),
+        },
+        PredefinedCommand {
+            id: "bt_enable".to_string(),
+            name: "Enable Bluetooth".to_string(),
+            command: "service call bluetooth_manager 6".to_string(),
+            category: CommandCategory::Connectivity,
+            requires_sudo: true,
+            description: "Enable Bluetooth".to_string(),
+        },
+        PredefinedCommand {
+            id: "bt_disable".to_string(),
+            name: "Disable Bluetooth".to_string(),
+            command: "service call bluetooth_manager 8".to_string(),
+            category: CommandCategory::Connectivity,
+            requires_sudo: true,
+            description: "Disable Bluetooth".to_string(),
+        },
+    ]
 }
 
 pub struct App {
@@ -30,7 +237,6 @@ pub struct App {
     last_refresh: Instant,
     monitor: Option<DeviceMonitor>,
     scroll_offset: usize,
-    sudo_mode: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -42,6 +248,8 @@ struct AppState {
     current_command_index: Option<usize>,
     logs: Vec<String>,
     status_message: String,
+    selected_command_index: usize,
+    selected_category_index: usize,
 }
 
 impl App {
@@ -56,13 +264,14 @@ impl App {
                 current_command_index: None,
                 logs: vec![],
                 status_message: "Loading...".to_string(),
+                selected_command_index: 0,
+                selected_category_index: 0,
             },
             input_buffer: String::new(),
             output_buffer: String::new(),
             last_refresh: Instant::now(),
             monitor: None,
             scroll_offset: 0,
-            sudo_mode: false,
         }
     }
 
@@ -70,65 +279,12 @@ impl App {
         // Initial data fetch
         self.refresh_devices().await?;
 
-        // Gap 5: start the device monitor now that we have an API client
-        // We clone the client via a fresh instance (ApiClient is not Clone, so we
-        // start the monitor inline with a brief kick-off).
-        // Note: monitor.start() spawns per-device tasks internally.
         let mut last_auto_refresh = Instant::now();
 
         loop {
             // Auto-refresh every 5 seconds
             if last_auto_refresh.elapsed() >= Duration::from_secs(5) {
                 self.refresh_devices().await?;
-                
-                // Refresh based on current view
-                match self.state.current_view {
-                    View::Logs => {
-                        self.refresh_logs().await;
-                    }
-                    View::CommandExecution => {
-                        // Refresh command results for selected device
-                        if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-                            match self.api_client.get_commands(&device.id, Some(5)).await {
-                                Ok(commands) => {
-                                    if !commands.is_empty() {
-                                        // Get the most recent command and its result
-                                        if let Some(cmd) = commands.first() {
-                                            let status = if cmd.status == "completed" {
-                                                "✓"
-                                            } else if cmd.status == "failed" {
-                                                "✗"
-                                            } else {
-                                                "⟳"
-                                            };
-                                            
-                                            let output_text = match &cmd.output {
-                                                Some(output) => output.clone(),
-                                                None => "[No output yet]".to_string(),
-                                            };
-                                            
-                                            self.output_buffer = format!(
-                                                "{} {}:\nOutput:\n{}",
-                                                status, cmd.command, output_text
-                                            );
-                                            
-                                            self.state.status_message = format!(
-                                                "Last updated: {}",
-                                                chrono::Local::now().format("%H:%M:%S")
-                                            );
-                                        } else {
-                                            self.state.status_message = "No commands found".to_string();
-                                        }
-                                    }
-                                }
-                                Err(e) => {
-                                    self.state.status_message = format!("Command fetch error: {}", e);
-                                }
-                            }
-                        }
-                    }
-                    _ => {}
-                }
                 last_auto_refresh = Instant::now();
             }
 
@@ -170,6 +326,10 @@ impl App {
         match key.code {
             KeyCode::Char('q') | KeyCode::Esc => {
                 // Quit
+                if self.state.current_view == View::CommandList {
+                    self.state.current_view = View::CommandExecution;
+                    return Ok(false);
+                }
                 return Ok(true);
             }
             KeyCode::Char('1') => {
@@ -192,12 +352,26 @@ impl App {
                     self.scroll_offset = 0;
                 }
             }
-
+            KeyCode::Tab => {
+                if self.state.current_view == View::CommandExecution {
+                    self.state.current_view = View::CommandList;
+                    self.scroll_offset = 0;
+                } else if self.state.current_view == View::CommandList {
+                    self.state.current_view = View::CommandExecution;
+                    self.scroll_offset = 0;
+                }
+            }
+            KeyCode::Char('5') => {
+                self.state.current_view = View::Logs;
+                self.scroll_offset = 0;
+            }
             KeyCode::Up => {
                 if self.state.current_view == View::Devices {
                     if self.state.devices.len() > 0 && self.state.selected_device_index > 0 {
                         self.state.selected_device_index -= 1;
                     }
+                } else if self.state.current_view == View::CommandList {
+                    self.handle_command_list_navigation(-1);
                 } else if self.state.current_view == View::Logs {
                     if self.scroll_offset > 0 {
                         self.scroll_offset -= 1;
@@ -209,8 +383,25 @@ impl App {
                     if self.state.devices.len() > 0 && self.state.selected_device_index < self.state.devices.len() - 1 {
                         self.state.selected_device_index += 1;
                     }
+                } else if self.state.current_view == View::CommandList {
+                    self.handle_command_list_navigation(1);
                 } else if self.state.current_view == View::Logs {
                     self.scroll_offset += 1;
+                }
+            }
+            KeyCode::Left => {
+                if self.state.current_view == View::CommandList && self.state.selected_category_index > 0 {
+                    self.state.selected_category_index -= 1;
+                    self.state.selected_command_index = 0;
+                }
+            }
+            KeyCode::Right => {
+                if self.state.current_view == View::CommandList {
+                    let categories = self.get_categories();
+                    if self.state.selected_category_index < categories.len() - 1 {
+                        self.state.selected_category_index += 1;
+                        self.state.selected_command_index = 0;
+                    }
                 }
             }
             KeyCode::PageUp => {
@@ -226,25 +417,12 @@ impl App {
             KeyCode::Enter => {
                 if self.state.current_view == View::CommandExecution && !self.input_buffer.is_empty() {
                     self.execute_command().await?;
+                } else if self.state.current_view == View::CommandList {
+                    self.execute_selected_command().await?;
                 }
-            }
-            KeyCode::Char('s') => {
-                if self.state.current_view == View::CommandExecution {
-                    // Gap 4: toggle sudo mode (don't add 's' to input buffer)
-                    self.sudo_mode = !self.sudo_mode;
-                    let label = if self.sudo_mode { "[sudo ON]" } else { "[sudo OFF]" };
-                    self.state.status_message = format!("Sudo mode: {}", label);
-                }
-            }
-            KeyCode::Char('5') => {
-                self.state.current_view = View::Logs;
-                self.scroll_offset = 0;
-                // Immediately fetch logs when switching to Logs view
-                self.refresh_logs().await;
             }
             KeyCode::Char(c) => {
-                if self.state.current_view == View::CommandExecution && c != 's' {
-                    // Add to input buffer, but skip 's' (handled above for sudo toggle)
+                if self.state.current_view == View::CommandExecution {
                     self.input_buffer.push(c);
                 }
             }
@@ -258,50 +436,78 @@ impl App {
         Ok(false)
     }
 
+    fn handle_command_list_navigation(&mut self, direction: i32) {
+        let commands = get_predefined_commands();
+        let categories = self.get_categories();
+        let current_category = &categories[self.state.selected_category_index];
+
+        let category_commands: Vec<_> = commands
+            .iter()
+            .filter(|c| c.category == *current_category)
+            .collect();
+
+        let new_index = if direction > 0 {
+            self.state.selected_command_index + 1
+        } else {
+            if self.state.selected_command_index > 0 {
+                self.state.selected_command_index - 1
+            } else {
+                0
+            }
+        };
+
+        if new_index < category_commands.len() {
+            self.state.selected_command_index = new_index;
+        }
+    }
+
+    async fn execute_selected_command(&mut self) -> Result<()> {
+        let commands = get_predefined_commands();
+        let categories = self.get_categories();
+        let current_category = &categories[self.state.selected_category_index];
+
+        if let Some(cmd) = commands
+            .iter()
+            .filter(|c| c.category == *current_category)
+            .nth(self.state.selected_command_index)
+        {
+            self.input_buffer = cmd.command.clone();
+            self.state.current_view = View::CommandExecution;
+            self.execute_command().await?;
+        }
+        Ok(())
+    }
+
+    fn get_categories(&self) -> Vec<CommandCategory> {
+        vec![
+            CommandCategory::DeviceInfo,
+            CommandCategory::AppManagement,
+            CommandCategory::System,
+            CommandCategory::Connectivity,
+        ]
+    }
+
     async fn execute_command(&mut self) -> Result<()> {
         let command = self.input_buffer.clone();
         self.state.command_history.push(command.clone());
 
         if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-            self.state.status_message = format!(
-                "Executing{}: {} on {}",
-                if self.sudo_mode { " (sudo)" } else { "" },
-                command,
-                device.name
-            );
+            self.state.status_message = format!("Executing: {} on {}", command, device.name);
 
-            // Gap 4: pass sudo_mode to the API call
-            match self.api_client.execute_command(&device.id, &command, self.sudo_mode).await {
+            match self.api_client.execute_command(&device.id, &command, false).await {
                 Ok(result) => {
                     self.output_buffer = result.clone();
-                    self.state.logs.push(format!("[cmd] {} -> {}", command, result));
+                    self.state.logs.push(format!("Command: {} -> {}", command, result));
                 }
                 Err(e) => {
                     self.output_buffer = format!("Error: {}", e);
-                    self.state.logs.push(format!("[err] {}", e));
+                    self.state.logs.push(format!("Command failed: {}", e));
                 }
             }
         }
 
         self.input_buffer.clear();
         Ok(())
-    }
-
-    /// Gap 3: fetch real logs from the server for the currently selected device
-    async fn refresh_logs(&mut self) {
-        if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-            match self.api_client.get_logs(&device.id, Some(200)).await {
-                Ok(entries) => {
-                    self.state.logs = entries
-                        .into_iter()
-                        .map(|e| format!("[{}] {} {}", e.level.to_uppercase(), e.timestamp, e.message))
-                        .collect();
-                }
-                Err(e) => {
-                    self.state.status_message = format!("Log fetch error: {}", e);
-                }
-            }
-        }
     }
 
     fn draw<B: Backend>(&self, f: &mut Frame) {
@@ -326,6 +532,7 @@ impl App {
             View::Dashboard => self.draw_dashboard::<B>(f, chunks[1]),
             View::Devices => self.draw_devices::<B>(f, chunks[1]),
             View::DeviceInfo => self.draw_device_info::<B>(f, chunks[1]),
+            View::CommandList => self.draw_command_list::<B>(f, chunks[1]),
             View::CommandExecution => self.draw_command_execution::<B>(f, chunks[1]),
             View::Logs => self.draw_logs::<B>(f, chunks[1]),
         }
@@ -352,22 +559,10 @@ impl App {
     }
 
     fn draw_footer<B: Backend>(&self, f: &mut Frame, area: ratatui::layout::Rect) {
-        let status_color = if self.state.status_message.contains("Error") || self.state.status_message.contains("error") {
+        let status_color = if self.state.status_message.contains("Error") {
             Color::Red
-        } else if self.state.status_message.contains("sudo") {
-            Color::Yellow
         } else {
             Color::Green
-        };
-
-        let sudo_hint = if self.state.current_view == View::CommandExecution {
-            if self.sudo_mode {
-                Span::styled("[S]udo:ON ", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD))
-            } else {
-                Span::styled("[S]udo ", Style::default().fg(Color::DarkGray))
-            }
-        } else {
-            Span::styled("", Style::default())
         };
 
         let footer = Paragraph::new(vec![
@@ -378,7 +573,6 @@ impl App {
                 Span::styled("[3]Info ", Style::default().fg(Color::Cyan)),
                 Span::styled("[4]Command ", Style::default().fg(Color::Cyan)),
                 Span::styled("[5]Logs ", Style::default().fg(Color::Cyan)),
-                sudo_hint,
             ]),
             Line::from(vec![
                 Span::styled("Status: ", Style::default().fg(Color::DarkGray)),
@@ -560,15 +754,24 @@ impl App {
         }
 
         if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-            let api_level = device.api_level.map(|l| l.to_string()).unwrap_or_else(|| "N/A".to_string());
+            let api_level = device.api_level.to_string();
+
+            // Get foreground app from state if available
+            let foreground_app = self.state.devices
+                .iter()
+                .find(|d| d.id == device.id)
+                .and_then(|d| d.foreground_app.as_ref())
+                .map(|s| s.as_str())
+                .unwrap_or("Unknown");
 
             let rows = vec![
                 Row::new(vec!["Name", device.name.as_str()]),
                 Row::new(vec!["Model", device.model.as_str()]),
-                Row::new(vec!["Android", device.android_version.as_deref().unwrap_or("N/A")]),
+                Row::new(vec!["Android", device.android_version.as_str()]),
                 Row::new(vec!["API Level", api_level.as_str()]),
-                Row::new(vec!["Architecture", device.architecture.as_deref().unwrap_or("N/A")]),
-                Row::new(vec!["Last Seen", device.last_seen.as_deref().unwrap_or("N/A")]),
+                Row::new(vec!["Architecture", device.architecture.as_str()]),
+                Row::new(vec!["Foreground App", foreground_app]),
+                Row::new(vec!["Last Seen", device.last_seen.as_str()]),
                 Row::new(vec!["Device ID", device.id.as_str()]),
             ];
 
@@ -605,35 +808,23 @@ impl App {
             .constraints([Constraint::Length(3), Constraint::Min(0)])
             .split(area);
 
-        // Input field — show sudo indicator in prompt
+        // Input field
         let device_name = self.state.devices
             .get(self.state.selected_device_index)
             .map(|d| d.name.as_str())
             .unwrap_or("No device");
 
-        let sudo_prefix = if self.sudo_mode { "[SUDO] " } else { "" };
-        let input_text = format!("{}: {}{}> {}", device_name, sudo_prefix, "shell ", self.input_buffer);
-
-        let input_border_color = if self.sudo_mode { Color::Yellow } else { Color::Cyan };
-        let input_title = if self.sudo_mode {
-            "Command — sudo ON ([S] to toggle) | Enter to run | Backspace to delete"
-        } else {
-            "Command — ([S] to toggle sudo) | Enter to run | Backspace to delete"
-        };
+        let input_text = format!("{}: {} > {}", device_name, "shell", self.input_buffer);
 
         let input = Paragraph::new(input_text)
             .block(
                 Block::default()
-                    .title(input_title)
-                    .title_style(Style::default().fg(input_border_color).add_modifier(Modifier::BOLD))
+                    .title("Command (Enter to execute, Backspace to delete, Tab for command list)")
+                    .title_style(Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD))
                     .borders(Borders::ALL)
-                    .border_style(Style::default().fg(input_border_color))
+                    .border_style(Style::default().fg(Color::Cyan))
             )
-            .style(if self.sudo_mode {
-                Style::default().fg(Color::Yellow)
-            } else {
-                Style::default().fg(Color::Green)
-            });
+            .style(Style::default().fg(Color::Green));
 
         f.render_widget(input, chunks[0]);
 
@@ -656,6 +847,87 @@ impl App {
             .style(Style::default().fg(Color::White));
 
         f.render_widget(output_paragraph, chunks[1]);
+    }
+
+    fn draw_command_list<B: Backend>(&self, f: &mut Frame, area: ratatui::layout::Rect) {
+        let chunks = Layout::default()
+            .direction(Direction::Horizontal)
+            .constraints([Constraint::Length(25), Constraint::Min(0)])
+            .split(area);
+
+        // Categories list (left panel)
+        let categories = self.get_categories();
+        let category_items: Vec<ListItem> = categories
+            .iter()
+            .enumerate()
+            .map(|(i, cat)| {
+                let is_selected = i == self.state.selected_category_index;
+                let style = if is_selected {
+                    Style::default().fg(Color::Black).bg(Color::Cyan)
+                } else {
+                    Style::default().fg(Color::White)
+                };
+
+                ListItem::new(Line::from(vec![
+                    Span::styled(format!("  {}  ", cat.display_name()), style),
+                ]))
+            })
+            .collect();
+
+        let categories_list = List::new(category_items)
+            .block(
+                Block::default()
+                    .title("Categories")
+                    .title_style(Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD))
+                    .borders(Borders::ALL)
+                    .border_style(Style::default().fg(Color::Cyan))
+            );
+
+        f.render_widget(categories_list, chunks[0]);
+
+        // Commands list (right panel)
+        let commands = get_predefined_commands();
+        let current_category = &categories[self.state.selected_category_index];
+        let category_commands: Vec<_> = commands
+            .iter()
+            .filter(|c| c.category == *current_category)
+            .collect();
+
+        let command_items: Vec<ListItem> = category_commands
+            .iter()
+            .enumerate()
+            .map(|(i, cmd)| {
+                let is_selected = i == self.state.selected_command_index;
+                let (bg_color, fg_color) = if is_selected {
+                    (Color::Cyan, Color::Black)
+                } else {
+                    (Color::Reset, Color::White)
+                };
+
+                let sudo_indicator = if cmd.requires_sudo {
+                    Span::styled("[sudo] ", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
+                } else {
+                    Span::styled("       ", Style::default())
+                };
+
+                ListItem::new(Line::from(vec![
+                    sudo_indicator,
+                    Span::styled(&cmd.name, Style::default().fg(fg_color).bg(bg_color)),
+                ]))
+            })
+            .collect();
+
+        let commands_list = List::new(command_items)
+            .block(
+                Block::default()
+                    .title(format!("Commands (↑↓ to select, Enter to execute, Esc/Tab to go back)")
+                    )
+                    .title_style(Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD))
+                    .borders(Borders::ALL)
+                    .border_style(Style::default().fg(Color::Cyan))
+            );
+
+        f.render_widget(commands_list, chunks[1]);
     }
 
     fn draw_logs<B: Backend>(&self, f: &mut Frame, area: ratatui::layout::Rect) {

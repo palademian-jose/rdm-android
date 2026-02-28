@@ -213,4 +213,74 @@ class RootExecutor {
     suspend fun disableBluetooth(): CommandResult {
         return execute("service call bluetooth_manager 8", useSudo = true)
     }
+
+    suspend fun getCurrentForegroundApp(): CommandResult {
+        return execute("dumpsys activity activities | grep 'mResumedActivity'", useSudo = false)
+    }
+
+    suspend fun getForegroundAppInfo(): ForegroundAppInfo = withContext(Dispatchers.IO) {
+        try {
+            val result = execute("dumpsys activity activities", useSudo = false)
+            if (result.success && result.output != null) {
+                parseForegroundApp(result.output)
+            } else {
+                ForegroundAppInfo(packageName = null, activityName = null, timestamp = System.currentTimeMillis())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to get foreground app info", e)
+            ForegroundAppInfo(packageName = null, activityName = null, timestamp = System.currentTimeMillis())
+        }
+    }
+
+    private fun parseForegroundApp(output: String): ForegroundAppInfo {
+        val timestamp = System.currentTimeMillis()
+
+        // Look for mResumedActivity line which contains the current foreground app
+        val resumedLine = output.lines().firstOrNull { line ->
+            line.trim().startsWith("mResumedActivity:")
+        }
+
+        if (resumedLine != null) {
+            // Parse line like: mResumedActivity: ActivityRecord{... u0 com.example.app/.MainActivity t1234}
+            val regex = """([a-zA-Z][a-zA-Z0-9_.]*(?:\.[a-zA-Z][a-zA-Z0-9_.]*)+)/""".toRegex()
+            val match = regex.find(resumedLine)
+
+            if (match != null) {
+                val packageName = match.groupValues[1]
+                val activityMatch = Regex("""/([a-zA-Z][a-zA-Z0-9_.]*)""").find(resumedLine)
+                val activityName = activityMatch?.groupValues?.get(1)
+
+                return ForegroundAppInfo(
+                    packageName = packageName,
+                    activityName = activityName,
+                    timestamp = timestamp
+                )
+            }
+        }
+
+        return ForegroundAppInfo(packageName = null, activityName = null, timestamp = timestamp)
+    }
+
+    suspend fun getAppName(packageName: String): String = withContext(Dispatchers.IO) {
+        try {
+            val result = execute("pm list packages -f $packageName", useSudo = false)
+            if (result.success && result.output != null) {
+                // Parse package name from output
+                val regex = """package:.*?name=([a-zA-Z][a-zA-Z0-9_.]*(?:\.[a-zA-Z][a-zA-Z0-9_.]*)*)""".toRegex()
+                val match = regex.find(result.output)
+                match?.groupValues?.get(1) ?: packageName
+            } else {
+                packageName
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to get app name", e)
+            packageName
+        }
+    }
 }
+
+data class ForegroundAppInfo(
+    val packageName: String?,
+    val activityName: String?,
+    val timestamp: Long
+)

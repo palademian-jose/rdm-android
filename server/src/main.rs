@@ -4,7 +4,7 @@ use actix_cors::Cors;
 use actix_files::Files;
 use tracing::{info, error};
 use std::sync::Arc;
-use futures_util::stream::StreamExt;
+use futures_util::StreamExt;
 use std::env;
 use tokio::sync::mpsc;
 use std::collections::HashMap;
@@ -126,14 +126,10 @@ async fn ws_device(
                                                         id: d_id.clone(),
                                                         name: name.clone(),
                                                         model: model.clone(),
-                                                        android_version: android_version.clone(),
+                                                        platform: android_version.clone(),
                                                         status: "online".to_string(),
                                                         last_seen: chrono::Utc::now().to_rfc3339(),
-                                                        latitude: None,
-                                                        longitude: None,
-                                                        battery_level: None,
-                                                        storage_free: None,
-                                                        ram_free: None,
+                                                        foreground_app: None,
                                                     };
 
                                                     if let Ok(mut devices) = app_state_clone.devices.write() {
@@ -153,11 +149,6 @@ async fn ws_device(
                                                         user_data: "{}".to_string(),
                                                         last_seen: chrono::Utc::now().to_rfc3339(),
                                                         created_at: chrono::Utc::now().to_rfc3339(),
-                                                        latitude: None,
-                                                        longitude: None,
-                                                        battery_level: None,
-                                                        storage_free: None,
-                                                        ram_free: None,
                                                     };
 
                                                     if let Err(e) = app_state_clone.db.save_device(&db_device).await {
@@ -193,18 +184,18 @@ async fn ws_device(
                                                 };
                                                 let _ = app_state_clone.db.save_log(&log_entry).await;
                                             }
-                                            websocket::WsMessage::AppUsage { device_id: d_id, event_type, package_name, app_name, timestamp } => {
-                                                info!("App usage from {}: {} - {}", d_id, event_type, app_name);
-                                                let app_usage_event = database::AppUsageEvent {
-                                                    id: uuid::Uuid::new_v4().to_string(),
-                                                    device_id: d_id.clone(),
-                                                    event_type: event_type.clone(),
-                                                    package_name: package_name.clone(),
-                                                    app_name: app_name.clone(),
-                                                    timestamp: chrono::Utc::now().to_rfc3339(),
-                                                    created_at: chrono::Utc::now().to_rfc3339(),
-                                                };
-                                                let _ = app_state_clone.db.save_app_usage_event(&app_usage_event).await;
+                                            websocket::WsMessage::ForegroundApp { device_id: d_id, data } => {
+                                                if let Ok(mut devices) = app_state_clone.devices.write() {
+                                                    if let Some(device) = devices.iter_mut().find(|d| d.id == d_id) {
+                                                        let package_name = data.get("package_name")
+                                                            .and_then(|v| v.as_str())
+                                                            .unwrap_or("Unknown")
+                                                            .to_string();
+
+                                                        device.foreground_app = Some(package_name.clone());
+                                                        info!("Foreground app updated for {}: {}", d_id, package_name);
+                                                    }
+                                                }
                                             }
                                             websocket::WsMessage::Error { .. } => {
                                                 error!("Error message received from device: {}", device_id);

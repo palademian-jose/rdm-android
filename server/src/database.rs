@@ -18,11 +18,6 @@ pub struct Device {
     pub user_data: String,
     pub last_seen: String,
     pub created_at: String,
-    pub latitude: Option<f64>,
-    pub longitude: Option<f64>,
-    pub battery_level: Option<i32>,
-    pub storage_free: Option<i64>,
-    pub ram_free: Option<i64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
@@ -46,17 +41,6 @@ pub struct LogEntry {
     pub message: String,
     pub data: Option<String>,
     pub timestamp: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
-pub struct AppUsageEvent {
-    pub id: String,
-    pub device_id: String,
-    pub event_type: String,
-    pub package_name: String,
-    pub app_name: String,
-    pub timestamp: String,
-    pub created_at: String,
 }
 
 pub struct Database {
@@ -94,18 +78,9 @@ impl Database {
                 device_info TEXT NOT NULL,
                 user_data TEXT NOT NULL,
                 last_seen TEXT NOT NULL,
-                created_at TEXT NOT NULL,
-                latitude REAL,
-                longitude REAL,
-                battery_level INTEGER,
-                storage_free INTEGER,
-                ram_free INTEGER
-            )
-        "#)
-        .execute(&self.pool)
-        .await?;
+                created_at TEXT NOT NULL
+            );
 
-        sqlx::query(r#"
             CREATE TABLE IF NOT EXISTS commands (
                 id TEXT PRIMARY KEY,
                 device_id TEXT NOT NULL,
@@ -116,12 +91,8 @@ impl Database {
                 status TEXT NOT NULL,
                 created_at TEXT NOT NULL,
                 completed_at TEXT
-            )
-        "#)
-        .execute(&self.pool)
-        .await?;
+            );
 
-        sqlx::query(r#"
             CREATE TABLE IF NOT EXISTS logs (
                 id TEXT PRIMARY KEY,
                 device_id TEXT NOT NULL,
@@ -129,45 +100,10 @@ impl Database {
                 message TEXT NOT NULL,
                 data TEXT,
                 timestamp TEXT NOT NULL
-            )
+            );
         "#)
         .execute(&self.pool)
         .await?;
-
-        sqlx::query(r#"
-            CREATE TABLE IF NOT EXISTS app_usage_events (
-                id TEXT PRIMARY KEY,
-                device_id TEXT NOT NULL,
-                event_type TEXT NOT NULL,
-                package_name TEXT NOT NULL,
-                app_name TEXT NOT NULL,
-                timestamp TEXT NOT NULL,
-                created_at TEXT NOT NULL
-            )
-        "#)
-        .execute(&self.pool)
-        .await?;
-
-        // Add new columns if they don't exist (for existing databases)
-        sqlx::query(r#"
-            ALTER TABLE devices ADD COLUMN latitude REAL;
-        "#).execute(&self.pool).await.ok();
-
-        sqlx::query(r#"
-            ALTER TABLE devices ADD COLUMN longitude REAL;
-        "#).execute(&self.pool).await.ok();
-
-        sqlx::query(r#"
-            ALTER TABLE devices ADD COLUMN battery_level INTEGER;
-        "#).execute(&self.pool).await.ok();
-
-        sqlx::query(r#"
-            ALTER TABLE devices ADD COLUMN storage_free INTEGER;
-        "#).execute(&self.pool).await.ok();
-
-        sqlx::query(r#"
-            ALTER TABLE devices ADD COLUMN ram_free INTEGER;
-        "#).execute(&self.pool).await.ok();
 
         Ok(())
     }
@@ -175,8 +111,8 @@ impl Database {
     pub async fn save_device(&self, device: &Device) -> Result<()> {
         sqlx::query(r#"
             INSERT OR REPLACE INTO devices
-            (id, name, model, android_version, api_level, architecture, device_info, user_data, last_seen, created_at, latitude, longitude, battery_level, storage_free, ram_free)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15)
+            (id, name, model, android_version, api_level, architecture, device_info, user_data, last_seen, created_at)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
         "#)
         .bind(&device.id)
         .bind(&device.name)
@@ -188,11 +124,6 @@ impl Database {
         .bind(&device.user_data)
         .bind(&device.last_seen)
         .bind(&device.created_at)
-        .bind(device.latitude)
-        .bind(device.longitude)
-        .bind(device.battery_level)
-        .bind(device.storage_free)
-        .bind(device.ram_free)
         .execute(&self.pool)
         .await?;
 
@@ -275,24 +206,6 @@ impl Database {
         Ok(())
     }
 
-    pub async fn save_app_usage_event(&self, event: &AppUsageEvent) -> Result<()> {
-        sqlx::query(r#"
-            INSERT INTO app_usage_events (id, device_id, event_type, package_name, app_name, timestamp, created_at)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
-        "#)
-        .bind(&event.id)
-        .bind(&event.device_id)
-        .bind(&event.event_type)
-        .bind(&event.package_name)
-        .bind(&event.app_name)
-        .bind(&event.timestamp)
-        .bind(&event.created_at)
-        .execute(&self.pool)
-        .await?;
-
-        Ok(())
-    }
-
     pub async fn get_logs(
         &self,
         device_id: Option<&str>,
@@ -315,32 +228,5 @@ impl Database {
         };
 
         Ok(logs)
-    }
-
-    pub async fn get_commands(
-        &self,
-        device_id: &str,
-        limit: Option<i64>,
-    ) -> Result<Vec<Command>> {
-        let commands = sqlx::query_as::<_, Command>(
-            "SELECT * FROM commands WHERE device_id = ?1 ORDER BY created_at DESC LIMIT ?2"
-        )
-        .bind(device_id)
-        .bind(limit.unwrap_or(50))
-        .fetch_all(&self.pool)
-        .await?;
-
-        Ok(commands)
-    }
-
-    pub async fn get_command_by_id(&self, command_id: &str) -> Result<Option<Command>> {
-        let command = sqlx::query_as::<_, Command>(
-            "SELECT * FROM commands WHERE id = ?1"
-        )
-        .bind(command_id)
-        .fetch_optional(&self.pool)
-        .await?;
-
-        Ok(command)
     }
 }

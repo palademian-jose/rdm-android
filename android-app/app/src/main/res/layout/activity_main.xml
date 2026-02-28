@@ -1,429 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#121212"
     android:padding="16dp"
+    android:background="@android:color/background_light"
     tools:context=".MainActivity">
 
-    <!-- Header with title and status -->
-    <LinearLayout
+    <!-- Status Bar -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingBottom="20dp">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="RDM Client"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#E0E0E0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remote Device Manager"
-                android:textSize="13sp"
-                android:textColor="#9E9E9E"
-                android:layout_marginTop="2dp" />
-        </LinearLayout>
+        android:layout_marginBottom="16dp"
+        android:elevation="4dp">
 
         <TextView
             android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="● Offline"
-            android:textSize="13sp"
+            android:text="Status: Disconnected"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#FF5252"
+            android:padding="16dp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_blue_dark"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Server URL Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Server Configuration"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etServerUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter server URL"
+            android:text="wss://separately-touched-manatee.ngrok-free.app/ws/device"
+            android:inputType="textUri"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:drawable/editbox_background"
+            android:textSize="14sp"/>
+
+        <!-- Append Device ID Toggle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:padding="8dp"
-            android:background="#1E1E1E"
-            android:backgroundTint="#2A2A2A"
-            android:layout_marginStart="12dp" />
-    </LinearLayout>
-
-    <!-- Device ID Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#1E1E1E"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:background="@android:drawable/edit_text">
 
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Append Device ID"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"/>
+
+            <Switch
+                android:id="@+id/switchAppendDeviceId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DEVICE ID"
-                android:textSize="11sp"
-                android:textColor="#9E9E9E"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:id="@+id/tvDeviceInfoHint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Loading..."
-                android:textSize="13sp"
-                android:textColor="#00E5FF"
-                android:fontFamily="monospace"
-                android:padding="10dp"
-                android:background="#0D1117"
-                android:layout_marginBottom="8dp" />
-
+                android:checked="true"
+                android:textOn="Yes"
+                android:textOff="No"
+                android:showText="false"/>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <!-- Server Configuration Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#1E1E1E"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvDeviceInfoHint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SERVER CONFIGURATION"
-                android:textSize="11sp"
-                android:textColor="#9E9E9E"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Server URL input -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="WebSocket Server URL"
-                android:layout_marginBottom="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:boxBackgroundColor="#252525"
-                app:boxStrokeColor="#00E5FF"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusBottomEnd="10dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etServerUrl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textUri"
-                    android:text="wss://separately-touched-manatee.ngrok-free.app/ws/device"
-                    android:textColor="#E0E0E0"
-                    android:textSize="13sp"
-                    android:fontFamily="monospace" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Append Device ID switch -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="#252525"
-                android:padding="12dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Append Device ID"
-                        android:textSize="14sp"
-                        android:textColor="#E0E0E0" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Auto-add /{device_id} to URL"
-                        android:textSize="11sp"
-                        android:textColor="#9E9E9E"
-                        android:layout_marginTop="2dp" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchAppendDeviceId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true" />
-            </LinearLayout>
-
-        </LinearLayout>
+            android:text="Device ID: 0067f8bf53dbf21b"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="8dp"
+            android:fontFamily="monospace"/>
     </com.google.android.material.card.MaterialCardView>
-
-    <!-- Connect/Disconnect buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnConnect"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="Connect"
-            android:layout_marginEnd="8dp"
-            android:textSize="14sp"
-            app:backgroundTint="#00E5FF"
-            android:textColor="#121212"
-            style="@style/Widget.Material3.Button"
-            app:cornerRadius="10dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDisconnect"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="Disconnect"
-            android:layout_marginStart="8dp"
-            android:textSize="14sp"
-            android:enabled="false"
-            app:strokeColor="#FF5252"
-            android:textColor="#FF5252"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            app:cornerRadius="10dp" />
-    </LinearLayout>
 
     <!-- Device Info Card -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#1E1E1E"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="0dp">
+        android:elevation="2dp"
+        android:padding="16dp">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:text="Device Information"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="8dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="DEVICE INFORMATION"
-                    android:textSize="11sp"
-                    android:textColor="#9E9E9E"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="$"
-                    android:textSize="14sp"
-                    android:textColor="#00E5FF"
-                    android:fontFamily="monospace"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:background="#0D1117" />
-            </LinearLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#0D1117">
-
-                <TextView
-                    android:id="@+id/tvDeviceInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Loading device info..."
-                    android:textSize="12sp"
-                    android:textColor="#00E5CC"
-                    android:fontFamily="monospace"
-                    android:padding="14dp" />
-            </ScrollView>
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- ─── Shell Command Card (Gap 6: ad-hoc command input) ─── -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#1E2035"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:strokeColor="#303450"
-        app:strokeWidth="1dp">
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SHELL COMMAND"
-                android:textSize="11sp"
-                android:textColor="#8890BB"
-                android:letterSpacing="0.12"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="12dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tvDeviceInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter shell command"
-                app:boxBackgroundColor="#252640"
-                app:boxStrokeColor="#00D4FF"
-                app:boxStrokeWidth="1dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:hintTextColor="#8890BB"
-                android:textColorHint="#555A7A"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_marginBottom="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etCommand"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:imeOptions="actionDone"
-                    android:hint="e.g. ls -la /data"
-                    android:textColor="#EAEAF5"
-                    android:textSize="13sp"
-                    android:fontFamily="monospace"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:background="@drawable/editbox_background"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginEnd="10dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Run as root"
-                            android:textSize="13sp"
-                            android:textColor="#EAEAF5"
-                            android:fontFamily="sans-serif-medium" />
-
-                        <com.google.android.material.materialswitch.MaterialSwitch
-                            android:id="@+id/switchSudo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            app:thumbTint="#0F1019"
-                            app:trackTint="#00D4FF" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Execute with su/sudo"
-                        android:textSize="10sp"
-                        android:textColor="#8890BB"
-                        android:layout_marginTop="2dp" />
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRunCommand"
-                    android:layout_width="wrap_content"
-                    android:layout_height="52dp"
-                    android:text="Run"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif-medium"
-                    app:icon="@android:drawable/ic_media_play"
-                    app:iconGravity="textStart"
-                    app:iconPadding="6dp"
-                    app:backgroundTint="#00D4FF"
-                    android:textColor="#0F1019"
-                    app:cornerRadius="12dp"
-                    style="@style/Widget.Material3.Button" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+                android:text="Loading device info..."
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                android:textColor="@android:color/black"/>
+        </ScrollView>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Test Root Command Button -->
+    <!-- Connection Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConnect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Connect"
+            android:layout_marginEnd="8dp"
+            style="@style/Widget.Material3.Button"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDisconnect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Disconnect"
+            android:enabled="false"
+            android:layout_marginStart="8dp"
+            style="@style/Widget.Material3.Button.OutlinedButton"/>
+    </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnTestCommand"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="Test Root Command (ls -la /system/app)"
-        android:textSize="13sp"
-        app:backgroundTint="#3D1A5E"
-        android:textColor="#BB86FC"
-        style="@style/Widget.Material3.Button.TonalButton"
-        app:cornerRadius="10dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Test Root Command"
+        android:icon="@android:drawable/ic_menu_manage"
+        style="@style/Widget.Material3.Button.TonalButton"/>
 
 </LinearLayout>
-

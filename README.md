@@ -70,11 +70,59 @@ A comprehensive remote device management system for rooted Android devices with 
 
 ## Features
 
+### App Selection & Screen Recording
+The RDM system can automatically record the screen when specific apps are opened:
+
+- **App Enumeration**: List all installed apps (system & user)
+- **App Selection**: Choose which apps to monitor for recording
+- **Automatic Recording**: Starts recording when selected app becomes foreground
+- **Smart Triggers**: Detects app changes in real-time
+- **Permission Handling**: Manages MediaProjection permission flow
+- **File Storage**: Saves recordings to device storage (MP4 format)
+- **Foreground Service**: Shows persistent notification during recording
+- **Audio Capture**: Records audio along with video
+
+**Use Cases:**
+- Parental monitoring
+- App usage tracking
+- Bug reproduction
+- Compliance monitoring
+- User behavior analysis
+
+**Technical Details:**
+- Checks foreground app every 3 seconds
+- Uses MediaProjection API for screen capture
+- Records video (H.264, 8 Mbps, 30 FPS) + audio (AAC, 128 kbps)
+- Requires user permission (MediaProjection dialog)
+- Only records when app is configured to be monitored
+
+See [APP_SCREEN_RECORDING.md](APP_SCREEN_RECORDING.md) for details.
+
+### Foreground App Detection
+The RDM system can detect which app is currently open/active on connected devices:
+
+- **Automatic Monitoring**: Background monitoring detects app changes in real-time
+- **Smart Updates**: Only sends data when app changes (efficient)
+- **Package & Activity**: Shows both package name and specific activity
+- **Integration**: Works seamlessly with existing device monitoring
+- **Commands**: Quick TUI commands to check current app (`Get Foreground App`, `Get Activity Stack`)
+
+**Use Cases:**
+- Parental monitoring
+- App usage analytics
+- Remote troubleshooting
+- Device state awareness
+
+See [FOREGROUND_APP_DETECTION.md](FOREGROUND_APP_DETECTION.md) for details.
+
 ### Android App
 - ✅ Full device info (hardware, software, network)
 - ✅ User data (accounts, apps, storage)
 - ✅ Root command execution
 - ✅ Real-time stats streaming
+- ✅ Foreground app detection
+- ✅ Installed app listing & management
+- ✅ Automatic screen recording on app open
 - ✅ File system access
 - ✅ Auto-reconnection
 - ✅ Secure authentication
@@ -92,6 +140,7 @@ A comprehensive remote device management system for rooted Android devices with 
 - ✅ Multi-device dashboard
 - ✅ Real-time monitoring
 - ✅ Command execution
+- ✅ Predefined command library with categories
 - ✅ Log viewer
 - ✅ Data export
 - ✅ Keyboard navigation
@@ -144,6 +193,47 @@ reboot
 cd tui
 cargo run
 ```
+
+## TUI Usage
+
+The TUI provides a terminal-based interface for managing connected devices.
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| 1 | Dashboard |
+| 2 | Devices List |
+| 3 | Device Info |
+| 4 | Execute Command |
+| 5 | View Logs |
+| Q / Esc | Quit (or go back from command list) |
+| ↑↓ | Navigate devices/commands/logs |
+| ←→ | Navigate command categories |
+| PageUp/PageDown | Fast scroll (Logs) |
+| Tab | Toggle command list / manual input |
+| Enter | Execute command |
+| Backspace | Delete character |
+
+### Command List Feature
+
+The TUI includes a library of predefined commands organized by categories:
+
+**Categories:**
+- **Device Info**: Get device properties, network info, processes, memory, CPU, storage, battery
+- **App Management**: List apps, force stop, clear data, uninstall
+- **System**: Reboot, set screen brightness
+- **Connectivity**: Enable/disable WiFi and Bluetooth
+
+To use the command list:
+1. Navigate to Command view (key 4)
+2. Press Tab to open the command list
+3. Use ←→ to switch between categories
+4. Use ↑↓ to select a command
+5. Press Enter to execute
+6. Press Tab or Esc to return to manual input mode
+
+Commands marked with `[sudo]` require root access.
 
 ## Security
 

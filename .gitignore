@@ -15,3 +15,9 @@ android-app/.idea/
 .vscode/
 .idea/
 *.iml
+tui/target/
+server/target/
+android-app/app/build/
+android-app/.gradle/
+*.apk
+*.aab

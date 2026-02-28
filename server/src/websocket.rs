@@ -39,13 +39,10 @@ pub enum WsMessage {
         device_id: String,
         timestamp: i64,
     },
-    #[serde(rename = "app_usage")]
-    AppUsage {
+    #[serde(rename = "foreground_app")]
+    ForegroundApp {
         device_id: String,
-        event_type: String,
-        package_name: String,
-        app_name: String,
-        timestamp: i64,
+        data: Value,
     },
     #[serde(rename = "error")]
     Error {

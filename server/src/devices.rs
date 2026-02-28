@@ -8,14 +8,11 @@ pub struct Device {
     pub id: String,
     pub name: String,
     pub model: String,
-    pub android_version: String,
+    pub platform: String,
     pub status: String,
     pub last_seen: String,
-    pub latitude: Option<f64>,
-    pub longitude: Option<f64>,
-    pub battery_level: Option<i32>,
-    pub storage_free: Option<i64>,
-    pub ram_free: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub foreground_app: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -44,14 +41,10 @@ pub async fn get_all_devices(app_state: web::Data<crate::AppState>) -> impl Resp
                     id: db_device.id,
                     name: db_device.name,
                     model: db_device.model,
-                    android_version: db_device.android_version,
+                    platform: db_device.android_version,
                     status: "offline".to_string(),
                     last_seen: db_device.last_seen,
-                    latitude: db_device.latitude,
-                    longitude: db_device.longitude,
-                    battery_level: db_device.battery_level,
-                    storage_free: db_device.storage_free,
-                    ram_free: db_device.ram_free,
+                    foreground_app: None,
                 });
             }
         }

@@ -1,116 +1,58 @@
 package com.rdm.client
 
-import android.Manifest
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.drawable.GradientDrawable
-import android.os.Build
+import android.graphics.Color
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.util.Log
-import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.EditText
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.materialswitch.MaterialSwitch
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import android.provider.Settings
+import android.net.Uri
+import android.os.Build
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var tvStatus: TextView
     private lateinit var tvDeviceInfo: TextView
     private lateinit var tvDeviceInfoHint: TextView
-    private lateinit var btnConnect: MaterialButton
-    private lateinit var btnDisconnect: MaterialButton
-    private lateinit var btnTestCommand: MaterialButton
-    private lateinit var etServerUrl: TextInputEditText
-    private lateinit var switchAppendDeviceId: MaterialSwitch
+    private lateinit var btnConnect: Button
+    private lateinit var btnDisconnect: Button
+    private lateinit var btnTestCommand: Button
+    private lateinit var etServerUrl: EditText
+    private lateinit var switchAppendDeviceId: Switch
 
     private lateinit var webSocketClient: WebSocketClient
     private lateinit var deviceId: String
     private var isServiceRunning = false
-    private var appUsageTracker: AppUsageTracker? = null
+    private lateinit var rootExecutor: RootExecutor
+    private lateinit var foregroundAppMonitor: ForegroundAppMonitor
+    private lateinit var appListCollector: AppListCollector
+    private lateinit var mediaProjectionManager: MediaProjectionManager
 
     private val TAG = "MainActivity"
+    private val SCREEN_RECORD_REQUEST_CODE = 1001
 
-    // Permission request launcher
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val allGranted = permissions.values.all { it }
-        if (allGranted) {
-            Log.d(TAG, "All permissions granted")
-            initializeApp()
-        } else {
-            Log.d(TAG, "Some permissions denied - app will work with limited functionality")
-            initializeApp()
-        }
-    }
+    private var pendingRecordPackageName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Request permissions first
-        requestPermissions()
-    }
-
-    private fun requestPermissions() {
-        val permissionsToRequest = mutableListOf<String>()
-
-        // READ_PHONE_STATE - for phone number and SIM info
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-            != PackageManager.PERMISSION_GRANTED) {
-            permissionsToRequest.add(Manifest.permission.READ_PHONE_STATE)
-        }
-
-        // READ_PHONE_NUMBERS - for getting phone number (Android 8.0+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS)
-                != PackageManager.PERMISSION_GRANTED) {
-                permissionsToRequest.add(Manifest.permission.READ_PHONE_NUMBERS)
-            }
-        }
-
-        // PACKAGE_USAGE_STATS - for app usage tracking
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.PACKAGE_USAGE_STATS)
-                != PackageManager.PERMISSION_GRANTED) {
-                permissionsToRequest.add(Manifest.permission.PACKAGE_USAGE_STATS)
-            }
-        }
-
-        if (permissionsToRequest.isNotEmpty()) {
-            Log.d(TAG, "Requesting permissions: $permissionsToRequest")
-            requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
-        } else {
-            Log.d(TAG, "All permissions already granted")
-            initializeApp()
-        }
-    }
-
-    private fun initializeApp() {
         // Get device ID
         deviceId = android.provider.Settings.Secure.getString(
             contentResolver,
             android.provider.Settings.Secure.ANDROID_ID
         ) ?: "unknown"
-
-        // Initialize app usage tracker
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            appUsageTracker = AppUsageTracker(this) { packageName, eventType, timestamp ->
-                sendAppUsageEvent(packageName, eventType, timestamp)
-            }
-            appUsageTracker?.startTracking()
-        }
 
         // Initialize views
         tvStatus = findViewById(R.id.tvStatus)
@@ -122,115 +64,145 @@ class MainActivity : AppCompatActivity() {
         etServerUrl = findViewById(R.id.etServerUrl)
         switchAppendDeviceId = findViewById(R.id.switchAppendDeviceId)
 
-        // Set device ID
-        tvDeviceInfoHint.text = deviceId
+        // Set device ID hint
+        tvDeviceInfoHint.text = "Device ID: $deviceId"
 
-        // Initialize WebSocket client (placeholder until connect)
-        webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device", deviceId, "admin123")
+        // Initialize WebSocket client (will be replaced on connect)
+        webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device", deviceId)
 
-        // Setup
+        // Initialize root executor
+        rootExecutor = RootExecutor()
+
+        // Initialize app list collector
+        appListCollector = AppListCollector(this)
+
+        // Initialize media projection manager
+        mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+
+        // Initialize foreground app monitor with recording callbacks
+        foregroundAppMonitor = ForegroundAppMonitor(
+            context = this,
+            rootExecutor = rootExecutor,
+            webSocketClient = webSocketClient,
+            onRecordingTrigger = { packageName ->
+                startScreenRecording(packageName)
+            },
+            onRecordingStop = {
+                stopScreenRecording()
+            }
+        )
+
+        // Setup listeners
         setupWebSocketListeners()
         setupSwitchListener()
+
+        // Setup button listeners
         setupButtonListeners()
+
+        // Start service
         startRdmService()
+
+        // Update UI
         updateDeviceInfo()
-
-        // Initial status: disconnected
-        setStatus(ConnectionStatus.DISCONNECTED)
     }
-
-    private fun sendAppUsageEvent(packageName: String, eventType: String, timestamp: Long) {
-        try {
-            val appName = appUsageTracker?.getAppName(packageName) ?: packageName
-
-            val eventData = mapOf(
-                "type" to "app_usage",
-                "event_type" to eventType,
-                "package_name" to packageName,
-                "app_name" to appName,
-                "timestamp" to timestamp
-            )
-
-            val json = org.json.JSONObject(eventData).toString()
-            webSocketClient.send(json)
-            Log.d(TAG, "App usage event sent: $eventType - $appName")
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to send app usage event", e)
-        }
-    }
-
-    // ──────────────────────────────────────────────────────────────────────
-    // Status UI
-    // ──────────────────────────────────────────────────────────────────────
-
-    enum class ConnectionStatus { CONNECTED, DISCONNECTED, CONNECTING, ERROR }
-
-    private fun setStatus(status: ConnectionStatus) {
-        val (label, textColor) = when (status) {
-            ConnectionStatus.CONNECTED -> Pair("Online", R.color.status_connected)
-            ConnectionStatus.DISCONNECTED -> Pair("Offline", R.color.status_disconnected)
-            ConnectionStatus.CONNECTING -> Pair("Connecting…", R.color.status_connecting)
-            ConnectionStatus.ERROR -> Pair("Error", R.color.status_disconnected)
-        }
-
-        tvStatus.text = "● $label"
-        tvStatus.setTextColor(ContextCompat.getColor(this, textColor))
-    }
-
-    // ──────────────────────────────────────────────────────────────────────
-    // Listeners
-    // ──────────────────────────────────────────────────────────────────────
 
     private fun setupSwitchListener() {
-        switchAppendDeviceId.setOnCheckedChangeListener { _, isChecked ->
-            Log.d(TAG, "Append Device ID: $isChecked")
+        switchAppendDeviceId.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            updateServerUrlHint(isChecked)
         }
+    }
+
+    private fun updateServerUrlHint(appendDeviceId: Boolean) {
+        val currentUrl = etServerUrl.text.toString()
+        if (appendDeviceId) {
+            etServerUrl.hint = "Server URL (device ID will be appended automatically)"
+        } else {
+            etServerUrl.hint = "Server URL (include device ID in URL)"
+        }
+        Log.d(TAG, "Append Device ID: $appendDeviceId")
     }
 
     private fun setupWebSocketListeners() {
         webSocketClient.onConnected = {
             runOnUiThread {
-                setStatus(ConnectionStatus.CONNECTED)
+                tvStatus.text = "✓ Connected"
+                tvStatus.setBackgroundColor(getColor(android.R.color.holo_green_dark))
+                tvStatus.setTextColor(Color.WHITE)
                 btnConnect.isEnabled = false
                 btnDisconnect.isEnabled = true
                 Toast.makeText(this@MainActivity, "Connected to server", Toast.LENGTH_SHORT).show()
+
+                // Start foreground app monitoring
+                lifecycleScope.launch {
+                    try {
+                        foregroundAppMonitor.start()
+                        Log.d(TAG, "Foreground app monitoring started")
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to start foreground app monitor", e)
+                    }
+                }
             }
         }
 
         webSocketClient.onDisconnected = {
             runOnUiThread {
-                setStatus(ConnectionStatus.DISCONNECTED)
+                tvStatus.text = "✗ Disconnected"
+                tvStatus.setBackgroundColor(getColor(android.R.color.holo_red_dark))
+                tvStatus.setTextColor(Color.WHITE)
                 btnConnect.isEnabled = true
                 btnDisconnect.isEnabled = false
+
+                // Stop foreground app monitoring
+                foregroundAppMonitor.stop()
+                Log.d(TAG, "Foreground app monitoring stopped")
             }
         }
 
         webSocketClient.onError = { exception ->
             runOnUiThread {
-                setStatus(ConnectionStatus.ERROR)
-                tvStatus.text = "Error"
-                btnConnect.isEnabled = true
-                btnDisconnect.isEnabled = false
-                Toast.makeText(
-                    this@MainActivity,
-                    "Connection error: ${exception.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+                tvStatus.text = "⚠ Error: ${exception.message}"
+                tvStatus.setBackgroundColor(getColor(android.R.color.holo_orange_dark))
+                tvStatus.setTextColor(Color.WHITE)
+                Toast.makeText(this@MainActivity, "Connection error: ${exception.message}", Toast.LENGTH_LONG).show()
+
+                // Stop foreground app monitoring on error
+                foregroundAppMonitor.stop()
             }
         }
 
         webSocketClient.onMessage = { message ->
             runOnUiThread {
+                // Handle incoming messages
                 val type = message.get("type")?.asString
                 when (type) {
                     "command" -> {
+                        // Command received from server
                         val command = message.get("command")?.asString
                         val commandId = message.get("id")?.asString
                         Log.d(TAG, "Command received: $command (ID: $commandId)")
-                        Toast.makeText(this@MainActivity, "⚡ Command: $command", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Command: $command", Toast.LENGTH_SHORT).show()
                     }
                     "log_request" -> {
+                        // Server requesting logs
                         Log.d(TAG, "Log request received")
+                    }
+                    "get_foreground_app" -> {
+                        // Server requesting current foreground app
+                        lifecycleScope.launch {
+                            val currentApp = foregroundAppMonitor.getCurrentForegroundApp()
+                            if (currentApp != null) {
+                                val response = JSONObject().apply {
+                                    put("type", "foreground_app_response")
+                                    put("device_id", deviceId)
+                                    put("data", JSONObject().apply {
+                                        put("package_name", currentApp.packageName)
+                                        put("activity_name", currentApp.activityName)
+                                        put("timestamp", currentApp.timestamp)
+                                    })
+                                }
+                                webSocketClient.send(response.toString())
+                            }
+                        }
                     }
                     else -> {
                         Log.d(TAG, "Unknown message type: $type")
@@ -241,14 +213,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtonListeners() {
-        btnConnect.setOnClickListener { connectToServer() }
-        btnDisconnect.setOnClickListener { disconnectFromServer() }
-        btnTestCommand.setOnClickListener { testCommand() }
-    }
+        btnConnect.setOnClickListener {
+            connectToServer()
+        }
 
-    // ──────────────────────────────────────────────────────────────────────
-    // Actions
-    // ──────────────────────────────────────────────────────────────────────
+        btnDisconnect.setOnClickListener {
+            disconnectFromServer()
+        }
+
+        btnTestCommand.setOnClickListener {
+            testCommand()
+        }
+    }
 
     private fun connectToServer() {
         lifecycleScope.launch {
@@ -256,45 +232,51 @@ class MainActivity : AppCompatActivity() {
                 val serverUrl = etServerUrl.text.toString().trim()
                 val appendDeviceId = switchAppendDeviceId.isChecked
 
+                Log.d(TAG, "Server URL from input: '$serverUrl'")
+                Log.d(TAG, "Append Device ID: $appendDeviceId")
+
                 if (serverUrl.isEmpty()) {
                     Toast.makeText(this@MainActivity, "Please enter a server URL", Toast.LENGTH_SHORT).show()
                     return@launch
                 }
 
-                // Build final URL
+                // Build final URL based on switch state
                 val finalUrl = if (appendDeviceId) {
-                    if (!serverUrl.endsWith(deviceId)) "$serverUrl/$deviceId" else serverUrl
+                    if (!serverUrl.endsWith(deviceId)) {
+                        "$serverUrl/$deviceId"
+                    } else {
+                        serverUrl
+                    }
                 } else {
                     serverUrl
                 }
 
-                // Disconnect existing client
+                // Disconnect existing client if any
                 webSocketClient.disconnect()
 
-                // Create new client
-                webSocketClient = WebSocketClient(this@MainActivity, finalUrl, deviceId, "admin123")
+                // Create new WebSocket client with the final URL
+                webSocketClient = WebSocketClient(this@MainActivity, finalUrl, deviceId)
                 setupWebSocketListeners()
 
                 Log.d(TAG, "Connecting to: $finalUrl")
-                runOnUiThread { setStatus(ConnectionStatus.CONNECTING) }
+                tvStatus.text = "⏳ Connecting..."
+                tvStatus.setBackgroundColor(getColor(android.R.color.holo_blue_dark))
+                tvStatus.setTextColor(Color.WHITE)
 
                 webSocketClient.connect()
+                Toast.makeText(this@MainActivity, "Connecting to server...", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "Connection error", e)
-                runOnUiThread {
-                    setStatus(ConnectionStatus.ERROR)
-                    Toast.makeText(this@MainActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+                Toast.makeText(this@MainActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
 
     private fun disconnectFromServer() {
         lifecycleScope.launch {
+            foregroundAppMonitor.stop()
             webSocketClient.disconnect()
-            runOnUiThread {
-                Toast.makeText(this@MainActivity, "Disconnected", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(this@MainActivity, "Disconnected from server", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -315,9 +297,7 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Test command error", e)
-                runOnUiThread {
-                    Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                }
+                Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -339,43 +319,34 @@ class MainActivity : AppCompatActivity() {
                 val deviceInfo = DeviceInfoCollector.collect(this@MainActivity)
 
                 runOnUiThread {
-                    val ramFree = (deviceInfo.memory_info.available / 1024 / 1024).toInt()
-                    val storageFree = (deviceInfo.storage_info.available / 1024 / 1024 / 1024).toInt()
-                    val batteryPct = deviceInfo.battery_info.percentage.toInt()
-
-                    val infoText = buildString {
-                        appendLine("# System Overview")
-                        appendLine("  name     : ${deviceInfo.name}")
-                        appendLine("  model    : ${deviceInfo.model}")
-                        appendLine("  android  : ${deviceInfo.android_version} (API ${deviceInfo.api_level})")
-                        appendLine()
-                        appendLine("# Hardware")
-                        appendLine("  cpu      : ${deviceInfo.cpu_info.cores} cores · ${deviceInfo.cpu_info.model}")
-                        appendLine("  ram      : $ramFree MB free")
-                        appendLine("  storage  : $storageFree GB free")
-                        appendLine("  battery  : $batteryPct%")
-                        appendLine()
-                        appendLine("# Software")
-                        appendLine("  apps     : ${deviceInfo.installed_apps.size} installed")
-                        appendLine()
-                        appendLine("# Identity")
-                        append("  id       : $deviceId")
-                    }
+                    val infoText = """
+                        ┌─────────────────────────────────┐
+                        │  Device Information           │
+                        ├─────────────────────────────────┤
+                        │  Name: ${deviceInfo.name.padEnd(22)}│
+                        │  Model: ${deviceInfo.model.padEnd(22)}│
+                        │  Android: ${deviceInfo.android_version.padEnd(19)}│
+                        │  API: ${deviceInfo.api_level.toString().padEnd(24)}│
+                        │  CPU: ${deviceInfo.cpu_info.cores} cores - ${deviceInfo.cpu_info.model.padEnd(8)}│
+                        │  RAM: ${(deviceInfo.memory_info.available / 1024 / 1024).toInt()} MB free${" ".repeat(13)}│
+                        │  Storage: ${(deviceInfo.storage_info.available / 1024 / 1024 / 1024).toInt()} GB free${" ".repeat(11)}│
+                        │  Battery: ${(deviceInfo.battery_info.percentage).toInt()}%${" ".repeat(25)}│
+                        │  Apps: ${deviceInfo.installed_apps.size} installed${" ".repeat(14)}│
+                        └─────────────────────────────────┘
+                        
+                        Device ID: $deviceId
+                    """.trimIndent()
 
                     tvDeviceInfo.text = infoText
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error collecting device info", e)
                 runOnUiThread {
-                    tvDeviceInfo.text = "# Error\n  ${e.message}"
+                    tvDeviceInfo.text = "Failed to load device info: ${e.message}"
                 }
             }
         }
     }
-
-    // ──────────────────────────────────────────────────────────────────────
-    // Lifecycle
-    // ──────────────────────────────────────────────────────────────────────
 
     override fun onResume() {
         super.onResume()
@@ -385,5 +356,70 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         webSocketClient.disconnect()
+        foregroundAppMonitor.stop()
+        stopScreenRecording()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            SCREEN_RECORD_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val packageName = pendingRecordPackageName
+                    if (packageName != null) {
+                        startScreenRecordingService(resultCode, data, packageName)
+                        pendingRecordPackageName = null
+                    }
+                } else {
+                    Log.w(TAG, "Screen recording permission denied")
+                    Toast.makeText(this, "Screen recording permission required", Toast.LENGTH_LONG).show()
+                    foregroundAppMonitor.updateRecordingApps(emptyList())
+                }
+            }
+        }
+    }
+
+    private fun startScreenRecording(packageName: String) {
+        // Request screen recording permission
+        pendingRecordPackageName = packageName
+        val captureIntent = mediaProjectionManager.createScreenCaptureIntent()
+        startActivityForResult(captureIntent, SCREEN_RECORD_REQUEST_CODE)
+    }
+
+    private fun startScreenRecordingService(resultCode: Int, data: Intent, packageName: String) {
+        try {
+            val serviceIntent = Intent(this, ScreenRecordService::class.java).apply {
+                action = ScreenRecordService.ACTION_START
+                putExtra(ScreenRecordService.EXTRA_RESULT_CODE, resultCode)
+                putExtra(ScreenRecordService.EXTRA_DATA, data)
+                putExtra(ScreenRecordService.EXTRA_APP_PACKAGE, packageName)
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent)
+            } else {
+                @Suppress("DEPRECATION")
+                startService(serviceIntent)
+            }
+
+            Log.d(TAG, "Screen recording service started for: $packageName")
+            Toast.makeText(this, "Recording: $packageName", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start screen recording service", e)
+            Toast.makeText(this, "Failed to start recording", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun stopScreenRecording() {
+        try {
+            val serviceIntent = Intent(this, ScreenRecordService::class.java).apply {
+                action = ScreenRecordService.ACTION_STOP
+            }
+            startService(serviceIntent)
+            Log.d(TAG, "Screen recording service stopped")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to stop screen recording service", e)
+        }
     }
 }

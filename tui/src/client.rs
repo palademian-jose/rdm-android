@@ -13,31 +13,17 @@ pub struct ApiClient {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Device {
     pub id: String,
-    #[serde(default)]
     pub name: String,
-    #[serde(default)]
     pub model: String,
-    #[serde(default)]
-    pub android_version: Option<String>,
-    #[serde(default)]
-    pub status: Option<String>,
-    #[serde(default)]
-    pub api_level: Option<i32>,
-    #[serde(default)]
-    pub architecture: Option<String>,
-    #[serde(default)]
-    pub device_info: Option<String>,
-    #[serde(default)]
-    pub user_data: Option<String>,
-    #[serde(default)]
-    pub last_seen: Option<String>,
-    #[serde(default)]
-    pub created_at: Option<String>,
-    pub latitude: Option<f64>,
-    pub longitude: Option<f64>,
-    pub battery_level: Option<i32>,
-    pub storage_free: Option<i64>,
-    pub ram_free: Option<i64>,
+    pub android_version: String,
+    pub api_level: i32,
+    pub architecture: String,
+    pub device_info: String,
+    pub user_data: String,
+    pub last_seen: String,
+    pub created_at: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub foreground_app: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -77,6 +63,7 @@ struct AuthResponse {
 
 #[derive(Debug, Serialize)]
 struct CommandRequest {
+    device_id: String,
     command: String,
     sudo: bool,
 }
@@ -182,45 +169,50 @@ impl ApiClient {
 
     pub async fn execute_command(&self, device_id: &str, command: &str, sudo: bool) -> Result<String> {
         let cmd_request = CommandRequest {
+            device_id: device_id.to_string(),
             command: command.to_string(),
             sudo,
         };
 
-        // Correct endpoint: POST /api/devices/{device_id}/commands
-        let url = format!("/api/devices/{}/commands", device_id);
-        let response: serde_json::Value = self.post(&url, &cmd_request).await?;
+        let response: serde_json::Value = self.post("/api/commands", &cmd_request).await?;
 
-        // Server returns { success, message, data: { command_id, ... } }
-        if response["success"].as_bool().unwrap_or(false) {
-            Ok(response["message"]
-                .as_str()
-                .unwrap_or("Command sent")
-                .to_string())
-        } else {
-            Err(anyhow!(
-                "Command failed: {}",
-                response["message"].as_str().unwrap_or("Unknown error")
-            ))
+        match response["status"].as_str() {
+            Some("queued") | Some("executing") | Some("completed") => {
+                Ok(response.get("output")
+                    .and_then(|o| o.as_str())
+                    .unwrap_or("Command queued")
+                    .to_string())
+            }
+            Some("failed") => {
+                Err(anyhow!("Command failed: {}",
+                    response.get("error")
+                        .and_then(|e| e.as_str())
+                        .unwrap_or("Unknown error")
+                ))
+            }
+            _ => {
+                Err(anyhow!("Unexpected command status"))
+            }
         }
     }
 
-    pub async fn get_logs(&self, device_id: &str, limit: Option<i64>) -> Result<Vec<LogEntry>> {
-        #[derive(Deserialize)]
-        struct LogsResponse {
-            data: Option<LogsData>,
+    pub async fn get_logs(&self, device_id: Option<&str>, limit: Option<i64>) -> Result<Vec<LogEntry>> {
+        let mut url = "/api/logs".to_string();
+        let mut params = vec![];
+
+        if let Some(did) = device_id {
+            params.push(format!("device_id={}", did));
         }
-        #[derive(Deserialize)]
-        struct LogsData {
-            logs: Vec<LogEntry>,
+        if let Some(l) = limit {
+            params.push(format!("limit={}", l));
         }
 
-        // Correct endpoint: GET /api/devices/{device_id}/logs
-        let mut url = format!("/api/devices/{}/logs", device_id);
-        if let Some(l) = limit {
-            url.push_str(&format!("?limit={}", l));
+        if !params.is_empty() {
+            url.push('?');
+            url.push_str(&params.join("&"));
         }
-        let response: LogsResponse = self.get(&url).await?;
-        Ok(response.data.map(|d| d.logs).unwrap_or_default())
+
+        self.get(&url).await
     }
 
     pub async fn get_commands(&self, device_id: &str, limit: Option<i64>) -> Result<Vec<Command>> {
