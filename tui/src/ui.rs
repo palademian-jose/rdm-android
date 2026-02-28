@@ -230,7 +230,7 @@ impl App {
             }
             KeyCode::Char('s') => {
                 if self.state.current_view == View::CommandExecution {
-                    // Gap 4: toggle sudo mode
+                    // Gap 4: toggle sudo mode (don't add 's' to input buffer)
                     self.sudo_mode = !self.sudo_mode;
                     let label = if self.sudo_mode { "[sudo ON]" } else { "[sudo OFF]" };
                     self.state.status_message = format!("Sudo mode: {}", label);
@@ -243,7 +243,8 @@ impl App {
                 self.refresh_logs().await;
             }
             KeyCode::Char(c) => {
-                if self.state.current_view == View::CommandExecution {
+                if self.state.current_view == View::CommandExecution && c != 's' {
+                    // Add to input buffer, but skip 's' (handled above for sudo toggle)
                     self.input_buffer.push(c);
                 }
             }
