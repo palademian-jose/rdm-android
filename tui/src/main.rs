@@ -8,7 +8,8 @@ use ratatui::{
     backend::CrosstermBackend,
     Terminal,
 };
-use tracing::info;
+use std::time::Duration;
+use tracing::{info, error};
 
 mod ui;
 mod client;
@@ -45,6 +46,19 @@ async fn main() -> Result<()> {
     info!("Authenticated successfully");
 
     api_client.set_token(&token);
+
+    // Connect to WebSocket for real-time updates
+    info!("Connecting to WebSocket...");
+    let mut ws_api_client = api_client.clone();  // Clone for background task
+    tokio::spawn(async move {
+        if let Err(e) = ws_api_client.connect_websocket().await {
+            error!("WebSocket connection failed: {:?}", e);
+            // Continue without WebSocket - will fall back to REST polling if needed
+        }
+    });
+
+    // Give WebSocket a moment to connect
+    tokio::time::sleep(Duration::from_millis(500)).await;
 
     // Initialize terminal
     enable_raw_mode()?;

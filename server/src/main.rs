@@ -24,6 +24,7 @@ struct AppState {
     devices: Arc<std::sync::RwLock<Vec<devices::Device>>>,
     db: Arc<database::Database>,
     ws_senders: Arc<std::sync::RwLock<HashMap<String, WsSender>>>,
+    client_senders: Arc<std::sync::RwLock<HashMap<String, WsSender>>>,  // client_id -> WsSender
 }
 
 impl AppState {
@@ -33,6 +34,14 @@ impl AppState {
 
     pub fn remove_ws_sender(&self, device_id: &str) {
         self.ws_senders.write().unwrap().remove(device_id);
+    }
+
+    pub fn add_client_sender(&self, client_id: String, sender: WsSender) {
+        self.client_senders.write().unwrap().insert(client_id, sender);
+    }
+
+    pub fn remove_client_sender(&self, client_id: &str) {
+        self.client_senders.write().unwrap().remove(client_id);
     }
 
     pub async fn send_command_to_device(&self, device_id: &str, command: &str, command_id: &str, sudo: bool) -> bool {
@@ -47,6 +56,15 @@ impl AppState {
             sender.tx.send(message.to_string()).is_ok()
         } else {
             false
+        }
+    }
+
+    pub async fn broadcast_to_clients(&self, message: &str) {
+        let senders = self.client_senders.read().unwrap().clone();
+        for (client_id, sender) in senders.iter() {
+            if let Err(e) = sender.tx.send(message.to_string()) {
+                error!("Failed to send message to client {}: {:?}", client_id, e);
+            }
         }
     }
 }
@@ -161,7 +179,20 @@ async fn ws_device(
                                             }
                                             websocket::WsMessage::CommandResult { id, success, output, error } => {
                                                 info!("Command result from {} - ID: {}, success: {}", device_id, id, success);
-                                                let _ = app_state_clone.db.update_command(&id, Some(output), error, if success { "completed" } else { "failed" }).await;
+                                                let _ = app_state_clone.db.update_command(&id, Some(output.clone()), error.clone(), if success { "completed" } else { "failed" }).await;
+
+                                                // Broadcast command result to all connected clients
+                                                let broadcast_message = serde_json::json!({
+                                                    "type": "command_result",
+                                                    "command_id": id,
+                                                    "device_id": device_id,
+                                                    "success": success,
+                                                    "output": output,
+                                                    "error": error,
+                                                    "timestamp": chrono::Utc::now().to_rfc3339()
+                                                }).to_string();
+
+                                                app_state_clone.broadcast_to_clients(&broadcast_message).await;
                                             }
                                             websocket::WsMessage::Heartbeat { device_id: d_id, .. } => {
                                                 info!("Heartbeat received from: {}", d_id);
@@ -248,6 +279,105 @@ async fn ws_device(
     Ok(response)
 }
 
+async fn ws_client(
+    auth_token: web::Query<std::collections::HashMap<String, String>>,
+    app_state: web::Data<AppState>,
+    req: actix_web::HttpRequest,
+    body: web::Payload,
+) -> Result<HttpResponse, actix_web::Error> {
+    info!("WebSocket connection request for client");
+
+    let client_id = uuid::Uuid::new_v4().to_string();
+
+    let (response, mut session, mut msg_stream) = actix_ws::handle(&req, body)?;
+
+    let app_state_clone = app_state.get_ref().clone();
+    let app_state_cleanup = app_state_clone.clone();
+
+    // Create channel for sending messages to this client
+    let (tx, mut rx) = mpsc::unbounded_channel::<String>();
+
+    // Register client sender
+    app_state.add_client_sender(client_id.clone(), WsSender { tx });
+
+    let client_id_cleanup = client_id.clone();
+
+    // Verify authentication token if provided
+    let is_authenticated = auth_token.get("token").is_some();
+
+    if !is_authenticated {
+        info!("Client connecting without authentication token (demo mode)");
+    } else {
+        info!("Client {} authenticated", client_id);
+    }
+
+    // Spawn a task to handle the WebSocket connection
+    actix_web::rt::spawn(async move {
+        info!("Client {} connected", client_id);
+
+        loop {
+            tokio::select! {
+                // Handle incoming WebSocket messages from client
+                msg_result = msg_stream.next() => {
+                    match msg_result {
+                        Some(Ok(msg)) => {
+                            match msg {
+                                Message::Text(text) => {
+                                    if let Ok(ws_msg) = serde_json::from_str::<websocket::WsMessage>(&text) {
+                                        match ws_msg {
+                                            websocket::WsMessage::Auth { token } => {
+                                                info!("Auth received from client: {}", client_id);
+                                            }
+                                            websocket::WsMessage::Command { id, command, sudo } => {
+                                                // Client wants to send a command to a device
+                                                // This will be handled via REST API, but we acknowledge receipt
+                                                info!("Command request from client {}: {}", client_id, command);
+                                            }
+                                            _ => {}
+                                        }
+                                    }
+                                }
+                                Message::Close(reason) => {
+                                    info!("WebSocket closed for client: {}, reason: {:?}", client_id, reason);
+                                    break;
+                                }
+                                Message::Ping(bytes) => {
+                                    let _ = session.pong(&bytes).await;
+                                }
+                                Message::Pong(_) => {}
+                                Message::Continuation(_) => {}
+                                Message::Binary(_) => {}
+                                Message::Nop => {}
+                            }
+                        }
+                        Some(Err(e)) => {
+                            error!("WebSocket error for client {}: {:?}", client_id, e);
+                            break;
+                        }
+                        None => {
+                            info!("WebSocket stream ended for client: {}", client_id);
+                            break;
+                        }
+                    }
+                }
+                // Handle outgoing messages (command results, etc.) to send to client
+                Some(msg) = rx.recv() => {
+                    if let Err(e) = session.text(msg).await {
+                        error!("Failed to send message to client {}: {:?}", client_id, e);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Cleanup
+        app_state_cleanup.remove_client_sender(&client_id_cleanup);
+        info!("Client {} disconnected", client_id_cleanup);
+    });
+
+    Ok(response)
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     tracing_subscriber::fmt()
@@ -280,6 +410,7 @@ async fn main() -> std::io::Result<()> {
         devices: Arc::new(std::sync::RwLock::new(Vec::new())),
         db: Arc::new(db),
         ws_senders: Arc::new(std::sync::RwLock::new(HashMap::new())),
+        client_senders: Arc::new(std::sync::RwLock::new(HashMap::new())),
     };
 
     let bind_addr = format!("{}:{}", host, port);
@@ -298,6 +429,7 @@ async fn main() -> std::io::Result<()> {
             .route("/api/devices/{device_id}/logs", web::get().to(devices::get_device_logs))
             .route("/api/devices/{device_id}/commands", web::post().to(devices::send_command))
             .route("/ws/device/{device_id}", web::get().to(ws_device))
+            .route("/ws/client", web::get().to(ws_client))
             .service(files)
     })
     .bind(&bind_addr)?

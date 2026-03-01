@@ -70,6 +70,32 @@ A comprehensive remote device management system for rooted Android devices with 
 
 ## Features
 
+### Real-Time Command Responses
+The RDM TUI now receives real-time command responses from devices via WebSocket:
+
+- **WebSocket Connection**: TUI connects via WebSocket to server for real-time updates
+- **Immediate Results**: Command output appears as soon as device completes execution
+- **No Polling**: Efficient, persistent connections instead of HTTP polling
+- **Multiple Clients**: Multiple TUI instances can connect simultaneously and receive results
+- **Timeout Protection**: 60-second timeout prevents hanging commands
+- **Error Handling**: Captures and displays command errors from device
+
+**How it works:**
+1. TUI sends command via REST API (`POST /api/devices/{id}/commands`)
+2. Server queues command and returns command ID
+3. TUI registers pending command and waits for result
+4. Server sends command to device via WebSocket
+5. Device executes command
+6. Device sends result back to server via WebSocket
+7. Server broadcasts result to all connected TUI clients
+8. TUI receives result and displays actual output
+
+**Before vs After:**
+- Before: TUI shows "Command queued" and never displays actual command output
+- After: TUI waits for real result and displays actual command output from device
+
+See [WEBSOCKET_SUMMARY.md](WEBSOCKET_SUMMARY.md) and [WEBSOCKET_IMPLEMENTATION.md](WEBSOCKET_IMPLEMENTATION.md) for details.
+
 ### App Selection & Screen Recording
 The RDM system can automatically record the screen when specific apps are opened:
 
