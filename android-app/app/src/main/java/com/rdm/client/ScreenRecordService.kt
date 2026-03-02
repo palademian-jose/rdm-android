@@ -148,7 +148,7 @@ class ScreenRecordService : Service() {
 
                 // Initialize MediaRecorder
                 mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    MediaRecorder(this@Service)
+                    MediaRecorder(this@ScreenRecordService)
                 } else {
                     @Suppress("DEPRECATION")
                     MediaRecorder()
