@@ -207,7 +207,7 @@
             app:cornerRadius="10dp" />
     </LinearLayout>
 
-    <!-- Device Info Card -->
+    <!-- App Selection Card -->
     <com.google.android.material.card.MaterialCardView
         style="@style/CardStyle.RdmClient"
         android:layout_width="match_parent"
@@ -217,7 +217,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -232,18 +232,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="DEVICE INFORMATION"
+                    android:text="APPS TO RECORD"
                     android:textSize="11sp"
                     android:textColor="@color/text_secondary"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvRecordingCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$"
-                    android:textSize="14sp"
+                    android:text="0 selected"
+                    android:textSize="11sp"
                     android:textColor="@color/accent_cyan"
-                    android:fontFamily="monospace"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:paddingTop="4dp"
@@ -251,10 +251,63 @@
                     android:background="@color/bg_input" />
             </LinearLayout>
 
-            <ScrollView
+            <!-- Search input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/InputStyle.RdmClient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search apps"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAppSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:textColor="@color/text_primary"
+                    android:textSize="13sp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- App list -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAppList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Device Info Card (collapsed) -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CardStyle.RdmClient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DEVICE INFORMATION"
+                android:textSize="11sp"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:background="@color/bg_input">
 
                 <TextView

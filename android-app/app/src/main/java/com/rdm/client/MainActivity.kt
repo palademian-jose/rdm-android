@@ -6,7 +6,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.projection.MediaProjectionManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.EditText
@@ -15,6 +19,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import android.provider.Settings
@@ -25,10 +31,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
     private lateinit var tvDeviceInfo: TextView
     private lateinit var tvDeviceInfoHint: TextView
+    private lateinit var tvRecordingCount: TextView
     private lateinit var btnConnect: Button
     private lateinit var btnDisconnect: Button
     private lateinit var btnTestCommand: Button
     private lateinit var etServerUrl: EditText
+    private lateinit var etAppSearch: EditText
     private lateinit var switchAppendDeviceId: Switch
 
     private lateinit var webSocketClient: WebSocketClient
@@ -39,10 +47,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appListCollector: AppListCollector
     private lateinit var mediaProjectionManager: MediaProjectionManager
 
+    private lateinit var rvAppList: RecyclerView
+    private lateinit var appListAdapter: AppListAdapter
+
     private val TAG = "MainActivity"
     private val SCREEN_RECORD_REQUEST_CODE = 1001
 
     private var pendingRecordPackageName: String? = null
+    private var allApps = listOf<AppInfo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,10 +70,12 @@ class MainActivity : AppCompatActivity() {
         tvStatus = findViewById(R.id.tvStatus)
         tvDeviceInfo = findViewById(R.id.tvDeviceInfo)
         tvDeviceInfoHint = findViewById(R.id.tvDeviceInfoHint)
+        tvRecordingCount = findViewById(R.id.tvRecordingCount)
         btnConnect = findViewById(R.id.btnConnect)
         btnDisconnect = findViewById(R.id.btnDisconnect)
         btnTestCommand = findViewById(R.id.btnTestCommand)
         etServerUrl = findViewById(R.id.etServerUrl)
+        etAppSearch = findViewById(R.id.etAppSearch)
         switchAppendDeviceId = findViewById(R.id.switchAppendDeviceId)
 
         // Set device ID hint
@@ -92,9 +106,29 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
+        // Initialize app list RecyclerView
+        rvAppList = findViewById(R.id.rvAppList)
+        appListAdapter = AppListAdapter { app, shouldRecord ->
+            if (shouldRecord) {
+                appListCollector.addRecordingApp(app.packageName)
+            } else {
+                appListCollector.removeRecordingApp(app.packageName)
+            }
+            updateRecordingCount()
+        }
+        rvAppList.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = appListAdapter
+        }
+
         // Setup listeners
         setupWebSocketListeners()
         setupSwitchListener()
+        setupAppSearchListener()
+
+        // Load app list
+        loadAppList()
+        updateRecordingCount()
 
         // Setup button listeners
         setupButtonListeners()
@@ -104,6 +138,74 @@ class MainActivity : AppCompatActivity() {
 
         // Update UI
         updateDeviceInfo()
+    }
+
+    private fun setupAppSearchListener() {
+        etAppSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                filterApps(s?.toString() ?: "")
+            }
+        })
+
+        etAppSearch.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                (event?.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                etAppSearch.clearFocus()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    private fun loadAppList() {
+        lifecycleScope.launch {
+            try {
+                val result = appListCollector.getAllApps()
+                if (result.isSuccess) {
+                    allApps = result.getOrNull() ?: emptyList()
+                    appListAdapter.submitList(allApps)
+                    Log.d(TAG, "Loaded ${allApps.size} apps")
+                } else {
+                    Log.e(TAG, "Failed to load apps", result.exceptionOrNull())
+                    Toast.makeText(this@MainActivity, "Failed to load app list", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading apps", e)
+                Toast.makeText(this@MainActivity, "Error loading apps", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun filterApps(query: String) {
+        lifecycleScope.launch {
+            try {
+                val result = if (query.isBlank()) {
+                    appListCollector.getAllApps()
+                } else {
+                    appListCollector.searchApps(query)
+                }
+
+                if (result.isSuccess) {
+                    val filtered = result.getOrNull() ?: emptyList()
+                    appListAdapter.submitList(filtered)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error filtering apps", e)
+            }
+        }
+    }
+
+    private fun updateRecordingCount() {
+        val recordingApps = appListCollector.getRecordingApps()
+        tvRecordingCount.text = "${recordingApps.size} selected"
+        appListAdapter.updateRecordingApps(recordingApps.toSet())
+
+        // Update foreground app monitor with recording list
+        foregroundAppMonitor.updateRecordingApps(recordingApps)
+        Log.d(TAG, "Recording apps: $recordingApps")
     }
 
     private fun setupSwitchListener() {
