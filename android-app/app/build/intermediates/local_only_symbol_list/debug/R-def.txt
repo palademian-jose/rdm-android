@@ -1,15 +1,30 @@
 R_DEF: Internal format may change without notice
 local
+anim pulse
+color accent_cyan
+color accent_cyan_dim
+color accent_purple
+color accent_purple_dim
+color bg_card
+color bg_primary
 color black
+color border
 color ic_launcher_background
 color purple_200
 color purple_500
 color purple_700
 color teal_200
 color teal_700
+color text_secondary
+color text_terminal
 color white
+drawable bg_status_connected
+drawable bg_status_connecting
+drawable bg_status_disconnected
+drawable bg_terminal
 drawable editbox_background
 drawable ic_launcher_foreground
+drawable status_dot
 id btnConnect
 id btnDisconnect
 id btnTestCommand
@@ -22,4 +37,13 @@ layout activity_main
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
+style ButtonStyle
+style ButtonStyle.Outlined
+style ButtonStyle.Primary
+style ButtonStyle.Tonal
+style CardStyle
+style TextStyle
+style TextStyle.SectionHeader
+style TextStyle.Terminal
+style Theme.RDM
 style Theme.RdmClient

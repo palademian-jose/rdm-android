@@ -3,10 +3,10 @@ package com.rdm.client
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Switch
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class AppListAdapter(
     private val onRecordingToggle: (AppInfo, Boolean) -> Unit
@@ -42,7 +42,7 @@ class AppListAdapter(
     inner class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvAppName: TextView = itemView.findViewById(R.id.tvAppName)
         private val tvPackageName: TextView = itemView.findViewById(R.id.tvPackageName)
-        private val switchRecord: Switch = itemView.findViewById(R.id.switchRecord)
+        private val switchRecord: SwitchMaterial = itemView.findViewById(R.id.switchRecord)
 
         fun bind(app: AppInfo, recordingApps: Set<String>) {
             tvAppName.text = app.appName ?: app.packageName
