@@ -33,12 +33,17 @@ pub struct Device {
     pub model: String,
     #[serde(rename = "platform", alias = "android_version")]
     pub platform: String,
-    pub api_level: i32,
-    pub architecture: String,
-    pub device_info: String,
-    pub user_data: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_level: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub architecture: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_info: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_data: Option<String>,
     pub last_seen: String,
-    pub created_at: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub foreground_app: Option<String>,
 }

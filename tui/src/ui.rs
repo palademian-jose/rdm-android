@@ -754,8 +754,6 @@ impl App {
         }
 
         if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-            let api_level = device.api_level.to_string();
-
             // Get foreground app from state if available
             let foreground_app = self.state.devices
                 .iter()
@@ -764,12 +762,21 @@ impl App {
                 .map(|s| s.as_str())
                 .unwrap_or("Unknown");
 
+            let api_level = device.api_level
+                .map(|l| l.to_string())
+                .unwrap_or("Unknown".to_string());
+
+            let architecture = device.architecture
+                .as_ref()
+                .map(|s| s.as_str())
+                .unwrap_or("Unknown");
+
             let rows = vec![
                 Row::new(vec!["Name", device.name.as_str()]),
                 Row::new(vec!["Model", device.model.as_str()]),
                 Row::new(vec!["Android", device.platform.as_str()]),
                 Row::new(vec!["API Level", api_level.as_str()]),
-                Row::new(vec!["Architecture", device.architecture.as_str()]),
+                Row::new(vec!["Architecture", architecture]),
                 Row::new(vec!["Foreground App", foreground_app]),
                 Row::new(vec!["Last Seen", device.last_seen.as_str()]),
                 Row::new(vec!["Device ID", device.id.as_str()]),
