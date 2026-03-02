@@ -126,8 +126,8 @@ class MainActivity : AppCompatActivity() {
         webSocketClient.onConnected = {
             runOnUiThread {
                 tvStatus.text = "✓ Connected"
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_green_dark))
-                tvStatus.setTextColor(Color.WHITE)
+                tvStatus.setBackgroundColor(getColor(R.color.status_connected))
+                tvStatus.setTextColor(getColor(R.color.bg_card))
                 btnConnect.isEnabled = false
                 btnDisconnect.isEnabled = true
                 Toast.makeText(this@MainActivity, "Connected to server", Toast.LENGTH_SHORT).show()
@@ -147,8 +147,8 @@ class MainActivity : AppCompatActivity() {
         webSocketClient.onDisconnected = {
             runOnUiThread {
                 tvStatus.text = "✗ Disconnected"
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_red_dark))
-                tvStatus.setTextColor(Color.WHITE)
+                tvStatus.setBackgroundColor(getColor(R.color.status_disconnected))
+                tvStatus.setTextColor(getColor(R.color.bg_card))
                 btnConnect.isEnabled = true
                 btnDisconnect.isEnabled = false
 
@@ -161,8 +161,8 @@ class MainActivity : AppCompatActivity() {
         webSocketClient.onError = { exception ->
             runOnUiThread {
                 tvStatus.text = "⚠ Error: ${exception.message}"
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_orange_dark))
-                tvStatus.setTextColor(Color.WHITE)
+                tvStatus.setBackgroundColor(getColor(R.color.status_connecting))
+                tvStatus.setTextColor(getColor(R.color.bg_card))
                 Toast.makeText(this@MainActivity, "Connection error: ${exception.message}", Toast.LENGTH_LONG).show()
 
                 // Stop foreground app monitoring on error
@@ -260,8 +260,8 @@ class MainActivity : AppCompatActivity() {
 
                 Log.d(TAG, "Connecting to: $finalUrl")
                 tvStatus.text = "⏳ Connecting..."
-                tvStatus.setBackgroundColor(getColor(android.R.color.holo_blue_dark))
-                tvStatus.setTextColor(Color.WHITE)
+                tvStatus.setBackgroundColor(getColor(R.color.status_connecting))
+                tvStatus.setTextColor(getColor(R.color.bg_card))
 
                 webSocketClient.connect()
                 Toast.makeText(this@MainActivity, "Connecting to server...", Toast.LENGTH_SHORT).show()
