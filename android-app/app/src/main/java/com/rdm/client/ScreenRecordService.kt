@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.MediaCodec
 import android.media.MediaCodecInfo
@@ -114,7 +115,7 @@ class ScreenRecordService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(message)
-            .setSmallIcon(android.R.drawable.ic_media_record)
+            .setSmallIcon(android.R.drawable.ic_media_play)
             .setOngoing(true)
             .setContentIntent(stopPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -147,7 +148,7 @@ class ScreenRecordService : Service() {
 
                 // Initialize MediaRecorder
                 mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    MediaRecorder(this)
+                    MediaRecorder(this@Service)
                 } else {
                     @Suppress("DEPRECATION")
                     MediaRecorder()
@@ -181,7 +182,7 @@ class ScreenRecordService : Service() {
                     screenWidth,
                     screenHeight,
                     screenDensity,
-                    DisplayMetrics.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
                     surface,
                     null,
                     null

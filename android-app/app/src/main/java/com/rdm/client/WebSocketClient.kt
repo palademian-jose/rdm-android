@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 class WebSocketClient(
     private val context: Context,
     private val serverUrl: String,
-    private val deviceId: String
+    val deviceId: String
 ) {
     private val TAG = "WebSocketClient"
     private val gson = Gson()
@@ -209,12 +209,16 @@ class WebSocketClient(
         }
     }
 
-    private fun sendMessage(message: String) {
+    fun send(message: String) {
         try {
             webSocket?.send(message)
         } catch (e: Exception) {
             Log.e(TAG, "Error sending message", e)
         }
+    }
+
+    private fun sendMessage(message: String) {
+        send(message)
     }
 
     private fun scheduleReconnect() {

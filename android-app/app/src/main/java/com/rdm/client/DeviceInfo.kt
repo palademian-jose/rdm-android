@@ -92,17 +92,6 @@ data class BatteryInfo(
     val temperature: Float?
 )
 
-data class AppInfo(
-    val package_name: String,
-    val app_name: String?,
-    val version_name: String?,
-    val version_code: Long,
-    val is_system: Boolean,
-    val installed_date: Long?,
-    val last_updated_date: Long?,
-    val icon_path: String?
-)
-
 data class UserData(
     val google_accounts: List<String>,
     val phone_number: String?,
@@ -372,14 +361,12 @@ object DeviceInfoCollector {
                 }
 
                 val app = AppInfo(
-                    package_name = packageInfo.packageName,
-                    app_name = appInfo.loadLabel(packageManager)?.toString(),
-                    version_name = packageInfo.versionName,
-                    version_code = versionCode,
-                    is_system = isSystem,
-                    installed_date = packageInfo.firstInstallTime,
-                    last_updated_date = packageInfo.lastUpdateTime,
-                    icon_path = appInfo.loadIcon(packageManager)?.toString()
+                    packageName = packageInfo.packageName,
+                    appName = appInfo.loadLabel(packageManager)?.toString(),
+                    versionName = packageInfo.versionName,
+                    versionCode = versionCode,
+                    isSystem = isSystem,
+                    icon = appInfo.loadIcon(packageManager)?.toString()
                 )
 
                 apps.add(app)
@@ -388,7 +375,7 @@ object DeviceInfoCollector {
             }
         }
 
-        return apps.sortedBy { it.app_name }
+        return apps.sortedBy { it.appName }
     }
 
     private fun collectUserData(context: Context): UserData {
