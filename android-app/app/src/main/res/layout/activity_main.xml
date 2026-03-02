@@ -1,30 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/bg_primary"
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <!-- Status Bar -->
-    <TextView
-        android:id="@+id/tvStatus"
+    <!-- Header with title and status -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Status: Disconnected"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:padding="16dp"
-        android:background="@color/accent_cyan"
-        android:textColor="@color/bg_primary"
-        android:elevation="4dp"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="20dp">
 
-    <!-- Server URL Card -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RDM Client"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remote Device Manager"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="● Offline"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/status_disconnected"
+            android:padding="8dp"
+            android:background="@color/bg_surface"
+            android:layout_marginStart="12dp" />
+    </LinearLayout>
+
+    <!-- Device ID Card -->
     <com.google.android.material.card.MaterialCardView
-        style="@style/CardStyle"
+        style="@style/CardStyle.RdmClient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp">
@@ -36,62 +67,149 @@
             android:padding="16dp">
 
             <TextView
-                style="@style/TextStyle.SectionHeader"
-                android:text="Server Configuration"
-                android:layout_marginBottom="12dp"/>
-
-            <EditText
-                android:id="@+id/etServerUrl"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Enter server URL"
-                android:text="wss://separately-touched-manatee.ngrok-free.app/ws/device"
-                android:inputType="textUri"
-                android:padding="12dp"
-                android:background="@drawable/editbox_background"
-                android:textSize="14sp"
-                android:layout_marginBottom="8dp"/>
-
-            <!-- Append Device ID Toggle -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="12dp"
-                android:background="@drawable/editbox_background">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Append Device ID"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_secondary"/>
-
-                <Switch
-                    android:id="@+id/switchAppendDeviceId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:showText="false"/>
-            </LinearLayout>
+                android:text="DEVICE ID"
+                android:textSize="11sp"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/tvDeviceInfoHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Device ID: 0067f8bf53dbf21b"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="8dp"
-                android:fontFamily="monospace"/>
+                android:text="Loading..."
+                android:textSize="13sp"
+                android:textColor="@color/accent_cyan"
+                android:fontFamily="monospace"
+                android:padding="10dp"
+                android:background="@color/bg_input"
+                android:layout_marginBottom="8dp" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Server Configuration Card -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CardStyle.RdmClient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SERVER CONFIGURATION"
+                android:textSize="11sp"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Server URL input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/InputStyle.RdmClient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="WebSocket Server URL"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etServerUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:text="wss://separately-touched-manatee.ngrok-free.app/ws/device"
+                    android:textColor="@color/text_primary"
+                    android:textSize="13sp"
+                    android:fontFamily="monospace" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Append Device ID switch -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@color/bg_input"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Append Device ID"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Auto-add /{device_id} to URL"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchAppendDeviceId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Connect/Disconnect buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConnect"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Connect"
+            android:layout_marginEnd="8dp"
+            android:textSize="14sp"
+            app:backgroundTint="@color/accent_cyan"
+            android:textColor="@color/bg_primary"
+            style="@style/Widget.Material3.Button"
+            app:cornerRadius="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDisconnect"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Disconnect"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:enabled="false"
+            app:strokeColor="@color/status_disconnected"
+            android:textColor="@color/status_disconnected"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
+
     <!-- Device Info Card -->
     <com.google.android.material.card.MaterialCardView
-        style="@style/CardStyle"
+        style="@style/CardStyle.RdmClient"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -103,58 +221,66 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                style="@style/TextStyle.SectionHeader"
-                android:text="Device Information"
-                android:layout_marginBottom="8dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="DEVICE INFORMATION"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$"
+                    android:textSize="14sp"
+                    android:textColor="@color/accent_cyan"
+                    android:fontFamily="monospace"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:background="@color/bg_input" />
+            </LinearLayout>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@color/bg_input">
 
                 <TextView
                     android:id="@+id/tvDeviceInfo"
-                    style="@style/TextStyle.Terminal"
-                    android:text="Loading device info..."/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Loading device info..."
+                    android:textSize="12sp"
+                    android:textColor="@color/text_terminal"
+                    android:fontFamily="monospace"
+                    android:padding="14dp" />
             </ScrollView>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Connection Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnConnect"
-            style="@style/ButtonStyle.Primary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Connect"
-            android:layout_marginEnd="8dp"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDisconnect"
-            style="@style/ButtonStyle.Outlined"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Disconnect"
-            android:enabled="false"
-            android:layout_marginStart="8dp"/>
-    </LinearLayout>
-
+    <!-- Test Root Command Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnTestCommand"
-        style="@style/ButtonStyle.Tonal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Test Root Command"
-        android:icon="@android:drawable/ic_menu_manage"/>
+        android:layout_height="48dp"
+        android:text="Test Root Command (ls -la /system/app)"
+        android:textSize="13sp"
+        app:backgroundTint="@color/accent_purple_dim"
+        android:textColor="@color/accent_purple"
+        style="@style/Widget.Material3.Button.TonalButton"
+        app:cornerRadius="10dp" />
 
 </LinearLayout>
