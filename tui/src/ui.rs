@@ -767,7 +767,7 @@ impl App {
             let rows = vec![
                 Row::new(vec!["Name", device.name.as_str()]),
                 Row::new(vec!["Model", device.model.as_str()]),
-                Row::new(vec!["Android", device.android_version.as_str()]),
+                Row::new(vec!["Android", device.platform.as_str()]),
                 Row::new(vec!["API Level", api_level.as_str()]),
                 Row::new(vec!["Architecture", device.architecture.as_str()]),
                 Row::new(vec!["Foreground App", foreground_app]),

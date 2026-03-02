@@ -31,7 +31,8 @@ pub struct Device {
     pub id: String,
     pub name: String,
     pub model: String,
-    pub android_version: String,
+    #[serde(alias = "android_version")]
+    pub platform: String,
     pub api_level: i32,
     pub architecture: String,
     pub device_info: String,
