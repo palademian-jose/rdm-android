@@ -16,7 +16,7 @@ import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnTestCommand: Button
     private lateinit var etServerUrl: EditText
     private lateinit var etAppSearch: EditText
-    private lateinit var switchAppendDeviceId: SwitchMaterial
+    private lateinit var switchAppendDeviceId: MaterialSwitch
 
     private lateinit var webSocketClient: WebSocketClient
     private lateinit var deviceId: String
