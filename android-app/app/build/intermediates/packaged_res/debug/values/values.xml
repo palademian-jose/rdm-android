@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="accent_cyan">#00BCD4</color>
-    <color name="accent_cyan_dim">#0097A7</color>
-    <color name="accent_purple">#9C27B0</color>
-    <color name="accent_purple_dim">#7B1FA2</color>
-    <color name="bg_card">#FFFFFF</color>
-    <color name="bg_primary">#FAFAFA</color>
+<resources xmlns:ns1="http://schemas.android.com/tools">
+    <color name="accent_cyan">#00D4FF</color>
+    <color name="accent_cyan_dim">#1A3D4A</color>
+    <color name="accent_purple">#7C4DFF</color>
+    <color name="accent_purple_dim">#2A1F4A</color>
+    <color name="bg_card">#1E2035</color>
+    <color name="bg_input">#252640</color>
+    <color name="bg_primary">#0F1019</color>
+    <color name="bg_surface">#1A1B2E</color>
     <color name="black">#FF000000</color>
-    <color name="border">#E0E0E0</color>
-    <color name="ic_launcher_background">#6200EE</color>
+    <color name="border">#303450</color>
+    <color name="divider">#2A2D45</color>
+    <color name="ic_launcher_background">#1A1B2E</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
+    <color name="status_connected">#00E676</color>
+    <color name="status_connected_dim">#0D3320</color>
+    <color name="status_connecting">#FFD740</color>
+    <color name="status_connecting_dim">#3D3010</color>
+    <color name="status_disconnected">#FF5252</color>
+    <color name="status_disconnected_dim">#3D1515</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_terminal">#4CAF50</color>
+    <color name="text_hint">#555A7A</color>
+    <color name="text_primary">#EAEAF5</color>
+    <color name="text_secondary">#8890BB</color>
+    <color name="text_terminal">#00E5CC</color>
     <color name="white">#FFFFFFFF</color>
     <string name="app_name">RDM Client</string>
     <style name="ButtonStyle" parent="Widget.Material3.Button">
@@ -43,12 +54,23 @@
         <item name="rippleColor">@color/accent_purple</item>
         <item name="cornerRadius">14dp</item>
     </style>
-    <style name="CardStyle" parent="Widget.Material3.CardView.Elevated">
+    <style name="CardStyle.RdmClient" parent="Widget.Material3.CardView.Elevated">
         <item name="cardBackgroundColor">@color/bg_card</item>
         <item name="cardCornerRadius">16dp</item>
         <item name="cardElevation">0dp</item>
         <item name="strokeColor">@color/border</item>
         <item name="strokeWidth">1dp</item>
+    </style>
+    <style name="InputStyle.RdmClient" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/bg_input</item>
+        <item name="boxStrokeColor">@color/border</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
     </style>
     <style name="TextStyle" parent="Widget.AppCompat.TextView">
         <item name="android:fontFamily">sans-serif</item>
@@ -73,30 +95,26 @@
         <item name="android:lineSpacingExtra">4dp</item>
         <item name="android:typeface">monospace</item>
     </style>
-    <style name="Theme.RDM" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.RdmClient" parent="Theme.Material3.Dark">
+        
         <item name="colorPrimary">@color/accent_cyan</item>
-        <item name="colorPrimaryDark">@color/accent_cyan_dim</item>
-        <item name="colorAccent">@color/accent_cyan</item>
-
-        <item name="android:windowBackground">@color/bg_primary</item>
+        <item name="colorPrimaryVariant">@color/accent_cyan_dim</item>
+        <item name="colorOnPrimary">@color/bg_primary</item>
+        
+        <item name="colorSecondary">@color/accent_purple</item>
+        <item name="colorSecondaryVariant">@color/accent_purple_dim</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+        
+        <item name="android:colorBackground">@color/bg_primary</item>
+        <item name="colorSurface">@color/bg_surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        
         <item name="android:statusBarColor">@color/bg_primary</item>
         <item name="android:navigationBarColor">@color/bg_primary</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
-
-        <item name="materialCardViewStyle">@style/CardStyle</item>
-    </style>
-    <style name="Theme.RdmClient" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:windowLightStatusBar" ns1:targetApi="m">false</item>
         
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="materialCardViewStyle">@style/CardStyle.RdmClient</item>
         
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        
+        <item name="textInputStyle">@style/InputStyle.RdmClient</item>
     </style>
 </resources>

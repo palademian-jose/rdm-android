@@ -1,7 +1,6 @@
-use actix_web::{web, HttpResponse, Responder, get, post};
+use actix_web::{web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Device {
@@ -74,7 +73,7 @@ pub async fn get_all_devices(app_state: web::Data<crate::AppState>) -> impl Resp
 
 pub async fn get_device_by_id(
     path: web::Path<String>,
-    app_state: web::Data<crate::AppState>
+    app_state: web::Data<crate::AppState>,
 ) -> impl Responder {
     let device_id = path.into_inner();
     let devices = app_state.devices.read().unwrap();
@@ -97,12 +96,19 @@ pub async fn get_device_by_id(
 pub async fn get_device_logs(
     path: web::Path<String>,
     query: web::Query<std::collections::HashMap<String, String>>,
-    app_state: web::Data<crate::AppState>
+    app_state: web::Data<crate::AppState>,
 ) -> impl Responder {
     let device_id = path.into_inner();
-    let limit = query.get("limit").and_then(|l| l.parse().ok()).unwrap_or(100);
+    let limit = query
+        .get("limit")
+        .and_then(|l| l.parse().ok())
+        .unwrap_or(100);
 
-    if let Ok(logs) = app_state.db.get_logs(Some(&device_id), Some(limit), None).await {
+    if let Ok(logs) = app_state
+        .db
+        .get_logs(Some(&device_id), Some(limit), None)
+        .await
+    {
         HttpResponse::Ok().json(ApiResponse {
             success: true,
             message: format!("Found {} log(s)", logs.len()),
@@ -122,14 +128,16 @@ pub async fn get_device_logs(
 pub async fn send_command(
     path: web::Path<String>,
     cmd_req: web::Json<CommandRequest>,
-    app_state: web::Data<crate::AppState>
+    app_state: web::Data<crate::AppState>,
 ) -> impl Responder {
     let device_id = path.into_inner();
     let sudo = cmd_req.sudo.unwrap_or(false);
 
     // Check if device is online
     let devices = app_state.devices.read().unwrap();
-    let device_online = devices.iter().any(|d| d.id == device_id && d.status == "online");
+    let device_online = devices
+        .iter()
+        .any(|d| d.id == device_id && d.status == "online");
     drop(devices);
 
     if !device_online {
@@ -141,7 +149,11 @@ pub async fn send_command(
     }
 
     // Save command to database
-    let command_id = match app_state.db.save_command(&device_id, &cmd_req.command, sudo).await {
+    let command_id = match app_state
+        .db
+        .save_command(&device_id, &cmd_req.command, sudo)
+        .await
+    {
         Ok(id) => id,
         Err(_) => {
             return HttpResponse::InternalServerError().json(ApiResponse {
@@ -153,7 +165,9 @@ pub async fn send_command(
     };
 
     // Send command to device via WebSocket
-    let sent = app_state.send_command_to_device(&device_id, &cmd_req.command, &command_id, sudo).await;
+    let sent = app_state
+        .send_command_to_device(&device_id, &cmd_req.command, &command_id, sudo)
+        .await;
 
     if !sent {
         // Device connected but failed to send
@@ -174,4 +188,36 @@ pub async fn send_command(
             "sudo": sudo
         })),
     })
+}
+
+pub async fn get_device_commands(
+    path: web::Path<String>,
+    query: web::Query<std::collections::HashMap<String, String>>,
+    app_state: web::Data<crate::AppState>,
+) -> impl Responder {
+    let device_id = path.into_inner();
+    let limit = query
+        .get("limit")
+        .and_then(|l| l.parse().ok())
+        .unwrap_or(100);
+
+    if let Ok(commands) = app_state
+        .db
+        .get_commands(Some(&device_id), Some(limit))
+        .await
+    {
+        HttpResponse::Ok().json(ApiResponse {
+            success: true,
+            message: format!("Found {} command(s)", commands.len()),
+            data: Some(json!({
+                "commands": commands
+            })),
+        })
+    } else {
+        HttpResponse::InternalServerError().json(ApiResponse {
+            success: false,
+            message: "Failed to fetch commands".to_string(),
+            data: None,
+        })
+    }
 }

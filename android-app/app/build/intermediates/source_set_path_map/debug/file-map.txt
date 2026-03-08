@@ -28,10 +28,10 @@ com.rdm.client.app-lifecycle-viewmodel-savedstate-2.7.0-26 /home/deimos/.gradle/
 com.rdm.client.app-cardview-1.0.0-27 /home/deimos/.gradle/caches/transforms-3/f47d16a6556e4855c9392813a19b75da/transformed/cardview-1.0.0/res
 com.rdm.client.app-emoji2-views-helper-1.2.0-28 /home/deimos/.gradle/caches/transforms-3/f848fa7d3a3b65c1575c183cc9692e1d/transformed/emoji2-views-helper-1.2.0/res
 com.rdm.client.app-coordinatorlayout-1.1.0-29 /home/deimos/.gradle/caches/transforms-3/fdd59a48df0d88a42976f9c034d9002b/transformed/coordinatorlayout-1.1.0/res
-com.rdm.client.app-pngs-30 /home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/build/generated/res/pngs/debug
-com.rdm.client.app-resValues-31 /home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/build/generated/res/resValues/debug
-com.rdm.client.app-packageDebugResources-32 /home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
-com.rdm.client.app-packageDebugResources-33 /home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
-com.rdm.client.app-merged_res-34 /home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/build/intermediates/merged_res/debug
-com.rdm.client.app-debug-35 /home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/debug/res
-com.rdm.client.app-main-36 /home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/res
+com.rdm.client.app-pngs-30 /home/deimos/Projects/rdm-android/android-app/app/build/generated/res/pngs/debug
+com.rdm.client.app-resValues-31 /home/deimos/Projects/rdm-android/android-app/app/build/generated/res/resValues/debug
+com.rdm.client.app-packageDebugResources-32 /home/deimos/Projects/rdm-android/android-app/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.rdm.client.app-packageDebugResources-33 /home/deimos/Projects/rdm-android/android-app/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.rdm.client.app-merged_res-34 /home/deimos/Projects/rdm-android/android-app/app/build/intermediates/merged_res/debug
+com.rdm.client.app-debug-35 /home/deimos/Projects/rdm-android/android-app/app/src/debug/res
+com.rdm.client.app-main-36 /home/deimos/Projects/rdm-android/android-app/app/src/main/res

@@ -1,9 +1,7 @@
-use actix_web::{web, HttpResponse, Responder};
 use anyhow::Result;
-use chrono::{DateTime, Utc};
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
-use sqlx::{Pool, SqlitePool, Sqlite};
-use bcrypt::{hash, verify, DEFAULT_COST};
+use sqlx::{Pool, Sqlite, SqlitePool};
 use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
@@ -55,7 +53,10 @@ impl Database {
         let pool = match SqlitePool::connect(&database_url).await {
             Ok(pool) => pool,
             Err(e) => {
-                eprintln!("Warning: Failed to connect to database at {}: {:?}. Using in-memory database.", database_url, e);
+                eprintln!(
+                    "Warning: Failed to connect to database at {}: {:?}. Using in-memory database.",
+                    database_url, e
+                );
                 // Fallback to in-memory database
                 SqlitePool::connect("sqlite::memory:")
                     .await
@@ -67,7 +68,8 @@ impl Database {
     }
 
     pub async fn migrate(&self) -> Result<()> {
-        sqlx::query(r#"
+        sqlx::query(
+            r#"
             CREATE TABLE IF NOT EXISTS devices (
                 id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
@@ -80,7 +82,13 @@ impl Database {
                 last_seen TEXT NOT NULL,
                 created_at TEXT NOT NULL
             );
+        "#,
+        )
+        .execute(&self.pool)
+        .await?;
 
+        sqlx::query(
+            r#"
             CREATE TABLE IF NOT EXISTS commands (
                 id TEXT PRIMARY KEY,
                 device_id TEXT NOT NULL,
@@ -92,7 +100,13 @@ impl Database {
                 created_at TEXT NOT NULL,
                 completed_at TEXT
             );
+        "#,
+        )
+        .execute(&self.pool)
+        .await?;
 
+        sqlx::query(
+            r#"
             CREATE TABLE IF NOT EXISTS logs (
                 id TEXT PRIMARY KEY,
                 device_id TEXT NOT NULL,
@@ -101,7 +115,8 @@ impl Database {
                 data TEXT,
                 timestamp TEXT NOT NULL
             );
-        "#)
+        "#,
+        )
         .execute(&self.pool)
         .await?;
 
@@ -150,10 +165,12 @@ impl Database {
     pub async fn save_command(&self, device_id: &str, command: &str, sudo: bool) -> Result<String> {
         let id = Uuid::new_v4().to_string();
 
-        sqlx::query(r#"
+        sqlx::query(
+            r#"
             INSERT INTO commands (id, device_id, command, sudo, status, created_at)
             VALUES (?1, ?2, ?3, ?4, ?5, ?6)
-        "#)
+        "#,
+        )
         .bind(&id)
         .bind(device_id)
         .bind(command)
@@ -173,11 +190,13 @@ impl Database {
         error: Option<String>,
         status: &str,
     ) -> Result<()> {
-        sqlx::query(r#"
+        sqlx::query(
+            r#"
             UPDATE commands
             SET output = ?1, error = ?2, status = ?3, completed_at = ?4
             WHERE id = ?5
-        "#)
+        "#,
+        )
         .bind(&output)
         .bind(&error)
         .bind(status)
@@ -190,10 +209,12 @@ impl Database {
     }
 
     pub async fn save_log(&self, log: &LogEntry) -> Result<()> {
-        sqlx::query(r#"
+        sqlx::query(
+            r#"
             INSERT INTO logs (id, device_id, level, message, data, timestamp)
             VALUES (?1, ?2, ?3, ?4, ?5, ?6)
-        "#)
+        "#,
+        )
         .bind(&log.id)
         .bind(&log.device_id)
         .bind(&log.level)
@@ -214,7 +235,7 @@ impl Database {
     ) -> Result<Vec<LogEntry>> {
         let logs = if let Some(device_id) = device_id {
             sqlx::query_as::<_, LogEntry>(
-                "SELECT * FROM logs WHERE device_id = ?1 ORDER BY timestamp DESC LIMIT ?2"
+                "SELECT * FROM logs WHERE device_id = ?1 ORDER BY timestamp DESC LIMIT ?2",
             )
             .bind(device_id)
             .bind(limit.unwrap_or(100))
@@ -222,11 +243,34 @@ impl Database {
             .await?
         } else {
             sqlx::query_as::<_, LogEntry>("SELECT * FROM logs ORDER BY timestamp DESC LIMIT ?1")
-            .bind(limit.unwrap_or(100))
-            .fetch_all(&self.pool)
-            .await?
+                .bind(limit.unwrap_or(100))
+                .fetch_all(&self.pool)
+                .await?
         };
 
         Ok(logs)
+    }
+
+    pub async fn get_commands(
+        &self,
+        device_id: Option<&str>,
+        limit: Option<i64>,
+    ) -> Result<Vec<Command>> {
+        let commands = if let Some(device_id) = device_id {
+            sqlx::query_as::<_, Command>(
+                "SELECT * FROM commands WHERE device_id = ?1 ORDER BY created_at DESC LIMIT ?2",
+            )
+            .bind(device_id)
+            .bind(limit.unwrap_or(100))
+            .fetch_all(&self.pool)
+            .await?
+        } else {
+            sqlx::query_as::<_, Command>("SELECT * FROM commands ORDER BY created_at DESC LIMIT ?1")
+                .bind(limit.unwrap_or(100))
+                .fetch_all(&self.pool)
+                .await?
+        };
+
+        Ok(commands)
     }
 }

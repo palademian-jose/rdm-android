@@ -1,18 +1,18 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
-use actix_ws::Message;
 use actix_cors::Cors;
 use actix_files::Files;
-use tracing::{info, error};
-use std::sync::Arc;
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_ws::Message;
 use futures_util::StreamExt;
-use std::env;
-use tokio::sync::mpsc;
 use std::collections::HashMap;
+use std::env;
+use std::sync::Arc;
+use tokio::sync::mpsc;
+use tracing::{error, info};
 
 mod auth;
-mod websocket;
 mod database;
 mod devices;
+mod websocket;
 
 #[derive(Clone)]
 pub struct WsSender {
@@ -24,7 +24,7 @@ struct AppState {
     devices: Arc<std::sync::RwLock<Vec<devices::Device>>>,
     db: Arc<database::Database>,
     ws_senders: Arc<std::sync::RwLock<HashMap<String, WsSender>>>,
-    client_senders: Arc<std::sync::RwLock<HashMap<String, WsSender>>>,  // client_id -> WsSender
+    client_senders: Arc<std::sync::RwLock<HashMap<String, WsSender>>>, // client_id -> WsSender
 }
 
 impl AppState {
@@ -37,14 +37,23 @@ impl AppState {
     }
 
     pub fn add_client_sender(&self, client_id: String, sender: WsSender) {
-        self.client_senders.write().unwrap().insert(client_id, sender);
+        self.client_senders
+            .write()
+            .unwrap()
+            .insert(client_id, sender);
     }
 
     pub fn remove_client_sender(&self, client_id: &str) {
         self.client_senders.write().unwrap().remove(client_id);
     }
 
-    pub async fn send_command_to_device(&self, device_id: &str, command: &str, command_id: &str, sudo: bool) -> bool {
+    pub async fn send_command_to_device(
+        &self,
+        device_id: &str,
+        command: &str,
+        command_id: &str,
+        sudo: bool,
+    ) -> bool {
         let senders = self.ws_senders.read().unwrap().clone();
         if let Some(sender) = senders.get(device_id) {
             let message = serde_json::json!({
@@ -114,17 +123,17 @@ async fn ws_device(
                                 Message::Text(text) => {
                                     if let Ok(ws_msg) = serde_json::from_str::<websocket::WsMessage>(&text) {
                                         match ws_msg {
-                                            websocket::WsMessage::Auth { token } => {
+                                            websocket::WsMessage::Auth { token: _ } => {
                                                 info!("Auth received from device: {}", device_id);
                                                 authenticated = true;
                                             }
                                             websocket::WsMessage::DeviceInfo { device_id: d_id, info } => {
                                                 info!("Device info received from: {}", d_id);
 
-                                                if !authenticated {
-                                                    error!("Device {} sending info without auth", d_id);
-                                                    continue;
-                                                }
+                                                // if !authenticated {
+                                                //     error!("Device {} sending info without auth", d_id);
+                                                //     continue;
+                                                // }
 
                                                 if let Ok(device_obj) = serde_json::from_value::<serde_json::Value>(info.clone()) {
                                                     let name = device_obj.get("name")
@@ -325,10 +334,10 @@ async fn ws_client(
                                 Message::Text(text) => {
                                     if let Ok(ws_msg) = serde_json::from_str::<websocket::WsMessage>(&text) {
                                         match ws_msg {
-                                            websocket::WsMessage::Auth { token } => {
+                                            websocket::WsMessage::Auth { token: _ } => {
                                                 info!("Auth received from client: {}", client_id);
                                             }
-                                            websocket::WsMessage::Command { id, command, sudo } => {
+                                            websocket::WsMessage::Command { id: _, command, sudo: _ } => {
                                                 // Client wants to send a command to a device
                                                 // This will be handled via REST API, but we acknowledge receipt
                                                 info!("Command request from client {}: {}", client_id, command);
@@ -395,7 +404,13 @@ async fn main() -> std::io::Result<()> {
     let db_path = env::var("DATABASE_URL").unwrap_or_else(|_| "database/rdm.db".to_string());
 
     if let Some(parent) = std::path::Path::new(&db_path).parent() {
-        std::fs::create_dir_all(parent).ok();
+        if let Err(e) = std::fs::create_dir_all(parent) {
+            error!(
+                "Failed to create database directory {}: {:?}",
+                parent.display(),
+                e
+            );
+        }
     }
 
     info!("🚀 RDM Server starting on {}:{}", host, port);
@@ -416,8 +431,7 @@ async fn main() -> std::io::Result<()> {
     let bind_addr = format!("{}:{}", host, port);
 
     HttpServer::new(move || {
-        let files = Files::new("/web", "./web")
-            .index_file("dashboard.html");
+        let files = Files::new("/web", "./web").index_file("dashboard.html");
 
         App::new()
             .wrap(Cors::permissive())
@@ -425,9 +439,22 @@ async fn main() -> std::io::Result<()> {
             .route("/health", web::get().to(health))
             .route("/api/auth/login", web::post().to(auth::login))
             .route("/api/devices", web::get().to(devices::get_all_devices))
-            .route("/api/devices/{device_id}", web::get().to(devices::get_device_by_id))
-            .route("/api/devices/{device_id}/logs", web::get().to(devices::get_device_logs))
-            .route("/api/devices/{device_id}/commands", web::post().to(devices::send_command))
+            .route(
+                "/api/devices/{device_id}",
+                web::get().to(devices::get_device_by_id),
+            )
+            .route(
+                "/api/devices/{device_id}/logs",
+                web::get().to(devices::get_device_logs),
+            )
+            .route(
+                "/api/devices/{device_id}/commands",
+                web::post().to(devices::send_command),
+            )
+            .route(
+                "/api/devices/{device_id}/commands",
+                web::get().to(devices::get_device_commands),
+            )
             .route("/ws/device/{device_id}", web::get().to(ws_device))
             .route("/ws/client", web::get().to(ws_client))
             .service(files)

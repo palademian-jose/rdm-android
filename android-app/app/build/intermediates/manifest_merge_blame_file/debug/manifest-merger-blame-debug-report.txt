@@ -9,38 +9,38 @@
 9
 10    <!-- Permissions -->
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:55:5-67
-11-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:55:22-64
+11-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:55:5-67
+11-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:55:22-64
 12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-12-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:56:5-79
-12-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:56:22-76
+12-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:56:5-79
+12-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:56:22-76
 13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-13-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:57:5-76
-13-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:57:22-73
+13-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:57:5-76
+13-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:57:22-73
 14    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-14-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:58:5-77
-14-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:58:22-74
+14-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:58:5-77
+14-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:58:22-74
 15    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-15-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:59:5-87
-15-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:59:22-84
+15-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:59:5-87
+15-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:59:22-84
 16    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
-16-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:60:5-94
-16-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:60:22-91
+16-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:60:5-94
+16-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:60:22-91
 17    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-17-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:61:5-81
-17-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:61:22-78
+17-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:61:5-81
+17-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:61:22-78
 18    <uses-permission android:name="android.permission.WAKE_LOCK" />
-18-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:62:5-68
-18-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:62:22-65
+18-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:62:5-68
+18-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:62:22-65
 19    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-19-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:63:5-71
-19-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:63:22-68
+19-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:63:5-71
+19-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:63:22-68
 20    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-20-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:64:5-81
-20-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:64:22-78
+20-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:64:5-81
+20-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:64:22-78
 21    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-21-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:65:5-80
-21-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:65:22-77
+21-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:65:5-80
+21-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:65:22-77
 22
 23    <permission
 23-->[androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
@@ -53,89 +53,89 @@
 27-->[androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 27-->[androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
 28    <application
-28-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:6:5-52:19
+28-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:6:5-52:19
 29        android:allowBackup="true"
-29-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:7:9-35
+29-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:7:9-35
 30        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 30-->[androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 31        android:debuggable="true"
 32        android:directBootAware="true"
-32-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:12:9-39
+32-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:12:9-39
 33        android:extractNativeLibs="true"
 34        android:icon="@mipmap/ic_launcher"
-34-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:8:9-43
+34-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:8:9-43
 35        android:label="@string/app_name"
-35-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:9:9-41
+35-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:9:9-41
 36        android:persistent="true"
-36-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:11:9-34
+36-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:11:9-34
 37        android:theme="@style/Theme.RdmClient"
-37-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:10:9-47
+37-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:10:9-47
 38        android:usesCleartextTraffic="true" >
-38-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:13:9-44
+38-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:13:9-44
 39        <activity
-39-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:16:9-24:20
+39-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:16:9-24:20
 40            android:name="com.rdm.client.MainActivity"
-40-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:17:13-41
+40-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:17:13-41
 41            android:exported="true"
-41-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:18:13-36
+41-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:18:13-36
 42            android:label="@string/app_name" >
-42-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:19:13-45
+42-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:19:13-45
 43            <intent-filter>
-43-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:20:13-23:29
+43-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:20:13-23:29
 44                <action android:name="android.intent.action.MAIN" />
-44-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:21:17-69
-44-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:21:25-66
+44-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:21:17-69
+44-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:21:25-66
 45
 46                <category android:name="android.intent.category.LAUNCHER" />
-46-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:22:17-77
-46-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:22:27-74
+46-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:22:17-77
+46-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:22:27-74
 47            </intent-filter>
 48        </activity>
 49
 50        <!-- Background service for WebSocket connection -->
 51        <service
-51-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:27:9-31:56
+51-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:27:9-31:56
 52            android:name="com.rdm.client.RdmService"
-52-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:28:13-39
+52-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:28:13-39
 53            android:enabled="true"
-53-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:29:13-35
+53-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:29:13-35
 54            android:exported="false"
-54-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:30:13-37
+54-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:30:13-37
 55            android:foregroundServiceType="dataSync" />
-55-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:31:13-53
+55-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:31:13-53
 56
 57        <!-- Screen recording service -->
 58        <service
-58-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:34:9-38:63
+58-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:34:9-38:63
 59            android:name="com.rdm.client.ScreenRecordService"
-59-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:35:13-48
+59-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:35:13-48
 60            android:enabled="true"
-60-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:36:13-35
+60-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:36:13-35
 61            android:exported="false"
-61-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:37:13-37
+61-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:37:13-37
 62            android:foregroundServiceType="mediaProjection" />
-62-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:38:13-60
+62-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:38:13-60
 63
 64        <!-- Boot receiver for auto-start -->
 65        <receiver
-65-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:41:9-50:20
+65-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:41:9-50:20
 66            android:name="com.rdm.client.BootReceiver"
-66-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:42:13-41
+66-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:42:13-41
 67            android:enabled="true"
-67-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:43:13-35
+67-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:43:13-35
 68            android:exported="true" >
-68-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:44:13-36
+68-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:44:13-36
 69            <intent-filter>
-69-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:45:13-49:29
+69-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:45:13-49:29
 70                <action android:name="android.intent.action.BOOT_COMPLETED" />
-70-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:46:17-79
-70-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:46:25-76
+70-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:46:17-79
+70-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:46:25-76
 71                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-71-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:47:17-82
-71-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:47:25-79
+71-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:47:17-82
+71-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:47:25-79
 72                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-72-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:48:17-82
-72-->/home/deimos/.openclaw/workspace/remote-device-manager/android-app/app/src/main/AndroidManifest.xml:48:25-79
+72-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:48:17-82
+72-->/home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:48:25-79
 73            </intent-filter>
 74        </receiver>
 75

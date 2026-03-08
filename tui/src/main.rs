@@ -8,7 +8,10 @@ use ratatui::{
     backend::CrosstermBackend,
     Terminal,
 };
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
+use tokio::sync::mpsc::unbounded_channel;
+use tokio_tungstenite::tungstenite::protocol::Message as WsMessage;
 use tracing::{info, error};
 
 mod ui;
@@ -47,13 +50,18 @@ async fn main() -> Result<()> {
 
     api_client.set_token(&token);
 
-    // Connect to WebSocket for real-time updates
+    // Set up WebSocket channel before spawning the connection task
+    let (ws_tx, mut ws_rx) = unbounded_channel::<WsMessage>();
+    let ws_sender = Arc::new(Mutex::new(ws_tx));
+    api_client.set_ws_sender(ws_sender.clone());
+
+    // Connect to WebSocket in background task
     info!("Connecting to WebSocket...");
-    let mut ws_api_client = api_client.clone();  // Clone for background task
+    let mut ws_api_client = api_client.clone();
     tokio::spawn(async move {
-        if let Err(e) = ws_api_client.connect_websocket().await {
-            error!("WebSocket connection failed: {:?}", e);
-            // Continue without WebSocket - will fall back to REST polling if needed
+        match ws_api_client.connect_websocket_with_channel(ws_rx).await {
+            Ok(_) => info!("WebSocket connection task completed"),
+            Err(e) => error!("WebSocket connection failed: {:?}", e),
         }
     });
 

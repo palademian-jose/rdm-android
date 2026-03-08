@@ -4,15 +4,16 @@ package com.rdm.client.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.textfield.TextInputEditText;
 import com.rdm.client.R;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -32,10 +33,16 @@ public final class ActivityMainBinding implements ViewBinding {
   public final MaterialButton btnTestCommand;
 
   @NonNull
-  public final EditText etServerUrl;
+  public final TextInputEditText etAppSearch;
 
   @NonNull
-  public final Switch switchAppendDeviceId;
+  public final TextInputEditText etServerUrl;
+
+  @NonNull
+  public final RecyclerView rvAppList;
+
+  @NonNull
+  public final MaterialSwitch switchAppendDeviceId;
 
   @NonNull
   public final TextView tvDeviceInfo;
@@ -44,21 +51,28 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvDeviceInfoHint;
 
   @NonNull
+  public final TextView tvRecordingCount;
+
+  @NonNull
   public final TextView tvStatus;
 
   private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull MaterialButton btnConnect,
       @NonNull MaterialButton btnDisconnect, @NonNull MaterialButton btnTestCommand,
-      @NonNull EditText etServerUrl, @NonNull Switch switchAppendDeviceId,
+      @NonNull TextInputEditText etAppSearch, @NonNull TextInputEditText etServerUrl,
+      @NonNull RecyclerView rvAppList, @NonNull MaterialSwitch switchAppendDeviceId,
       @NonNull TextView tvDeviceInfo, @NonNull TextView tvDeviceInfoHint,
-      @NonNull TextView tvStatus) {
+      @NonNull TextView tvRecordingCount, @NonNull TextView tvStatus) {
     this.rootView = rootView;
     this.btnConnect = btnConnect;
     this.btnDisconnect = btnDisconnect;
     this.btnTestCommand = btnTestCommand;
+    this.etAppSearch = etAppSearch;
     this.etServerUrl = etServerUrl;
+    this.rvAppList = rvAppList;
     this.switchAppendDeviceId = switchAppendDeviceId;
     this.tvDeviceInfo = tvDeviceInfo;
     this.tvDeviceInfoHint = tvDeviceInfoHint;
+    this.tvRecordingCount = tvRecordingCount;
     this.tvStatus = tvStatus;
   }
 
@@ -107,14 +121,26 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.etAppSearch;
+      TextInputEditText etAppSearch = ViewBindings.findChildViewById(rootView, id);
+      if (etAppSearch == null) {
+        break missingId;
+      }
+
       id = R.id.etServerUrl;
-      EditText etServerUrl = ViewBindings.findChildViewById(rootView, id);
+      TextInputEditText etServerUrl = ViewBindings.findChildViewById(rootView, id);
       if (etServerUrl == null) {
         break missingId;
       }
 
+      id = R.id.rvAppList;
+      RecyclerView rvAppList = ViewBindings.findChildViewById(rootView, id);
+      if (rvAppList == null) {
+        break missingId;
+      }
+
       id = R.id.switchAppendDeviceId;
-      Switch switchAppendDeviceId = ViewBindings.findChildViewById(rootView, id);
+      MaterialSwitch switchAppendDeviceId = ViewBindings.findChildViewById(rootView, id);
       if (switchAppendDeviceId == null) {
         break missingId;
       }
@@ -131,6 +157,12 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvRecordingCount;
+      TextView tvRecordingCount = ViewBindings.findChildViewById(rootView, id);
+      if (tvRecordingCount == null) {
+        break missingId;
+      }
+
       id = R.id.tvStatus;
       TextView tvStatus = ViewBindings.findChildViewById(rootView, id);
       if (tvStatus == null) {
@@ -138,8 +170,8 @@ public final class ActivityMainBinding implements ViewBinding {
       }
 
       return new ActivityMainBinding((LinearLayout) rootView, btnConnect, btnDisconnect,
-          btnTestCommand, etServerUrl, switchAppendDeviceId, tvDeviceInfo, tvDeviceInfoHint,
-          tvStatus);
+          btnTestCommand, etAppSearch, etServerUrl, rvAppList, switchAppendDeviceId, tvDeviceInfo,
+          tvDeviceInfoHint, tvRecordingCount, tvStatus);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
