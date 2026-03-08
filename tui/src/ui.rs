@@ -234,6 +234,7 @@ pub struct App {
     state: AppState,
     input_buffer: String,
     output_buffer: String,
+    output_scroll_offset: usize,
     last_refresh: Instant,
     monitor: Option<DeviceMonitor>,
     scroll_offset: usize,
@@ -250,6 +251,7 @@ struct AppState {
     status_message: String,
     selected_command_index: usize,
     selected_category_index: usize,
+    sudo_mode: bool,
 }
 
 impl App {
@@ -266,9 +268,11 @@ impl App {
                 status_message: "Loading...".to_string(),
                 selected_command_index: 0,
                 selected_category_index: 0,
+                sudo_mode: false,
             },
             input_buffer: String::new(),
             output_buffer: String::new(),
+            output_scroll_offset: 0,
             last_refresh: Instant::now(),
             monitor: None,
             scroll_offset: 0,
@@ -407,11 +411,22 @@ impl App {
             KeyCode::PageUp => {
                 if self.state.current_view == View::Logs && self.scroll_offset > 5 {
                     self.scroll_offset -= 5;
+                } else if self.state.current_view == View::CommandExecution && self.output_scroll_offset > 0 {
+                    self.output_scroll_offset -= 1;
                 }
             }
             KeyCode::PageDown => {
                 if self.state.current_view == View::Logs {
                     self.scroll_offset += 5;
+                } else if self.state.current_view == View::CommandExecution {
+                    self.output_scroll_offset += 1;
+                }
+            }
+            KeyCode::Char('s') => {
+                if self.state.current_view == View::CommandExecution {
+                    self.state.sudo_mode = !self.state.sudo_mode;
+                    let status = if self.state.sudo_mode { "ENABLED" } else { "DISABLED" };
+                    self.state.status_message = format!("Sudo mode {}", status);
                 }
             }
             KeyCode::Enter => {
@@ -492,9 +507,10 @@ impl App {
         self.state.command_history.push(command.clone());
 
         if let Some(device) = self.state.devices.get(self.state.selected_device_index) {
-            self.state.status_message = format!("Executing: {} on {}", command, device.name);
+            let sudo_prefix = if self.state.sudo_mode { "[sudo] " } else { "" };
+            self.state.status_message = format!("Executing: {}{} on {}", sudo_prefix, command, device.name);
 
-            match self.api_client.execute_command(&device.id, &command, false).await {
+            match self.api_client.execute_command(&device.id, &command, self.state.sudo_mode).await {
                 Ok(result) => {
                     self.output_buffer = result.clone();
                     self.state.logs.push(format!("Command: {} -> {}", command, result));
@@ -565,6 +581,12 @@ impl App {
             Color::Green
         };
 
+        let sudo_indicator = if self.state.sudo_mode {
+            Span::styled(" [ROOT]", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
+        } else {
+            Span::styled("", Style::default())
+        };
+
         let footer = Paragraph::new(vec![
             Line::from(vec![
                 Span::styled("[Q]uit ", Style::default().fg(Color::DarkGray)),
@@ -573,10 +595,12 @@ impl App {
                 Span::styled("[3]Info ", Style::default().fg(Color::Cyan)),
                 Span::styled("[4]Command ", Style::default().fg(Color::Cyan)),
                 Span::styled("[5]Logs ", Style::default().fg(Color::Cyan)),
+                Span::styled("[S]udo ", Style::default().fg(if self.state.sudo_mode { Color::Red } else { Color::DarkGray })),
             ]),
             Line::from(vec![
                 Span::styled("Status: ", Style::default().fg(Color::DarkGray)),
                 Span::styled(&self.state.status_message, Style::default().fg(status_color)),
+                sudo_indicator,
             ]),
         ])
         .block(
@@ -821,7 +845,8 @@ impl App {
             .map(|d| d.name.as_str())
             .unwrap_or("No device");
 
-        let input_text = format!("{}: {} > {}", device_name, "shell", self.input_buffer);
+        let sudo_prefix = if self.state.sudo_mode { "[sudo] " } else { "" };
+        let input_text = format!("{}: {} > {}{}", device_name, "shell", sudo_prefix, self.input_buffer);
 
         let input = Paragraph::new(input_text)
             .block(
@@ -842,6 +867,10 @@ impl App {
             self.output_buffer.clone()
         };
 
+        // Calculate visible area for scrolling
+        let output_area = chunks[1];
+        let output_height = output_area.height.saturating_sub(2) as usize; // Subtract border
+
         let output_paragraph = Paragraph::new(output)
             .block(
                 Block::default()
@@ -851,6 +880,7 @@ impl App {
                     .border_style(Style::default().fg(Color::Cyan))
             )
             .wrap(Wrap { trim: true })
+            .scroll((self.output_scroll_offset as u16, 0))
             .style(Style::default().fg(Color::White));
 
         f.render_widget(output_paragraph, chunks[1]);
