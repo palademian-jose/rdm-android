@@ -284,12 +284,13 @@ class MainActivity : AppCompatActivity() {
                         val sudo = message.get("sudo")?.asBoolean ?: false
                         Log.d(TAG, "Command received: $command (ID: $commandId, sudo=$sudo)")
                         Toast.makeText(this@MainActivity, "Executing: $command", Toast.LENGTH_SHORT).show()
-                        
-                        // Execute the command
-                        lifecycleScope.launch {
-                            try {
-                                val rootExecutor = RootExecutor()
-                                val result = rootExecutor.execute(command, useSudo = sudo)
+
+                        // Execute the command (null check)
+                        if (command != null) {
+                            lifecycleScope.launch {
+                                try {
+                                    val rootExecutor = RootExecutor()
+                                    val result = rootExecutor.execute(command, useSudo = sudo)
                                 
                                 // Send result back to server
                                 val response = JSONObject().apply {
@@ -320,6 +321,18 @@ class MainActivity : AppCompatActivity() {
                                 }
                                 webSocketClient.send(response.toString())
                             }
+                        }
+                    }
+                        else {
+                            Log.e(TAG, "Received null command from server")
+                            val response = JSONObject().apply {
+                                put("type", "command_result")
+                                put("id", commandId)
+                                put("success", false)
+                                put("output", "")
+                                put("error", "No command provided")
+                            }
+                            webSocketClient.send(response.toString())
                         }
                     }
                     "log_request" -> {
