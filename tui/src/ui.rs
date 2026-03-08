@@ -510,6 +510,10 @@ impl App {
             let sudo_prefix = if self.state.sudo_mode { "[sudo] " } else { "" };
             self.state.status_message = format!("Executing: {}{} on {}", sudo_prefix, command, device.name);
 
+            // Clear previous output and reset scroll
+            self.output_buffer = String::new();
+            self.output_scroll_offset = 0;
+
             match self.api_client.execute_command(&device.id, &command, self.state.sudo_mode).await {
                 Ok(result) => {
                     self.output_buffer = result.clone();
@@ -862,7 +866,11 @@ impl App {
 
         // Output
         let output = if self.output_buffer.is_empty() {
-            "Output will appear here...".to_string()
+            if self.state.status_message.contains("Executing") {
+                "Waiting for command result...".to_string()
+            } else {
+                "Output will appear here...".to_string()
+            }
         } else {
             self.output_buffer.clone()
         };
