@@ -281,8 +281,46 @@ class MainActivity : AppCompatActivity() {
                         // Command received from server
                         val command = message.get("command")?.asString
                         val commandId = message.get("id")?.asString
-                        Log.d(TAG, "Command received: $command (ID: $commandId)")
-                        Toast.makeText(this@MainActivity, "Command: $command", Toast.LENGTH_SHORT).show()
+                        val sudo = message.get("sudo")?.asBoolean ?: false
+                        Log.d(TAG, "Command received: $command (ID: $commandId, sudo=$sudo)")
+                        Toast.makeText(this@MainActivity, "Executing: $command", Toast.LENGTH_SHORT).show()
+                        
+                        // Execute the command
+                        lifecycleScope.launch {
+                            try {
+                                val rootExecutor = RootExecutor()
+                                val result = rootExecutor.execute(command, useSudo = sudo)
+                                
+                                // Send result back to server
+                                val response = JSONObject().apply {
+                                    put("type", "command_result")
+                                    put("id", commandId)
+                                    put("success", result.success)
+                                    put("output", result.output ?: "")
+                                    put("error", result.error ?: "")
+                                }
+                                webSocketClient.send(response.toString())
+                                
+                                runOnUiThread {
+                                    if (result.success) {
+                                        Toast.makeText(this@MainActivity, "✓ Command succeeded", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(this@MainActivity, "✗ Command failed", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Log.e(TAG, "Command execution error", e)
+                                // Send error result back to server
+                                val response = JSONObject().apply {
+                                    put("type", "command_result")
+                                    put("id", commandId)
+                                    put("success", false)
+                                    put("output", "")
+                                    put("error", e.message ?: "Unknown error")
+                                }
+                                webSocketClient.send(response.toString())
+                            }
+                        }
                     }
                     "log_request" -> {
                         // Server requesting logs
