@@ -23,9 +23,11 @@ use ui::App;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Initialize tracing
+    // Disable tracing output to avoid mixing with TUI
+    // Logs can be re-enabled via RUST_LOG environment variable if needed
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
+        .with_max_level(tracing::Level::ERROR)  // Only show errors
+        .with_writer(std::io::sink)  // Discard all log output
         .init();
 
     // Load environment variables
