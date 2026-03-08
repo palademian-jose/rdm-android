@@ -422,7 +422,7 @@ impl App {
                     self.output_scroll_offset += 1;
                 }
             }
-            KeyCode::Char('s') => {
+            KeyCode::Char('!') => {
                 if self.state.current_view == View::CommandExecution {
                     self.state.sudo_mode = !self.state.sudo_mode;
                     let status = if self.state.sudo_mode { "ENABLED" } else { "DISABLED" };
@@ -595,7 +595,7 @@ impl App {
                 Span::styled("[3]Info ", Style::default().fg(Color::Cyan)),
                 Span::styled("[4]Command ", Style::default().fg(Color::Cyan)),
                 Span::styled("[5]Logs ", Style::default().fg(Color::Cyan)),
-                Span::styled("[S]udo ", Style::default().fg(if self.state.sudo_mode { Color::Red } else { Color::DarkGray })),
+                Span::styled("[!]Sudo ", Style::default().fg(if self.state.sudo_mode { Color::Red } else { Color::DarkGray })),
             ]),
             Line::from(vec![
                 Span::styled("Status: ", Style::default().fg(Color::DarkGray)),
