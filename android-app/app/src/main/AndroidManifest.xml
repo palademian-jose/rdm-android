@@ -66,4 +66,17 @@
 
     <!-- Root access (not declared in manifest, handled programmatically) -->
 
+    <!-- Package visibility for Android 11+ -->
+    <queries>
+        <!-- Telegram variants -->
+        <package android:name="org.telegram.messenger" />
+        <package android:name="org.telegram.messenger.web" />
+        <package android:name="plus.messenger.android" />
+        <package android:name="org.telegram.plus" />
+
+        <!-- Signal variants -->
+        <package android:name="org.thoughtcrime.securesms" />
+        <package android:name="org.thoughtcrime.securesms.beta" />
+    </queries>
+
 </manifest>

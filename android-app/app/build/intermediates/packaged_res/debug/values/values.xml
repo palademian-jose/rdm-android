@@ -21,6 +21,8 @@
     <color name="status_connecting_dim">#3D3010</color>
     <color name="status_disconnected">#FF5252</color>
     <color name="status_disconnected_dim">#3D1515</color>
+    <color name="status_recording">#FF3D00</color>
+    <color name="status_recording_dim">#3D1000</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="text_hint">#555A7A</color>

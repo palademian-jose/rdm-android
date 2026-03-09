@@ -180,6 +180,19 @@
         android:layout_marginBottom="16dp">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDetectApps"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Detect Apps"
+            android:layout_marginEnd="8dp"
+            android:textSize="14sp"
+            app:backgroundTint="@color/accent_cyan"
+            android:textColor="@color/bg_primary"
+            style="@style/Widget.Material3.Button"
+            app:cornerRadius="10dp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnConnect"
             android:layout_width="0dp"
             android:layout_height="48dp"
@@ -207,7 +220,7 @@
             app:cornerRadius="10dp" />
     </LinearLayout>
 
-    <!-- App Selection Card -->
+    <!-- Detected Apps Card -->
     <com.google.android.material.card.MaterialCardView
         style="@style/CardStyle.RdmClient"
         android:layout_width="match_parent"
@@ -221,105 +234,115 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="APPS TO RECORD"
-                    android:textSize="11sp"
-                    android:textColor="@color/text_secondary"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvRecordingCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0 selected"
-                    android:textSize="11sp"
-                    android:textColor="@color/accent_cyan"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:background="@color/bg_input" />
-            </LinearLayout>
-
-            <!-- Search input -->
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/InputStyle.RdmClient"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Search apps"
-                android:layout_marginBottom="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etAppSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:imeOptions="actionSearch"
-                    android:textColor="@color/text_primary"
-                    android:textSize="13sp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- App list -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAppList"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:scrollbars="vertical" />
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Device Info Card (collapsed) -->
-    <com.google.android.material.card.MaterialCardView
-        style="@style/CardStyle.RdmClient"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DEVICE INFORMATION"
+                android:text="MONITORED APPS"
                 android:textSize="11sp"
                 android:textColor="@color/text_secondary"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
-            <ScrollView
+            <!-- Telegram Detection -->
+            <LinearLayout
+                android:id="@+id/layoutTelegram"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/bg_input">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@color/bg_input"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Telegram"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvTelegramStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not detected"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDeviceInfo"
-                    android:layout_width="match_parent"
+                    android:id="@+id/tvTelegramRecording"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Loading device info..."
-                    android:textSize="12sp"
-                    android:textColor="@color/text_terminal"
-                    android:fontFamily="monospace"
-                    android:padding="14dp" />
-            </ScrollView>
+                    android:text="●"
+                    android:textSize="20sp"
+                    android:textColor="@color/status_disconnected" />
+            </LinearLayout>
+
+            <!-- Signal Detection -->
+            <LinearLayout
+                android:id="@+id/layoutSignal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@color/bg_input"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Signal"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvSignalStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Not detected"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvSignalRecording"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="●"
+                    android:textSize="20sp"
+                    android:textColor="@color/status_disconnected" />
+            </LinearLayout>
+
+            <!-- Recording Status -->
+            <TextView
+                android:id="@+id/tvRecordingStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ready to monitor"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:gravity="center"
+                android:padding="12dp"
+                android:background="@color/bg_surface"
+                android:layout_marginTop="12dp" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

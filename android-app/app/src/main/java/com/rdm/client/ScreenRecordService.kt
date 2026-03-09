@@ -7,23 +7,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.hardware.display.DisplayManager
-import android.hardware.display.VirtualDisplay
-import android.media.MediaCodec
-import android.media.MediaCodecInfo
-import android.media.MediaFormat
-import android.media.MediaRecorder
-import android.media.projection.MediaProjection
-import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Environment
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Surface
-import android.view.WindowManager
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.*
 import java.io.File
@@ -35,15 +22,20 @@ class ScreenRecordService : Service() {
     private val CHANNEL_ID = "ScreenRecordChannel"
     private val NOTIFICATION_ID = 1001
 
-    private var mediaProjection: MediaProjection? = null
-    private var virtualDisplay: VirtualDisplay? = null
-    private var mediaRecorder: MediaRecorder? = null
-    private var surface: Surface? = null
-
     private var isRecording = false
     private var currentOutputPath: String? = null
+    private var recordJob: Job? = null
 
     private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private lateinit var rootExecutor: RootExecutor
+
+    companion object {
+        const val ACTION_START = "com.rdm.client.START_RECORDING"
+        const val ACTION_STOP = "com.rdm.client.STOP_RECORDING"
+        const val EXTRA_RESULT_CODE = "result_code"
+        const val EXTRA_DATA = "data"
+        const val EXTRA_APP_PACKAGE = "app_package"
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -52,20 +44,18 @@ class ScreenRecordService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        rootExecutor = RootExecutor()
         Log.d(TAG, "Screen Record Service created")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START -> {
-                val resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, -1)
-                val data = intent.getParcelableExtra<android.content.Intent>(EXTRA_DATA)
                 val appPackage = intent.getStringExtra(EXTRA_APP_PACKAGE)
-
-                if (resultCode != -1 && data != null && appPackage != null) {
-                    startRecording(resultCode, data, appPackage)
+                if (appPackage != null) {
+                    startRecording(appPackage)
                 } else {
-                    Log.e(TAG, "Invalid start command")
+                    Log.e(TAG, "Missing app package")
                 }
             }
             ACTION_STOP -> {
@@ -122,7 +112,7 @@ class ScreenRecordService : Service() {
             .build()
     }
 
-    private fun startRecording(resultCode: Int, data: android.content.Intent, appPackage: String) {
+    private fun startRecording(appPackage: String) {
         if (isRecording) {
             Log.w(TAG, "Already recording")
             return
@@ -130,77 +120,53 @@ class ScreenRecordService : Service() {
 
         serviceScope.launch {
             try {
-                val mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-                mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data)
-
-                val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                val displayMetrics = DisplayMetrics()
-                windowManager.defaultDisplay.getMetrics(displayMetrics)
-
-                val screenDensity = displayMetrics.densityDpi
-                val screenWidth = displayMetrics.widthPixels
-                val screenHeight = displayMetrics.heightPixels
+                // Get screen dimensions
+                val screenWidth = getScreenWidth()
+                val screenHeight = getScreenHeight()
 
                 // Create output file
                 val outputDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
                 val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-                currentOutputPath = File(outputDir, "recording_${appPackage}_$timestamp.mp4").absolutePath
+                val outputFile = File(outputDir, "recording_${appPackage}_$timestamp.mp4")
+                currentOutputPath = outputFile.absolutePath
 
-                // Initialize MediaRecorder
-                mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    MediaRecorder(this@ScreenRecordService)
-                } else {
-                    @Suppress("DEPRECATION")
-                    MediaRecorder()
-                }.apply {
-                    setAudioSource(MediaRecorder.AudioSource.MIC)
-                    setVideoSource(MediaRecorder.VideoSource.SURFACE)
-                    setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-                    setOutputFile(currentOutputPath)
-                    setVideoEncodingBitRate(8 * 1000 * 1000) // 8 Mbps
-                    setVideoFrameRate(30)
-                    setVideoSize(screenWidth, screenHeight)
-                    setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-                    setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-                    setAudioEncodingBitRate(128 * 1000) // 128 kbps
-                    setAudioSamplingRate(44100)
+                Log.d(TAG, "Starting recording to: $currentOutputPath")
 
-                    try {
-                        prepare()
-                        Log.d(TAG, "MediaRecorder prepared")
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Failed to prepare MediaRecorder", e)
-                        throw e
-                    }
+                // Build screenrecord command
+                val screenrecordCmd = buildString {
+                    append("screenrecord")
+                    append(" --size ${screenWidth}x$screenHeight")
+                    append(" --bit-rate 8000000") // 8 Mbps
+                    append(" --time-limit 1800") // 30 minutes max
+                    append(" \"$currentOutputPath\"")
                 }
 
-                surface = mediaRecorder?.surface
+                Log.d(TAG, "Executing: $screenrecordCmd")
 
-                // Create virtual display
-                virtualDisplay = mediaProjection?.createVirtualDisplay(
-                    "ScreenRecord",
-                    screenWidth,
-                    screenHeight,
-                    screenDensity,
-                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                    surface,
-                    null,
-                    null
-                )
-
-                // Start recording
-                mediaRecorder?.start()
+                // Start recording via root in background
                 isRecording = true
 
                 // Start foreground service
                 val notification = createRecordingNotification(appPackage)
                 startForeground(NOTIFICATION_ID, notification)
 
-                Log.d(TAG, "Recording started: $currentOutputPath")
+                // Execute screenrecord command (blocking, run in separate coroutine)
+                recordJob = launch(Dispatchers.IO) {
+                    val result = rootExecutor.execute(screenrecordCmd, useSudo = true)
+                    if (result.success) {
+                        Log.d(TAG, "Recording completed successfully")
+                        Log.d(TAG, "Output: ${result.output}")
+                    } else {
+                        Log.e(TAG, "Recording failed: ${result.error}")
+                    }
+                    // After screenrecord completes, stop service
+                    stopRecording()
+                }
 
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to start recording", e)
-                cleanup()
+                isRecording = false
+                stopSelf()
             }
         }
     }
@@ -215,18 +181,35 @@ class ScreenRecordService : Service() {
             try {
                 Log.d(TAG, "Stopping recording...")
 
-                mediaRecorder?.apply {
-                    stop()
-                    reset()
+                // Send SIGINT to screenrecord process (graceful stop)
+                val stopResult = rootExecutor.execute(
+                    "pkill -SIGINT -f 'screenrecord'",
+                    useSudo = true
+                )
+
+                if (stopResult.success) {
+                    Log.d(TAG, "Recording stopped gracefully")
+                } else {
+                    Log.e(TAG, "Failed to stop recording: ${stopResult.error}")
+                    // Force kill as fallback
+                    rootExecutor.execute("pkill -9 -f 'screenrecord'", useSudo = true)
                 }
 
-                virtualDisplay?.release()
-                mediaProjection?.stop()
+                // Wait for recording to complete
+                recordJob?.join()
 
                 Log.d(TAG, "Recording saved to: $currentOutputPath")
 
-                // Send recording info via WebSocket
-                // This would need to be integrated with the main app's WebSocket client
+                // Check if file exists and get size
+                currentOutputPath?.let { path ->
+                    val file = File(path)
+                    if (file.exists()) {
+                        val sizeKB = file.length() / 1024
+                        Log.d(TAG, "Recording file size: ${sizeKB}KB")
+                    } else {
+                        Log.w(TAG, "Recording file not found: $path")
+                    }
+                }
 
             } catch (e: Exception) {
                 Log.e(TAG, "Error stopping recording", e)
@@ -240,41 +223,42 @@ class ScreenRecordService : Service() {
 
     private fun cleanup() {
         isRecording = false
+        recordJob?.cancel()
+        recordJob = null
+        currentOutputPath = null
+        Log.d(TAG, "Cleanup complete")
+    }
 
-        try {
-            virtualDisplay?.release()
-            virtualDisplay = null
+    private suspend fun getScreenWidth(): Int = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val result = rootExecutor.execute("wm size", useSudo = false)
+            if (result.success && result.output != null) {
+                // Parse output: Physical size: 1080x2280
+                val regex = """(\d+)x(\d+)""".toRegex()
+                val match = regex.find(result.output)
+                match?.groupValues?.get(1)?.toInt() ?: 1080
+            } else {
+                1080 // fallback
+            }
         } catch (e: Exception) {
-            Log.e(TAG, "Error releasing virtual display", e)
-        }
-
-        try {
-            mediaRecorder?.release()
-            mediaRecorder = null
-        } catch (e: Exception) {
-            Log.e(TAG, "Error releasing media recorder", e)
-        }
-
-        try {
-            surface?.release()
-            surface = null
-        } catch (e: Exception) {
-            Log.e(TAG, "Error releasing surface", e)
-        }
-
-        try {
-            mediaProjection?.stop()
-            mediaProjection = null
-        } catch (e: Exception) {
-            Log.e(TAG, "Error stopping media projection", e)
+            Log.e(TAG, "Failed to get screen width", e)
+            1080
         }
     }
 
-    companion object {
-        const val ACTION_START = "com.rdm.client.START_RECORDING"
-        const val ACTION_STOP = "com.rdm.client.STOP_RECORDING"
-        const val EXTRA_RESULT_CODE = "result_code"
-        const val EXTRA_DATA = "data"
-        const val EXTRA_APP_PACKAGE = "app_package"
+    private suspend fun getScreenHeight(): Int = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val result = rootExecutor.execute("wm size", useSudo = false)
+            if (result.success && result.output != null) {
+                val regex = """(\d+)x(\d+)""".toRegex()
+                val match = regex.find(result.output)
+                match?.groupValues?.get(2)?.toInt() ?: 2280
+            } else {
+                2280 // fallback
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to get screen height", e)
+            2280
+        }
     }
 }

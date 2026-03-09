@@ -328,32 +328,74 @@ impl App {
 
     async fn handle_key_event(&mut self, key: KeyEvent) -> Result<bool> {
         match key.code {
-            KeyCode::Char('q') | KeyCode::Esc => {
-                // Quit
-                if self.state.current_view == View::CommandList {
-                    self.state.current_view = View::CommandExecution;
-                    return Ok(false);
+            KeyCode::Char('q') => {
+                return Ok(true); // Quit
+            }
+            KeyCode::Esc => {
+                // Handle Esc based on current view
+                match self.state.current_view {
+                    View::CommandList => {
+                        self.state.current_view = View::CommandExecution;
+                        self.scroll_offset = 0;
+                    }
+                    View::CommandExecution => {
+                        // Go back to Dashboard from Command view
+                        self.state.current_view = View::Dashboard;
+                        self.scroll_offset = 0;
+                    }
+                    _ => {
+                        return Ok(true); // Quit from other views
+                    }
                 }
-                return Ok(true);
+                return Ok(false);
             }
             KeyCode::Char('1') => {
-                self.state.current_view = View::Dashboard;
-                self.scroll_offset = 0;
+                // Only navigate if not in CommandExecution view
+                if self.state.current_view != View::CommandExecution {
+                    self.state.current_view = View::Dashboard;
+                    self.scroll_offset = 0;
+                } else {
+                    self.input_buffer.push('1');
+                }
             }
             KeyCode::Char('2') => {
-                self.state.current_view = View::Devices;
-                self.scroll_offset = 0;
+                // Only navigate if not in CommandExecution view
+                if self.state.current_view != View::CommandExecution {
+                    self.state.current_view = View::Devices;
+                    self.scroll_offset = 0;
+                } else {
+                    self.input_buffer.push('2');
+                }
             }
             KeyCode::Char('3') => {
-                if !self.state.devices.is_empty() {
-                    self.state.current_view = View::DeviceInfo;
-                    self.scroll_offset = 0;
+                // Only navigate if not in CommandExecution view
+                if self.state.current_view != View::CommandExecution {
+                    if !self.state.devices.is_empty() {
+                        self.state.current_view = View::DeviceInfo;
+                        self.scroll_offset = 0;
+                    }
+                } else {
+                    self.input_buffer.push('3');
                 }
             }
             KeyCode::Char('4') => {
-                if !self.state.devices.is_empty() {
-                    self.state.current_view = View::CommandExecution;
+                // Only navigate if not in CommandExecution view
+                if self.state.current_view != View::CommandExecution {
+                    if !self.state.devices.is_empty() {
+                        self.state.current_view = View::CommandExecution;
+                        self.scroll_offset = 0;
+                    }
+                } else {
+                    self.input_buffer.push('4');
+                }
+            }
+            KeyCode::Char('5') => {
+                // Only navigate if not in CommandExecution view
+                if self.state.current_view != View::CommandExecution {
+                    self.state.current_view = View::Logs;
                     self.scroll_offset = 0;
+                } else {
+                    self.input_buffer.push('5');
                 }
             }
             KeyCode::Tab => {
@@ -364,10 +406,6 @@ impl App {
                     self.state.current_view = View::CommandExecution;
                     self.scroll_offset = 0;
                 }
-            }
-            KeyCode::Char('5') => {
-                self.state.current_view = View::Logs;
-                self.scroll_offset = 0;
             }
             KeyCode::Up => {
                 if self.state.current_view == View::Devices {
@@ -591,9 +629,19 @@ impl App {
             Span::styled("", Style::default())
         };
 
+        // Show Esc or Tab hint based on view
+        let nav_hint = if self.state.current_view == View::CommandExecution {
+            Span::styled("[Esc]Back [Tab]Cmds ", Style::default().fg(Color::Yellow))
+        } else if self.state.current_view == View::CommandList {
+            Span::styled("[Esc]Back ", Style::default().fg(Color::Yellow))
+        } else {
+            Span::styled("", Style::default())
+        };
+
         let footer = Paragraph::new(vec![
             Line::from(vec![
                 Span::styled("[Q]uit ", Style::default().fg(Color::DarkGray)),
+                nav_hint,
                 Span::styled("[1]Dashboard ", Style::default().fg(Color::Cyan)),
                 Span::styled("[2]Devices ", Style::default().fg(Color::Cyan)),
                 Span::styled("[3]Info ", Style::default().fg(Color::Cyan)),
