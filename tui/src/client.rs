@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use futures_util::{SinkExt, StreamExt};
-use reqwest::{Client, ClientBuilder, StatusCode};
+use reqwest::{Client, ClientBuilder};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -11,7 +11,6 @@ use tokio_tungstenite::{
     tungstenite::protocol::Message as WsMessage,
 };
 use tracing::{debug, error, info, warn};
-use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct ApiClient {
@@ -258,7 +257,7 @@ impl ApiClient {
                             }
                         }
                     }
-                    Ok(WsMessage::Ping(data)) => {
+                    Ok(WsMessage::Ping(_data)) => {
                         debug!("Received ping");
                     }
                     Ok(WsMessage::Close(_)) => {
@@ -415,7 +414,7 @@ impl ApiClient {
                             }
                         }
                     }
-                    Ok(WsMessage::Ping(data)) => {
+                    Ok(WsMessage::Ping(_data)) => {
                         debug!("Received ping");
                     }
                     Ok(WsMessage::Close(_)) => {

@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
@@ -28,12 +29,12 @@ class ScreenRecordService : Service() {
 
     private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private lateinit var rootExecutor: RootExecutor
+    private lateinit var recordingManager: RecordingManager
+    private var currentAppPackage: String? = null
 
     companion object {
         const val ACTION_START = "com.rdm.client.START_RECORDING"
         const val ACTION_STOP = "com.rdm.client.STOP_RECORDING"
-        const val EXTRA_RESULT_CODE = "result_code"
-        const val EXTRA_DATA = "data"
         const val EXTRA_APP_PACKAGE = "app_package"
     }
 
@@ -45,6 +46,7 @@ class ScreenRecordService : Service() {
         super.onCreate()
         createNotificationChannel()
         rootExecutor = RootExecutor()
+        recordingManager = RecordingManager(this)
         Log.d(TAG, "Screen Record Service created")
     }
 
@@ -118,27 +120,42 @@ class ScreenRecordService : Service() {
             return
         }
 
+        currentAppPackage = appPackage
+
         serviceScope.launch {
             try {
-                // Get screen dimensions
+                // Use 720p with the screen's actual aspect ratio for good balance of quality and file size
+                // Get actual screen dimensions
                 val screenWidth = getScreenWidth()
                 val screenHeight = getScreenHeight()
 
-                // Create output file
+                // Calculate aspect ratio (width/height)
+                val aspectRatio = screenWidth.toDouble() / screenHeight.toDouble()
+
+                // Use 720 as base height, calculate width to match screen aspect ratio
+                val targetHeight = 720
+                val targetWidth = ((targetHeight * aspectRatio).toInt() + 7) / 8 * 8  // Round to multiple of 8
+
+                Log.d(TAG, "Screen: ${screenWidth}x$screenHeight, aspect ratio: $aspectRatio")
+                Log.d(TAG, "Recording at: ${targetWidth}x$targetHeight}")
+
+                // Create output files
                 val outputDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
                 val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-                val outputFile = File(outputDir, "recording_${appPackage}_$timestamp.mp4")
-                currentOutputPath = outputFile.absolutePath
+                val videoFile = File(outputDir, "recording_${appPackage}_$timestamp.mp4")
+                currentOutputPath = videoFile.absolutePath
 
                 Log.d(TAG, "Starting recording to: $currentOutputPath")
 
                 // Build screenrecord command
+                // Use su -c wrapper to execute via direct execution instead of persistent shell
+                // Set time limit to 0 (no limit) - we'll manually stop with SIGINT for proper finalization
                 val screenrecordCmd = buildString {
-                    append("screenrecord")
-                    append(" --size ${screenWidth}x$screenHeight")
-                    append(" --bit-rate 8000000") // 8 Mbps
-                    append(" --time-limit 1800") // 30 minutes max
-                    append(" \"$currentOutputPath\"")
+                    append("su -c 'screenrecord")
+                    append(" --size ${targetWidth}x$targetHeight")
+                    append(" --bit-rate 2000000") // 2 Mbps for smaller file size
+                    append(" --time-limit 0") // No limit - we stop manually with SIGINT
+                    append(" \"${currentOutputPath}\"'")
                 }
 
                 Log.d(TAG, "Executing: $screenrecordCmd")
@@ -152,15 +169,15 @@ class ScreenRecordService : Service() {
 
                 // Execute screenrecord command (blocking, run in separate coroutine)
                 recordJob = launch(Dispatchers.IO) {
-                    val result = rootExecutor.execute(screenrecordCmd, useSudo = true)
+                    val result = rootExecutor.execute(screenrecordCmd, useSudo = false)
                     if (result.success) {
                         Log.d(TAG, "Recording completed successfully")
                         Log.d(TAG, "Output: ${result.output}")
                     } else {
                         Log.e(TAG, "Recording failed: ${result.error}")
                     }
-                    // After screenrecord completes, stop service
-                    stopRecording()
+                    // After screenrecord completes naturally, process the file
+                    processCompletedRecording()
                 }
 
             } catch (e: Exception) {
@@ -179,40 +196,87 @@ class ScreenRecordService : Service() {
 
         serviceScope.launch {
             try {
-                Log.d(TAG, "Stopping recording...")
+                Log.d(TAG, "Stopping recording with SIGINT (Ctrl+C)...")
 
-                // Send SIGINT to screenrecord process (graceful stop)
-                val stopResult = rootExecutor.execute(
-                    "pkill -SIGINT -f 'screenrecord'",
-                    useSudo = true
+                // Send SIGINT to screenrecord process for proper MP4 finalization
+                // Find the screenrecord process and send SIGINT
+                val pidResult = rootExecutor.execute(
+                    "su -c 'pidof screenrecord'",
+                    useSudo = false,
+                    timeoutMs = 5000
                 )
 
-                if (stopResult.success) {
-                    Log.d(TAG, "Recording stopped gracefully")
+                if (pidResult.success && pidResult.output?.isNotEmpty() == true) {
+                    val pid = pidResult.output?.trim()
+                    Log.d(TAG, "Found screenrecord PID: $pid")
+
+                    // Send SIGINT (Ctrl+C) to allow proper finalization
+                    val killResult = rootExecutor.execute(
+                        "su -c 'kill -INT $pid'",
+                        useSudo = false
+                    )
+
+                    if (killResult.success) {
+                        Log.d(TAG, "SIGINT sent successfully, waiting for finalization...")
+                    } else {
+                        Log.e(TAG, "Failed to send SIGINT: ${killResult.error}")
+                    }
                 } else {
-                    Log.e(TAG, "Failed to stop recording: ${stopResult.error}")
-                    // Force kill as fallback
-                    rootExecutor.execute("pkill -9 -f 'screenrecord'", useSudo = true)
+                    Log.w(TAG, "No screenrecord process found")
                 }
 
-                // Wait for recording to complete
+                // Wait for recording job to complete naturally (screenrecord finalizes MP4)
+                Log.d(TAG, "Waiting for screenrecord to complete...")
                 recordJob?.join()
+                Log.d(TAG, "Screenrecord process completed")
+
+                // Give it a moment to ensure file is fully written
+                kotlinx.coroutines.delay(1000)
+
+                // Process the completed recording
+                processCompletedRecording()
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error stopping recording", e)
+                // Still try to process whatever was recorded
+                processCompletedRecording()
+            }
+        }
+    }
+
+    private fun processCompletedRecording() {
+        serviceScope.launch {
+            try {
+                Log.d(TAG, "Processing completed recording...")
+
+                // Wait a moment for file to be fully written
+                kotlinx.coroutines.delay(1000)
 
                 Log.d(TAG, "Recording saved to: $currentOutputPath")
 
-                // Check if file exists and get size
+                // Check if video file exists and get size
                 currentOutputPath?.let { path ->
                     val file = File(path)
                     if (file.exists()) {
                         val sizeKB = file.length() / 1024
                         Log.d(TAG, "Recording file size: ${sizeKB}KB")
+
+                        // Notify RecordingManager of completed recording
+                        currentAppPackage?.let { packageName ->
+                            recordingManager.onRecordingComplete(
+                                filePath = path,
+                                appPackage = packageName,
+                                timestamp = System.currentTimeMillis()
+                            )
+                            Log.d(TAG, "Recording queued for upload: $path")
+                        }
                     } else {
                         Log.w(TAG, "Recording file not found: $path")
                     }
                 }
 
             } catch (e: Exception) {
-                Log.e(TAG, "Error stopping recording", e)
+                Log.e(TAG, "Error processing completed recording", e)
             } finally {
                 cleanup()
                 stopForeground(STOP_FOREGROUND_REMOVE)

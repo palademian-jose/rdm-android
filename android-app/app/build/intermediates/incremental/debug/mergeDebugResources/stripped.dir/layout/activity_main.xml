@@ -180,24 +180,11 @@
         android:layout_marginBottom="16dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDetectApps"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:text="Detect Apps"
-            android:layout_marginEnd="8dp"
-            android:textSize="14sp"
-            app:backgroundTint="@color/accent_cyan"
-            android:textColor="@color/bg_primary"
-            style="@style/Widget.Material3.Button"
-            app:cornerRadius="10dp" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnConnect"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:text="Connect"
+            android:text="Connect Now"
             android:layout_marginEnd="8dp"
             android:textSize="14sp"
             app:backgroundTint="@color/accent_cyan"

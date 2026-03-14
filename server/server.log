@@ -1,0 +1,80 @@
+warning: unused variable: `app_state`
+  --> src/screenshots.rs:29:5
+   |
+29 |     app_state: web::Data<crate::AppState>,
+   |     ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_app_state`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `app_state`
+   --> src/screenshots.rs:170:5
+    |
+170 |     app_state: web::Data<crate::AppState>,
+    |     ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_app_state`
+
+warning: unused variable: `source_name`
+   --> src/unified_events.rs:310:21
+    |
+310 |                 let source_name = entry.file_name().to_string_lossy().to_string();
+    |                     ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_source_name`
+
+warning: variable `authenticated` is assigned to, but never used
+   --> src/main.rs:117:13
+    |
+117 |         let mut authenticated = false;
+    |             ^^^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_authenticated` instead
+
+warning: value assigned to `authenticated` is never read
+   --> src/main.rs:132:49
+    |
+132 | ...                   authenticated = true;
+    |                       ^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_token` is never used
+  --> src/auth.rs:94:8
+   |
+94 | pub fn verify_token(token: &str) -> Result<Claims> {
+   |        ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `hash_password` is never used
+   --> src/auth.rs:104:8
+    |
+104 | pub fn hash_password(password: &str) -> Result<String> {
+    |        ^^^^^^^^^^^^^
+
+warning: function `verify_password` is never used
+   --> src/auth.rs:109:8
+    |
+109 | pub fn verify_password(password: &str, hash: &str) -> Result<bool> {
+    |        ^^^^^^^^^^^^^^^
+
+warning: method `get_device` is never used
+   --> src/database.rs:156:18
+    |
+ 48 | impl Database {
+    | ------------- method in this implementation
+...
+156 |     pub async fn get_device(&self, device_id: &str) -> Result<Option<Device>> {
+    |                  ^^^^^^^^^^
+
+warning: struct `UnifiedEventsBatch` is never constructed
+  --> src/unified_events.rs:29:12
+   |
+29 | pub struct UnifiedEventsBatch {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: `rdm-server` (bin "rdm-server") generated 10 warnings (run `cargo fix --bin "rdm-server" -p rdm-server` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.13s
+     Running `target/release/rdm-server`
+[2m2026-03-11T05:07:49.274076Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m 🚀 RDM Server starting on 0.0.0.0:8443
+Database URL: sqlite:database/rdm.db
+[2m2026-03-11T05:07:49.274325Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Running database migrations...
+[2m2026-03-11T05:07:49.274696Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Database migrations completed successfully
+Error: Os { code: 98, kind: AddrInUse, message: "Address already in use" }

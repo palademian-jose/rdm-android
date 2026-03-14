@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -19,9 +20,9 @@ class WebSocketClient(
     private val TAG = "WebSocketClient"
     private val gson = Gson()
     private val okHttpClient = OkHttpClient.Builder()
-        .readTimeout(10, TimeUnit.SECONDS)
-        .writeTimeout(10, TimeUnit.SECONDS)
-        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(15, TimeUnit.SECONDS)
         .pingInterval(30, TimeUnit.SECONDS)
         .build()
 
@@ -30,10 +31,36 @@ class WebSocketClient(
     private var reconnectJob: Job? = null
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    // Message queue to prevent overflow
+    private val messageQueue = Channel<String>(capacity = 100)
+    private var isSending = false
+
     var onMessage: ((JsonObject) -> Unit)? = null
     var onConnected: (() -> Unit)? = null
     var onDisconnected: (() -> Unit)? = null
     var onError: ((Exception) -> Unit)? = null
+
+    init {
+        // Start message queue processor
+        startMessageProcessor()
+    }
+
+    private fun startMessageProcessor() {
+        scope.launch {
+            while (true) {
+                try {
+                    val message = messageQueue.receive()
+                    if (isConnected && webSocket != null) {
+                        // Add delay to prevent flooding
+                        delay(50) // Increased from 10ms to 50ms
+                        webSocket?.send(message)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error processing message queue", e)
+                }
+            }
+        }
+    }
 
     fun connect() {
         scope.launch {
@@ -48,7 +75,11 @@ class WebSocketClient(
                         Log.d(TAG, "WebSocket connected")
                         isConnected = true
                         onConnected?.invoke()
-                        sendDeviceInfo()
+                        // Delay sending device info to avoid overflow
+                        scope.launch {
+                            delay(2000) // Increased to 2 seconds
+                            sendDeviceInfo()
+                        }
                     }
 
                     override fun onMessage(ws: WebSocket, text: String) {
@@ -210,24 +241,43 @@ class WebSocketClient(
     }
 
     fun send(message: String) {
+        scope.launch {
+            try {
+                // Try to send to queue, if it's full, drop and log
+                if (!messageQueue.trySend(message).isSuccess) {
+                    Log.w(TAG, "Message queue full, dropping message")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error queuing message", e)
+            }
+        }
+    }
+
+    // New method for immediate sending (bypasses queue)
+    fun sendImmediate(message: String) {
         try {
             webSocket?.send(message)
         } catch (e: Exception) {
-            Log.e(TAG, "Error sending message", e)
+            Log.e(TAG, "Error sending message immediately", e)
         }
     }
 
     private fun sendMessage(message: String) {
-        send(message)
+        send(message)  // Always use the queue now
     }
 
     private fun scheduleReconnect() {
         reconnectJob?.cancel()
         reconnectJob = scope.launch {
-            Log.d(TAG, "Scheduling reconnect in 5 seconds...")
-            delay(5000)
-            if (!isConnected) {
-                connect()
+            // Exponential backoff: start with 5 seconds, max 60 seconds
+            var delay = 5000L
+            while (!isConnected) {
+                Log.d(TAG, "Scheduling reconnect in ${delay/1000} seconds...")
+                delay(delay)
+                if (!isConnected) {
+                    connect()
+                    delay = minOf(delay * 2, 60000L) // Double delay, max 60 seconds
+                }
             }
         }
     }

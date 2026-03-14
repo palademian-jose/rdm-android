@@ -14,7 +14,8 @@ class ForegroundAppMonitor(
     private val webSocketClient: WebSocketClient,
     private val onRecordingTrigger: (String) -> Unit,
     private val onRecordingStop: () -> Unit,
-    private val onAppChanged: (String?) -> Unit = {}
+    private val onAppChanged: (String?) -> Unit = {},
+    private val anomalyDetector: AnomalyDetector? = null
 ) {
     private val TAG = "ForegroundAppMonitor"
 
@@ -27,7 +28,9 @@ class ForegroundAppMonitor(
 
     private var lastPackage: String? = null
     private val recordableApps = mutableSetOf<String>()
-    private var isRecording = false
+
+    // Smart recording manager
+    private val smartRecordingManager = SmartRecordingManager(context)
 
     // App detector for Telegram/Signal
     private val appDetector = AppDetector(context)
@@ -52,6 +55,25 @@ class ForegroundAppMonitor(
             Log.e(TAG, "Failed to detect apps")
         }
 
+        // Configure smart recording manager
+        smartRecordingManager.configure(
+            backgroundGracePeriodMs = 30000L, // 30 seconds grace period
+            maxRecordingDurationMs = 1800000L, // 30 minutes max
+            lowBatteryThreshold = 20 // 20%
+        )
+
+        // Set up recording callbacks
+        smartRecordingManager.setRecordingCallbacks(
+            onStart = { packageName ->
+                Log.d(TAG, "Smart recording started for: $packageName")
+                onRecordingTrigger(packageName)
+            },
+            onStop = { packageName ->
+                Log.d(TAG, "Smart recording stopped for: $packageName")
+                onRecordingStop()
+            }
+        )
+
         Log.d(TAG, "Starting foreground app monitor (interval: ${checkIntervalMs}ms)")
 
         monitoringJob = CoroutineScope(Dispatchers.IO).launch {
@@ -75,12 +97,9 @@ class ForegroundAppMonitor(
         monitoringJob?.cancel()
         monitoringJob = null
 
-        // Stop recording if active
-        if (isRecording) {
-            Log.d(TAG, "Stopping recording (monitor stopped)")
-            onRecordingStop()
-            isRecording = false
-        }
+        // Stop smart recording manager
+        smartRecordingManager.forceStopRecording("Monitor stopped")
+        smartRecordingManager.cleanup()
 
         Log.d(TAG, "Foreground app monitor stopped")
     }
@@ -99,30 +118,27 @@ class ForegroundAppMonitor(
             // Notify UI about app change
             onAppChanged(appInfo.packageName)
 
-            // Check if we should start/stop recording
+            // Notify anomaly detector of app change
+            anomalyDetector?.onAppChanged(
+                appInfo.packageName,
+                appInfo.packageName?.let { appDetector.getAppName(it) }
+            )
+
+            // Check if we should start/stop recording using smart logic
             handleRecordingForApp(appInfo.packageName)
         }
     }
 
     private fun handleRecordingForApp(packageName: String?) {
-        if (packageName == null) return
+        // Use smart recording manager for intelligent recording decisions
+        smartRecordingManager.onAppChanged(packageName) { app ->
+            isRecordableApp(app)
+        }
 
-        val shouldRecord = isRecordableApp(packageName)
+        val isRecording = smartRecordingManager.isRecording.value
+        val shouldRecord = packageName != null && isRecordableApp(packageName)
 
         Log.d(TAG, "App: $packageName, Should record: $shouldRecord, Currently recording: $isRecording")
-
-        if (shouldRecord && !isRecording) {
-            // Start recording when app opens
-            val appName = appDetector.getAppName(packageName) ?: packageName
-            Log.d(TAG, "Starting recording for app: $appName ($packageName)")
-            isRecording = true
-            onRecordingTrigger(packageName)
-        } else if (!shouldRecord && isRecording) {
-            // Stop recording when app closes
-            Log.d(TAG, "Stopping recording (app changed to non-recordable app)")
-            isRecording = false
-            onRecordingStop()
-        }
     }
 
     fun isRecordableApp(packageName: String): Boolean {
@@ -150,6 +166,7 @@ class ForegroundAppMonitor(
     private fun sendForegroundAppUpdate(appInfo: ForegroundAppInfo) {
         try {
             val isRecordable = appInfo.packageName?.let { isRecordableApp(it) } ?: false
+            val isRecording = smartRecordingManager.isRecording.value
 
             val message = JSONObject().apply {
                 put("type", "foreground_app")
@@ -177,10 +194,17 @@ class ForegroundAppMonitor(
     }
 
     fun isCurrentlyRecording(): Boolean {
-        return isRecording
+        return smartRecordingManager.isRecording.value
     }
 
     fun getCurrentAppName(): String? {
         return _currentApp.value?.packageName?.let { appDetector.getAppName(it) }
+    }
+
+    /**
+     * Get the smart recording manager for advanced control
+     */
+    fun getSmartRecordingManager(): SmartRecordingManager {
+        return smartRecordingManager
     }
 }

@@ -1,55 +1,55 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-82:12
-INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-82:12
-INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-82:12
-INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-82:12
-MERGED from [androidx.databinding:viewbinding:8.2.0] /home/deimos/.gradle/caches/transforms-3/8a9afbc4fea38e00467f926795cbeab7/transformed/viewbinding-8.2.0/AndroidManifest.xml:2:1-7:12
-MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/transforms-3/184958b59b0b0fbc0694ac3308e227ed/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/transforms-3/415b44dba470347148fe7836a27170ec/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
-MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/deimos/.gradle/caches/transforms-3/af7216361ca839e24eaca4905b35b800/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.appcompat:appcompat:1.6.1] /home/deimos/.gradle/caches/transforms-3/af226701e07b6e5753175ffad1df9a85/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/deimos/.gradle/caches/transforms-3/f848fa7d3a3b65c1575c183cc9692e1d/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
-MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/deimos/.gradle/caches/transforms-3/9f07c45ccc9c9f6765efdcfd15aa9d79/transformed/viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.fragment:fragment:1.3.6] /home/deimos/.gradle/caches/transforms-3/682f8c367c2a77ce64b8ceb9c7d65505/transformed/fragment-1.3.6/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.activity:activity:1.8.0] /home/deimos/.gradle/caches/transforms-3/75340175a64cd458a93f7a57a6055b28/transformed/activity-1.8.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/deimos/.gradle/caches/transforms-3/2cfb57adc2fe163df1c83b78efb6f416/transformed/drawerlayout-1.1.1/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/deimos/.gradle/caches/transforms-3/fdd59a48df0d88a42976f9c034d9002b/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/deimos/.gradle/caches/transforms-3/bce7d068920674cd1146d66730e92c75/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.transition:transition:1.2.0] /home/deimos/.gradle/caches/transforms-3/dc2224d3b0c151c68b338e81807c7dd4/transformed/transition-1.2.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/deimos/.gradle/caches/transforms-3/97b7c4db7d57f9862eac14712ffdb75d/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/deimos/.gradle/caches/transforms-3/fda8d97d58f9c4911a77a3233bde6bbf/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.viewpager:viewpager:1.0.0] /home/deimos/.gradle/caches/transforms-3/8ec4b573f4cd7e8c5b5b7d1ef665b2df/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/deimos/.gradle/caches/transforms-3/683c953a3447f274c38464c2eb0f2e9e/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.loader:loader:1.0.0] /home/deimos/.gradle/caches/transforms-3/60a203ef5398fafe3c1e8b7f075b0420/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/deimos/.gradle/caches/transforms-3/228af82e2251dd57db0a21a49098915b/transformed/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.customview:customview:1.1.0] /home/deimos/.gradle/caches/transforms-3/f0577a48dd9a7730378814b706baef75/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:17:1-30:12
-MERGED from [androidx.savedstate:savedstate:1.2.1] /home/deimos/.gradle/caches/transforms-3/89e2d333b353016eb917f0384b488f36/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/e4787f17c81d8154c86edd474b157d98/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/deimos/.gradle/caches/transforms-3/66e756ebba14b40e4561db7c19a1e7af/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/deimos/.gradle/caches/transforms-3/1bb60db1eb68c7e49fe971ae254b3a60/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/deimos/.gradle/caches/transforms-3/a93036d45998da47bd8f352baecdcb1e/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/deimos/.gradle/caches/transforms-3/6802db8b0738a1f74dc288d6675e755c/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/9cf1f83319a1dee0c16cd111eb7e4616/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/5d31fd368cf97a6796f8d7e12b734441/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/deimos/.gradle/caches/transforms-3/ebcc249c3ba3ff1750edcdd1fec45f44/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core-ktx:1.12.0] /home/deimos/.gradle/caches/transforms-3/e0f6a21bbc1725885c6fb4d4ab876c33/transformed/core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/deimos/.gradle/caches/transforms-3/270fb7fd829a98926c9ddcbdbe931f54/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/deimos/.gradle/caches/transforms-3/e21e013573ba165400a6887dc3f5c897/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.cardview:cardview:1.0.0] /home/deimos/.gradle/caches/transforms-3/f47d16a6556e4855c9392813a19b75da/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.interpolator:interpolator:1.0.0] /home/deimos/.gradle/caches/transforms-3/1e96b204fe1df1541c103ca139cecd1e/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/transforms-3/09a2cd8c134e62d6cf73fc6e22c05804/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
-MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/transforms-3/9f32a872f0b1731ac06773ebeb3ffa7e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
-MERGED from [androidx.tracing:tracing:1.0.0] /home/deimos/.gradle/caches/transforms-3/12eaebcf2fa31f7d4d4c3b96f9aa98aa/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/deimos/.gradle/caches/transforms-3/8e0d1de627058a0ecd200583a07c48b2/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.documentfile:documentfile:1.0.0] /home/deimos/.gradle/caches/transforms-3/a61674fa44124cb0d0250eb6f3c5ae24/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/deimos/.gradle/caches/transforms-3/c233a84d844a77a5db64b4bba6b81187/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.print:print:1.0.0] /home/deimos/.gradle/caches/transforms-3/954307fe9eb1384af816411d226c6881/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/transforms-3/b741f5a7c5ee77c97ecec8d31930044e/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:2:1-13:12
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-202:12
+INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-202:12
+INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-202:12
+INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:1-202:12
+MERGED from [androidx.databinding:viewbinding:8.7.3] /home/deimos/.gradle/caches/8.11.1/transforms/a44f40842e0106e568f30b325d140add/transformed/viewbinding-8.7.3/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/8.11.1/transforms/02e45b240c28074d35d02ef6528a22fe/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/8.11.1/transforms/1cbb71261ca577efbd8b2da4912f8033/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/deimos/.gradle/caches/8.11.1/transforms/c9f8c0fa4f2d21175956c5447d3a25f2/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/deimos/.gradle/caches/8.11.1/transforms/2955c4d1fa1d474077423880bbd2e888/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/4230d5bc4bb95d71ee0e3df412978d79/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/1467581e284592d3c0a4e6f072464ef2/transformed/viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.3.6] /home/deimos/.gradle/caches/8.11.1/transforms/d8dfd6f3b0fbd31615344ec74af975a0/transformed/fragment-1.3.6/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.8.0] /home/deimos/.gradle/caches/8.11.1/transforms/a69bebe658486065607eb5b06a55b11e/transformed/activity-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/b92e6b7b5f92529a6ba1f91154aef10a/transformed/drawerlayout-1.1.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/491019e9dc0218a40ac2599ba20f0dd7/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/d3328a4141c13e86a2f1e7eddab4a751/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/d22772df9fa29504c9fa7b1e0f02002f/transformed/transition-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d67a1445aca5d67ae89a20363e97fd53/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/45c7034a067351c97f3794d87e9708bd/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/f59ef8beaa9da0827e2fa015b5058d85/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/fea243fa2e34eb349ad5fba0d255a339/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/24279f55f7cb52c98b64dedbb5fe56f9/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d0eb87a39608fdeed9e036d6552fb540/transformed/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d8d1172508024ef7ae9e34838eb55ce2/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/deimos/.gradle/caches/8.11.1/transforms/5c74fd909279c9ef7dc9e45b4f6b97e9/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/11ebadc1fc38a4f7695fdc1546f29ba6/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/d80b2cf13aa5bee08e7ffd31a41cbecf/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/946b1b2291558a2b328ec9a7606f83f4/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/639015b6c67f7eb6562165690b16fb97/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/68493262baba4e09e320ad77f85a1887/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/a0bc31f71b39923f564d52f54fafbc95/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/168daa015b7e06270ea3e5e1dfc98330/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/f74b01688df380df44dfe157e7d54d1c/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/38f7627362f25f13783a45d918a4e59e/transformed/core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/9bcf300d6d8ca0b2206e51913a98f285/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/9a2db62264375904b0243eaf2cffa637/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/15595eef0140fb40f34fce4b8bcd8bc8/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/4075e4259fd6a9f7e71bc166de8badab/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/6e49028ada0a21f1ce5bfd0f93d78fac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/c845ce18b84fd36413835a1b673c3c4f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/e2e9891a22617887f3638562d728139e/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/cbcaa4273fe98ad449e8d8488253c739/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/95d3cf6389243788da80e7087749bb91/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/dd982fa3f667820798809a6153071b77/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/6af4802418c023387a69d83722ff1adc/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/28fbe904c7c81de6ab1f72de0f0c6c44/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:2:1-13:12
 	package
 		INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml
 	android:versionName
@@ -61,38 +61,44 @@ MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/transf
 	xmlns:android
 		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:2:11-69
 application
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:6:5-52:19
-INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:6:5-52:19
-MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/transforms-3/184958b59b0b0fbc0694ac3308e227ed/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
-MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/transforms-3/184958b59b0b0fbc0694ac3308e227ed/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
-MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/transforms-3/415b44dba470347148fe7836a27170ec/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
-MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/transforms-3/415b44dba470347148fe7836a27170ec/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
-MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
-MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
-MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
-MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/transforms-3/09a2cd8c134e62d6cf73fc6e22c05804/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/transforms-3/09a2cd8c134e62d6cf73fc6e22c05804/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
-MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/transforms-3/9f32a872f0b1731ac06773ebeb3ffa7e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
-MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/transforms-3/9f32a872f0b1731ac06773ebeb3ffa7e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
-MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/transforms-3/b741f5a7c5ee77c97ecec8d31930044e/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:11:5-20
-MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/transforms-3/b741f5a7c5ee77c97ecec8d31930044e/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:11:5-20
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:6:5-86:19
+INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:6:5-86:19
+MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/8.11.1/transforms/02e45b240c28074d35d02ef6528a22fe/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/8.11.1/transforms/02e45b240c28074d35d02ef6528a22fe/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/8.11.1/transforms/1cbb71261ca577efbd8b2da4912f8033/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/8.11.1/transforms/1cbb71261ca577efbd8b2da4912f8033/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/6e49028ada0a21f1ce5bfd0f93d78fac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/6e49028ada0a21f1ce5bfd0f93d78fac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/c845ce18b84fd36413835a1b673c3c4f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/c845ce18b84fd36413835a1b673c3c4f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/28fbe904c7c81de6ab1f72de0f0c6c44/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:11:5-20
+MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/28fbe904c7c81de6ab1f72de0f0c6c44/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:11:5-20
 	android:extractNativeLibs
 		INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 	android:label
 		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:9:9-41
+	android:excludeFromRecents
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:16:9-43
+	android:launchMode
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:14:9-44
 	tools:targetApi
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:14:9-29
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:17:9-29
 	android:persistent
 		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:11:9-34
 	android:icon
 		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:8:9-43
+	android:alwaysRetainTaskState
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:15:9-45
 	android:allowBackup
 		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:7:9-35
 	android:theme
@@ -102,322 +108,674 @@ MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/transf
 	android:usesCleartextTraffic
 		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:13:9-44
 activity#com.rdm.client.MainActivity
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:16:9-24:20
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:19:9-33:20
+	android:stateNotNeeded
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:26:13-42
 	android:label
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:19:13-45
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:22:13-45
+	android:excludeFromRecents
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:25:13-47
+	android:launchMode
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:23:13-48
 	android:exported
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:18:13-36
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:21:13-36
+	android:resumeWhilePausing
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:27:13-46
+	android:configChanges
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:28:13-194
+	android:taskAffinity
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:24:13-36
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:17:13-41
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:20:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:20:13-23:29
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:29:13-32:29
 action#android.intent.action.MAIN
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:21:17-69
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:30:17-69
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:21:25-66
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:30:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:22:17-77
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:31:17-77
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:22:27-74
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:31:27-74
 service#com.rdm.client.RdmService
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:27:9-31:56
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:36:9-42:46
+	android:process
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:42:13-43
 	android:enabled
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:29:13-35
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:38:13-35
 	android:exported
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:30:13-37
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:39:13-37
+	android:stopWithTask
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:41:13-41
 	android:foregroundServiceType
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:31:13-53
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:40:13-53
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:28:13-39
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:37:13-39
 service#com.rdm.client.ScreenRecordService
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:34:9-38:63
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:45:9-51:45
+	android:process
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:51:13-42
 	android:enabled
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:36:13-35
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:47:13-35
 	android:exported
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:37:13-37
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:48:13-37
+	android:stopWithTask
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:50:13-41
 	android:foregroundServiceType
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:38:13-60
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:49:13-55
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:35:13-48
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:46:13-48
 receiver#com.rdm.client.BootReceiver
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:41:9-50:20
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:54:9-63:20
 	android:enabled
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:43:13-35
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:56:13-35
 	android:exported
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:44:13-36
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:57:13-36
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:42:13-41
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:55:13-41
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.QUICKBOOT_POWERON+action:name:com.htc.intent.action.QUICKBOOT_POWERON
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:45:13-49:29
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:58:13-62:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:46:17-79
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:59:17-79
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:46:25-76
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:59:25-76
 action#android.intent.action.QUICKBOOT_POWERON
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:47:17-82
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:60:17-82
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:47:25-79
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:60:25-79
 action#com.htc.intent.action.QUICKBOOT_POWERON
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:48:17-82
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:61:17-82
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:48:25-79
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:61:25-79
+service#com.rdm.client.NotificationMonitor
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:66:9-73:19
+	android:exported
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:69:13-37
+	android:permission
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:68:13-87
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:67:13-48
+intent-filter#action:name:android.service.notification.NotificationListenerService
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:70:13-72:29
+action#android.service.notification.NotificationListenerService
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:71:17-99
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:71:25-96
+receiver#com.rdm.client.DeviceConnectionMonitor
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:76:9-84:20
+	android:enabled
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:78:13-35
+	android:exported
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:79:13-36
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:77:13-52
+intent-filter#action:name:android.hardware.usb.action.USB_DEVICE_ATTACHED+action:name:android.hardware.usb.action.USB_DEVICE_DETACHED
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:80:13-83:29
+action#android.hardware.usb.action.USB_DEVICE_ATTACHED
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:81:17-90
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:81:25-87
+action#android.hardware.usb.action.USB_DEVICE_DETACHED
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:82:17-90
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:82:25-87
 uses-permission#android.permission.INTERNET
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:55:5-67
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:89:5-67
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:55:22-64
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:89:22-64
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:56:5-79
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:90:5-79
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:56:22-76
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:90:22-76
 uses-permission#android.permission.ACCESS_WIFI_STATE
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:57:5-76
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:91:5-76
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:57:22-73
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:91:22-73
 uses-permission#android.permission.FOREGROUND_SERVICE
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:58:5-77
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:92:5-77
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:58:22-74
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:92:22-74
 uses-permission#android.permission.FOREGROUND_SERVICE_DATA_SYNC
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:59:5-87
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:93:5-87
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:59:22-84
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:93:22-84
 uses-permission#android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:60:5-94
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:94:5-94
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:60:22-91
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:94:22-91
 uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:61:5-81
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:95:5-81
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:61:22-78
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:95:22-78
 uses-permission#android.permission.WAKE_LOCK
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:62:5-68
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:96:5-68
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:62:22-65
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:96:22-65
 uses-permission#android.permission.RECORD_AUDIO
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:63:5-71
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:97:5-71
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:63:22-68
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:97:22-68
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:64:5-81
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:98:5-81
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:64:22-78
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:98:22-78
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:65:5-80
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:99:5-80
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:65:22-77
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:99:22-77
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:100:5-78
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:100:22-75
+uses-permission#android.permission.DISABLE_KEYGUARD
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:101:5-75
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:101:22-72
+uses-permission#android.permission.REBOOT
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:102:5-65
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:102:22-62
+uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:103:5-95
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:103:22-92
+uses-permission#android.permission.CHANGE_NETWORK_STATE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:104:5-79
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:104:22-76
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:105:5-76
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:105:22-73
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:106:5-75
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:106:22-72
+uses-permission#android.permission.PROCESS_OUTGOING_CALLS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:107:5-81
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:107:22-78
+uses-permission#android.permission.CAPTURE_VIDEO_OUTPUT
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:108:5-79
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:108:22-76
+uses-permission#android.permission.CAPTURE_AUDIO_OUTPUT
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:109:5-79
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:109:22-76
+uses-permission#android.permission.FOREGROUND_SERVICE_SPECIAL_USE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:110:5-89
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:110:22-86
+uses-permission#android.permission.FOREGROUND_CAMERA
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:113:5-76
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:113:22-73
+uses-permission#android.permission.CAMERA
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:114:5-65
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:114:22-62
+uses-permission#android.permission.BIND_NOTIFICATION_LISTENER_SERVICE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:117:5-93
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:117:22-90
+uses-permission#android.permission.USB_PERMISSION
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:118:5-73
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:118:22-70
+uses-permission#android.permission.READ_CLIPBOARD
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:119:5-73
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:119:22-70
+uses-permission#android.permission.WRITE_CLIPBOARD
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:120:5-74
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:120:22-71
+uses-permission#android.permission.MANAGE_EXTERNAL_STORAGE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:121:5-82
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:121:22-79
+uses-permission#android.permission.READ_MEDIA_IMAGES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:122:5-76
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:122:22-73
+uses-permission#android.permission.READ_MEDIA_VIDEO
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:123:5-75
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:123:22-72
+uses-permission#android.permission.USE_FULL_SCREEN_INTENT
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:124:5-81
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:124:22-78
+uses-permission#android.permission.GET_TASKS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:126:5-68
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:126:22-65
+uses-permission#android.permission.PACKAGE_USAGE_STATS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:127:5-78
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:127:22-75
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:128:5-79
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:128:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:129:5-81
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:129:22-78
+uses-permission#android.permission.BLUETOOTH
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:130:5-68
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:130:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:131:5-74
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:131:22-71
+uses-permission#android.permission.QUERY_ALL_PACKAGES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:132:5-77
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:132:22-74
+uses-permission#android.permission.INTERACT_ACROSS_USERS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:133:5-80
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:133:22-77
+uses-permission#android.permission.INTERACT_ACROSS_USERS_FULL
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:134:5-85
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:134:22-82
+uses-permission#android.permission.MANAGE_USERS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:135:5-71
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:135:22-68
+uses-permission#android.permission.WRITE_SETTINGS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:136:5-73
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:136:22-70
+uses-permission#android.permission.READ_SETTINGS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:137:5-72
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:137:22-69
+uses-permission#android.permission.DEVICE_POWER
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:138:5-71
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:138:22-68
+uses-permission#android.permission.ACCESS_BACKGROUND_SERVICE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:140:5-84
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:140:22-81
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:141:5-77
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:141:22-74
+uses-permission#android.permission.ACCESS_NOTIFICATION_POLICY
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:142:5-85
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:142:22-82
+uses-permission#android.permission.HDMI_CEC
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:143:5-67
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:143:22-64
+uses-permission#android.permission.MEDIA_CONTENT_CONTROL
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:144:5-80
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:144:22-77
+uses-permission#android.permission.DUMP
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:147:5-63
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:147:22-60
+uses-permission#android.permission.GRANT_RUNTIME_PERMISSIONS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:149:5-84
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:149:22-81
+uses-permission#android.permission.ACCESS_MEDIA_LOCATION
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:150:5-80
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:150:22-77
+uses-permission#android.permission.WRITE_APN_SETTINGS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:151:5-77
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:151:22-74
+uses-permission#android.permission.CHANGE_CONFIGURATION
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:152:5-79
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:152:22-76
+uses-permission#android.permission.SET_TIME
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:153:5-67
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:153:22-64
+uses-permission#android.permission.SET_TIME_ZONE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:154:5-72
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:154:22-69
+uses-permission#android.permission.WRITE_SECURE_SETTINGS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:155:5-80
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:155:22-77
+uses-permission#android.permission.READ_SECURE_SETTINGS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:156:5-79
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:156:22-76
+uses-permission#android.permission.BIND_ACCESSIBILITY_SERVICE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:157:5-85
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:157:22-82
+uses-permission#android.permission.BIND_DEVICE_ADMIN
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:158:5-76
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:158:22-73
+uses-permission#android.permission.MANAGE_DEVICE_ADMINS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:159:5-79
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:159:22-76
+uses-permission#android.permission.DELETE_CACHE_FILES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:160:5-77
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:160:22-74
+uses-permission#android.permission.DELETE_PACKAGES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:161:5-74
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:161:22-71
+uses-permission#android.permission.CLEAR_APP_CACHE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:162:5-74
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:162:22-71
+uses-permission#android.permission.CLEAR_APP_USER_DATA
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:163:5-78
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:163:22-75
+uses-permission#android.permission.FORCE_STOP_PACKAGES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:164:5-78
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:164:22-75
+uses-permission#android.permission.INSTALL_PACKAGES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:165:5-75
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:165:22-72
+uses-permission#android.permission.REQUEST_INSTALL_PACKAGES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:166:5-83
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:166:22-80
+uses-permission#android.permission.KILL_BACKGROUND_PROCESSES
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:167:5-84
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:167:22-81
+uses-permission#android.permission.SEND_SMS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:168:5-67
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:168:22-64
+uses-permission#android.permission.RECEIVE_SMS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:169:5-70
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:169:22-67
+uses-permission#android.permission.READ_SMS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:170:5-67
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:170:22-64
+uses-permission#android.permission.WRITE_SMS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:171:5-68
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:171:22-65
+uses-permission#android.permission.RECEIVE_MMS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:172:5-70
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:172:22-67
+uses-permission#android.permission.READ_CALL_LOG
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:173:5-72
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:173:22-69
+uses-permission#android.permission.WRITE_CALL_LOG
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:174:5-73
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:174:22-70
+uses-permission#android.permission.READ_CONTACTS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:175:5-72
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:175:22-69
+uses-permission#android.permission.WRITE_CONTACTS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:176:5-73
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:176:22-70
+uses-permission#android.permission.GET_ACCOUNTS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:177:5-71
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:177:22-68
+uses-permission#android.permission.MANAGE_ACCOUNTS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:178:5-74
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:178:22-71
+uses-permission#android.permission.USE_CREDENTIALS
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:179:5-74
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:179:22-71
+uses-permission#android.permission.READ_CALENDAR
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:180:5-72
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:180:22-69
+uses-permission#android.permission.WRITE_CALENDAR
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:181:5-73
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:181:22-70
+uses-permission#android.permission.ACCESSIBILITY_SERVICE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:183:5-80
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:183:22-77
+uses-permission#android.permission.BIND_AUTOFILL_SERVICE
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:184:5-80
+	android:name
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:184:22-77
 queries
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:70:5-80:15
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:190:5-200:15
 package#org.telegram.messenger
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:72:9-58
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:192:9-58
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:72:18-55
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:192:18-55
 package#org.telegram.messenger.web
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:73:9-62
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:193:9-62
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:73:18-59
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:193:18-59
 package#plus.messenger.android
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:74:9-58
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:194:9-58
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:74:18-55
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:194:18-55
 package#org.telegram.plus
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:75:9-53
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:195:9-53
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:75:18-50
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:195:18-50
 package#org.thoughtcrime.securesms
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:78:9-62
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:198:9-62
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:78:18-59
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:198:18-59
 package#org.thoughtcrime.securesms.beta
-ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:79:9-67
+ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:199:9-67
 	android:name
-		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:79:18-64
+		ADDED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml:199:18-64
 uses-sdk
 INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml
 INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml
-MERGED from [androidx.databinding:viewbinding:8.2.0] /home/deimos/.gradle/caches/transforms-3/8a9afbc4fea38e00467f926795cbeab7/transformed/viewbinding-8.2.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.databinding:viewbinding:8.2.0] /home/deimos/.gradle/caches/transforms-3/8a9afbc4fea38e00467f926795cbeab7/transformed/viewbinding-8.2.0/AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/transforms-3/184958b59b0b0fbc0694ac3308e227ed/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/transforms-3/184958b59b0b0fbc0694ac3308e227ed/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/transforms-3/415b44dba470347148fe7836a27170ec/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/transforms-3/415b44dba470347148fe7836a27170ec/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/deimos/.gradle/caches/transforms-3/af7216361ca839e24eaca4905b35b800/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/deimos/.gradle/caches/transforms-3/af7216361ca839e24eaca4905b35b800/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.appcompat:appcompat:1.6.1] /home/deimos/.gradle/caches/transforms-3/af226701e07b6e5753175ffad1df9a85/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.appcompat:appcompat:1.6.1] /home/deimos/.gradle/caches/transforms-3/af226701e07b6e5753175ffad1df9a85/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/deimos/.gradle/caches/transforms-3/f848fa7d3a3b65c1575c183cc9692e1d/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/deimos/.gradle/caches/transforms-3/f848fa7d3a3b65c1575c183cc9692e1d/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/deimos/.gradle/caches/transforms-3/9f07c45ccc9c9f6765efdcfd15aa9d79/transformed/viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/deimos/.gradle/caches/transforms-3/9f07c45ccc9c9f6765efdcfd15aa9d79/transformed/viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.fragment:fragment:1.3.6] /home/deimos/.gradle/caches/transforms-3/682f8c367c2a77ce64b8ceb9c7d65505/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.fragment:fragment:1.3.6] /home/deimos/.gradle/caches/transforms-3/682f8c367c2a77ce64b8ceb9c7d65505/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.activity:activity:1.8.0] /home/deimos/.gradle/caches/transforms-3/75340175a64cd458a93f7a57a6055b28/transformed/activity-1.8.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.activity:activity:1.8.0] /home/deimos/.gradle/caches/transforms-3/75340175a64cd458a93f7a57a6055b28/transformed/activity-1.8.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/deimos/.gradle/caches/transforms-3/2cfb57adc2fe163df1c83b78efb6f416/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/deimos/.gradle/caches/transforms-3/2cfb57adc2fe163df1c83b78efb6f416/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/deimos/.gradle/caches/transforms-3/fdd59a48df0d88a42976f9c034d9002b/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/deimos/.gradle/caches/transforms-3/fdd59a48df0d88a42976f9c034d9002b/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/deimos/.gradle/caches/transforms-3/bce7d068920674cd1146d66730e92c75/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/deimos/.gradle/caches/transforms-3/bce7d068920674cd1146d66730e92c75/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.transition:transition:1.2.0] /home/deimos/.gradle/caches/transforms-3/dc2224d3b0c151c68b338e81807c7dd4/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.transition:transition:1.2.0] /home/deimos/.gradle/caches/transforms-3/dc2224d3b0c151c68b338e81807c7dd4/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/deimos/.gradle/caches/transforms-3/97b7c4db7d57f9862eac14712ffdb75d/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/deimos/.gradle/caches/transforms-3/97b7c4db7d57f9862eac14712ffdb75d/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/deimos/.gradle/caches/transforms-3/fda8d97d58f9c4911a77a3233bde6bbf/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/deimos/.gradle/caches/transforms-3/fda8d97d58f9c4911a77a3233bde6bbf/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.viewpager:viewpager:1.0.0] /home/deimos/.gradle/caches/transforms-3/8ec4b573f4cd7e8c5b5b7d1ef665b2df/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.viewpager:viewpager:1.0.0] /home/deimos/.gradle/caches/transforms-3/8ec4b573f4cd7e8c5b5b7d1ef665b2df/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/deimos/.gradle/caches/transforms-3/683c953a3447f274c38464c2eb0f2e9e/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/deimos/.gradle/caches/transforms-3/683c953a3447f274c38464c2eb0f2e9e/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /home/deimos/.gradle/caches/transforms-3/60a203ef5398fafe3c1e8b7f075b0420/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /home/deimos/.gradle/caches/transforms-3/60a203ef5398fafe3c1e8b7f075b0420/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/deimos/.gradle/caches/transforms-3/228af82e2251dd57db0a21a49098915b/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/deimos/.gradle/caches/transforms-3/228af82e2251dd57db0a21a49098915b/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.customview:customview:1.1.0] /home/deimos/.gradle/caches/transforms-3/f0577a48dd9a7730378814b706baef75/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.customview:customview:1.1.0] /home/deimos/.gradle/caches/transforms-3/f0577a48dd9a7730378814b706baef75/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.savedstate:savedstate:1.2.1] /home/deimos/.gradle/caches/transforms-3/89e2d333b353016eb917f0384b488f36/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.savedstate:savedstate:1.2.1] /home/deimos/.gradle/caches/transforms-3/89e2d333b353016eb917f0384b488f36/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/e4787f17c81d8154c86edd474b157d98/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/e4787f17c81d8154c86edd474b157d98/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/deimos/.gradle/caches/transforms-3/66e756ebba14b40e4561db7c19a1e7af/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/deimos/.gradle/caches/transforms-3/66e756ebba14b40e4561db7c19a1e7af/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/deimos/.gradle/caches/transforms-3/1bb60db1eb68c7e49fe971ae254b3a60/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/deimos/.gradle/caches/transforms-3/1bb60db1eb68c7e49fe971ae254b3a60/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/deimos/.gradle/caches/transforms-3/a93036d45998da47bd8f352baecdcb1e/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/deimos/.gradle/caches/transforms-3/a93036d45998da47bd8f352baecdcb1e/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/deimos/.gradle/caches/transforms-3/6802db8b0738a1f74dc288d6675e755c/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/deimos/.gradle/caches/transforms-3/6802db8b0738a1f74dc288d6675e755c/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/9cf1f83319a1dee0c16cd111eb7e4616/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/9cf1f83319a1dee0c16cd111eb7e4616/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/5d31fd368cf97a6796f8d7e12b734441/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/deimos/.gradle/caches/transforms-3/5d31fd368cf97a6796f8d7e12b734441/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/deimos/.gradle/caches/transforms-3/ebcc249c3ba3ff1750edcdd1fec45f44/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/deimos/.gradle/caches/transforms-3/ebcc249c3ba3ff1750edcdd1fec45f44/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core-ktx:1.12.0] /home/deimos/.gradle/caches/transforms-3/e0f6a21bbc1725885c6fb4d4ab876c33/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.core:core-ktx:1.12.0] /home/deimos/.gradle/caches/transforms-3/e0f6a21bbc1725885c6fb4d4ab876c33/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/deimos/.gradle/caches/transforms-3/270fb7fd829a98926c9ddcbdbe931f54/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/deimos/.gradle/caches/transforms-3/270fb7fd829a98926c9ddcbdbe931f54/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/deimos/.gradle/caches/transforms-3/e21e013573ba165400a6887dc3f5c897/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/deimos/.gradle/caches/transforms-3/e21e013573ba165400a6887dc3f5c897/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cardview:cardview:1.0.0] /home/deimos/.gradle/caches/transforms-3/f47d16a6556e4855c9392813a19b75da/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cardview:cardview:1.0.0] /home/deimos/.gradle/caches/transforms-3/f47d16a6556e4855c9392813a19b75da/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] /home/deimos/.gradle/caches/transforms-3/1e96b204fe1df1541c103ca139cecd1e/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] /home/deimos/.gradle/caches/transforms-3/1e96b204fe1df1541c103ca139cecd1e/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/transforms-3/09a2cd8c134e62d6cf73fc6e22c05804/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/transforms-3/09a2cd8c134e62d6cf73fc6e22c05804/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/transforms-3/9f32a872f0b1731ac06773ebeb3ffa7e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
-MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/transforms-3/9f32a872f0b1731ac06773ebeb3ffa7e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
-MERGED from [androidx.tracing:tracing:1.0.0] /home/deimos/.gradle/caches/transforms-3/12eaebcf2fa31f7d4d4c3b96f9aa98aa/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.tracing:tracing:1.0.0] /home/deimos/.gradle/caches/transforms-3/12eaebcf2fa31f7d4d4c3b96f9aa98aa/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/deimos/.gradle/caches/transforms-3/8e0d1de627058a0ecd200583a07c48b2/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/deimos/.gradle/caches/transforms-3/8e0d1de627058a0ecd200583a07c48b2/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.documentfile:documentfile:1.0.0] /home/deimos/.gradle/caches/transforms-3/a61674fa44124cb0d0250eb6f3c5ae24/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.documentfile:documentfile:1.0.0] /home/deimos/.gradle/caches/transforms-3/a61674fa44124cb0d0250eb6f3c5ae24/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/deimos/.gradle/caches/transforms-3/c233a84d844a77a5db64b4bba6b81187/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/deimos/.gradle/caches/transforms-3/c233a84d844a77a5db64b4bba6b81187/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.print:print:1.0.0] /home/deimos/.gradle/caches/transforms-3/954307fe9eb1384af816411d226c6881/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.print:print:1.0.0] /home/deimos/.gradle/caches/transforms-3/954307fe9eb1384af816411d226c6881/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/transforms-3/b741f5a7c5ee77c97ecec8d31930044e/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:7:5-9:41
-MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/transforms-3/b741f5a7c5ee77c97ecec8d31930044e/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.databinding:viewbinding:8.7.3] /home/deimos/.gradle/caches/8.11.1/transforms/a44f40842e0106e568f30b325d140add/transformed/viewbinding-8.7.3/AndroidManifest.xml:5:5-44
+MERGED from [androidx.databinding:viewbinding:8.7.3] /home/deimos/.gradle/caches/8.11.1/transforms/a44f40842e0106e568f30b325d140add/transformed/viewbinding-8.7.3/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/8.11.1/transforms/02e45b240c28074d35d02ef6528a22fe/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.11.0] /home/deimos/.gradle/caches/8.11.1/transforms/02e45b240c28074d35d02ef6528a22fe/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/8.11.1/transforms/1cbb71261ca577efbd8b2da4912f8033/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/deimos/.gradle/caches/8.11.1/transforms/1cbb71261ca577efbd8b2da4912f8033/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/deimos/.gradle/caches/8.11.1/transforms/c9f8c0fa4f2d21175956c5447d3a25f2/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/deimos/.gradle/caches/8.11.1/transforms/c9f8c0fa4f2d21175956c5447d3a25f2/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/deimos/.gradle/caches/8.11.1/transforms/2955c4d1fa1d474077423880bbd2e888/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/deimos/.gradle/caches/8.11.1/transforms/2955c4d1fa1d474077423880bbd2e888/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/4230d5bc4bb95d71ee0e3df412978d79/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/4230d5bc4bb95d71ee0e3df412978d79/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/1467581e284592d3c0a4e6f072464ef2/transformed/viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/1467581e284592d3c0a4e6f072464ef2/transformed/viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/deimos/.gradle/caches/8.11.1/transforms/d8dfd6f3b0fbd31615344ec74af975a0/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/deimos/.gradle/caches/8.11.1/transforms/d8dfd6f3b0fbd31615344ec74af975a0/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.8.0] /home/deimos/.gradle/caches/8.11.1/transforms/a69bebe658486065607eb5b06a55b11e/transformed/activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.0] /home/deimos/.gradle/caches/8.11.1/transforms/a69bebe658486065607eb5b06a55b11e/transformed/activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/b92e6b7b5f92529a6ba1f91154aef10a/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/b92e6b7b5f92529a6ba1f91154aef10a/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/491019e9dc0218a40ac2599ba20f0dd7/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/491019e9dc0218a40ac2599ba20f0dd7/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/d3328a4141c13e86a2f1e7eddab4a751/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/d3328a4141c13e86a2f1e7eddab4a751/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/d22772df9fa29504c9fa7b1e0f02002f/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/d22772df9fa29504c9fa7b1e0f02002f/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d67a1445aca5d67ae89a20363e97fd53/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d67a1445aca5d67ae89a20363e97fd53/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/45c7034a067351c97f3794d87e9708bd/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/45c7034a067351c97f3794d87e9708bd/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/f59ef8beaa9da0827e2fa015b5058d85/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/f59ef8beaa9da0827e2fa015b5058d85/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/fea243fa2e34eb349ad5fba0d255a339/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/fea243fa2e34eb349ad5fba0d255a339/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/24279f55f7cb52c98b64dedbb5fe56f9/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/24279f55f7cb52c98b64dedbb5fe56f9/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d0eb87a39608fdeed9e036d6552fb540/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d0eb87a39608fdeed9e036d6552fb540/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d8d1172508024ef7ae9e34838eb55ce2/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/d8d1172508024ef7ae9e34838eb55ce2/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/deimos/.gradle/caches/8.11.1/transforms/5c74fd909279c9ef7dc9e45b4f6b97e9/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/deimos/.gradle/caches/8.11.1/transforms/5c74fd909279c9ef7dc9e45b4f6b97e9/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/11ebadc1fc38a4f7695fdc1546f29ba6/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/11ebadc1fc38a4f7695fdc1546f29ba6/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/d80b2cf13aa5bee08e7ffd31a41cbecf/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/d80b2cf13aa5bee08e7ffd31a41cbecf/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/946b1b2291558a2b328ec9a7606f83f4/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/946b1b2291558a2b328ec9a7606f83f4/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/639015b6c67f7eb6562165690b16fb97/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/639015b6c67f7eb6562165690b16fb97/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/68493262baba4e09e320ad77f85a1887/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/68493262baba4e09e320ad77f85a1887/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/a0bc31f71b39923f564d52f54fafbc95/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/a0bc31f71b39923f564d52f54fafbc95/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/168daa015b7e06270ea3e5e1dfc98330/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/168daa015b7e06270ea3e5e1dfc98330/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/f74b01688df380df44dfe157e7d54d1c/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/f74b01688df380df44dfe157e7d54d1c/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/38f7627362f25f13783a45d918a4e59e/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/38f7627362f25f13783a45d918a4e59e/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/9bcf300d6d8ca0b2206e51913a98f285/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/9bcf300d6d8ca0b2206e51913a98f285/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/9a2db62264375904b0243eaf2cffa637/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/9a2db62264375904b0243eaf2cffa637/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/15595eef0140fb40f34fce4b8bcd8bc8/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/15595eef0140fb40f34fce4b8bcd8bc8/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/4075e4259fd6a9f7e71bc166de8badab/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/4075e4259fd6a9f7e71bc166de8badab/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/6e49028ada0a21f1ce5bfd0f93d78fac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/6e49028ada0a21f1ce5bfd0f93d78fac/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/c845ce18b84fd36413835a1b673c3c4f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/c845ce18b84fd36413835a1b673c3c4f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/e2e9891a22617887f3638562d728139e/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/e2e9891a22617887f3638562d728139e/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/cbcaa4273fe98ad449e8d8488253c739/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/cbcaa4273fe98ad449e8d8488253c739/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/95d3cf6389243788da80e7087749bb91/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/95d3cf6389243788da80e7087749bb91/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/dd982fa3f667820798809a6153071b77/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/dd982fa3f667820798809a6153071b77/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/6af4802418c023387a69d83722ff1adc/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/deimos/.gradle/caches/8.11.1/transforms/6af4802418c023387a69d83722ff1adc/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/28fbe904c7c81de6ab1f72de0f0c6c44/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:7:5-9:41
+MERGED from [com.scottyab:rootbeer-lib:0.1.0] /home/deimos/.gradle/caches/8.11.1/transforms/28fbe904c7c81de6ab1f72de0f0c6c44/transformed/rootbeer-lib-0.1.0/AndroidManifest.xml:7:5-9:41
 	android:targetSdkVersion
 		INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from /home/deimos/Projects/rdm-android/android-app/app/src/main/AndroidManifest.xml
 provider#androidx.startup.InitializationProvider
-ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/transforms-3/9f32a872f0b1731ac06773ebeb3ffa7e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
-MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/transforms-3/9f32a872f0b1731ac06773ebeb3ffa7e/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/c845ce18b84fd36413835a1b673c3c4f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/deimos/.gradle/caches/8.11.1/transforms/c845ce18b84fd36413835a1b673c3c4f/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
 	tools:node
-		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:28:13-31
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:28:13-31
 	android:authorities
-		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
 	android:exported
-		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
 	android:name
-		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
 meta-data#androidx.emoji2.text.EmojiCompatInitializer
-ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
 	android:value
-		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
 	android:name
-		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/transforms-3/6f6fec51fc0bf858d6900b90dd62d6da/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/deimos/.gradle/caches/8.11.1/transforms/601ea52904186c3f1317d688eb3b271a/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
 permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
-		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
 	android:name
-		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
 permission#com.rdm.client.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
-		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
 	android:name
-		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
 uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 	android:name
-		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
 uses-permission#com.rdm.client.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
 	android:name
-		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/transforms-3/2ccd268e0ca2e1cd10ec650ac8067a3e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+		ADDED from [androidx.core:core:1.12.0] /home/deimos/.gradle/caches/8.11.1/transforms/17002a2533725fac94ea46d2bf16e857/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
 meta-data#androidx.lifecycle.ProcessLifecycleInitializer
-ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
 	android:value
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
 	android:name
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/transforms-3/de0aab144c5a415a89446dd83fe34e27/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/deimos/.gradle/caches/8.11.1/transforms/094b4301812c0ac495f903e1475224f5/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
 meta-data#androidx.profileinstaller.ProfileInstallerInitializer
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
 	android:value
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
 receiver#androidx.profileinstaller.ProfileInstallReceiver
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
 	android:enabled
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
 	android:exported
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
 	android:permission
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
 	android:directBootAware
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
 intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
 action#androidx.profileinstaller.action.INSTALL_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
 intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
 action#androidx.profileinstaller.action.SKIP_FILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
 intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
 action#androidx.profileinstaller.action.SAVE_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
 intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
 action#androidx.profileinstaller.action.BENCHMARK_OPERATION
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/transforms-3/90a5c045bb237d34bfde7528c354fcd3/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/deimos/.gradle/caches/8.11.1/transforms/c9893c844713b0e028fcf5e0e00a335b/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92

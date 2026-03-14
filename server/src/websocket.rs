@@ -43,6 +43,31 @@ pub enum WsMessage {
         device_id: String,
         data: Value,
     },
+    #[serde(rename = "anomaly")]
+    Anomaly {
+        device_id: String,
+        data: Value,
+    },
+    #[serde(rename = "unified_event")]
+    UnifiedEvent {
+        device_id: String,
+        data: Value,
+    },
+    #[serde(rename = "unified_events_batch")]
+    UnifiedEventsBatch {
+        device_id: String,
+        data: Value,
+    },
+    #[serde(rename = "recording_event")]
+    RecordingEvent {
+        device_id: String,
+        data: Value,
+    },
+    #[serde(rename = "screenshot")]
+    Screenshot {
+        device_id: String,
+        data: Value,
+    },
     #[serde(rename = "error")]
     Error {
         code: String,

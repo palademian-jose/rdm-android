@@ -7,11 +7,15 @@ use std::collections::HashMap;
 use std::env;
 use std::sync::Arc;
 use tokio::sync::mpsc;
-use tracing::{error, info};
+use tracing::{error, info, warn};
 
 mod auth;
+mod anomalies;
 mod database;
 mod devices;
+mod recordings;
+mod screenshots;
+mod unified_events;
 mod websocket;
 
 #[derive(Clone)]
@@ -237,6 +241,101 @@ async fn ws_device(
                                                     }
                                                 }
                                             }
+                                            websocket::WsMessage::Anomaly { device_id: d_id, data } => {
+                                                info!("Anomaly received from {}: {:?}", d_id, data);
+
+                                                // Parse anomaly data
+                                                if let Ok(anomaly_data) = serde_json::from_value::<anomalies::AnomalyData>(data.clone()) {
+                                                    // Save anomaly log to file system
+                                                    match anomalies::save_anomaly_log(&d_id, &anomaly_data) {
+                                                        Ok(log_file) => {
+                                                            info!("Anomaly log saved to: {}", log_file);
+
+                                                            // Broadcast anomaly to all connected clients
+                                                            let broadcast_message = serde_json::json!({
+                                                                "type": "anomaly",
+                                                                "device_id": d_id,
+                                                                "data": data,
+                                                                "timestamp": chrono::Utc::now().to_rfc3339()
+                                                            }).to_string();
+
+                                                            app_state_clone.broadcast_to_clients(&broadcast_message).await;
+                                                        }
+                                                        Err(e) => {
+                                                            error!("Failed to save anomaly log: {}", e);
+                                                        }
+                                                    }
+                                                } else {
+                                                    error!("Failed to parse anomaly data");
+                                                }
+                                            }
+                                            websocket::WsMessage::UnifiedEvent { device_id: d_id, data } => {
+                                                info!("Unified event received from {}: {:?}", d_id, data);
+
+                                                // Parse unified event data
+                                                if let Ok(unified_event) = serde_json::from_value::<unified_events::UnifiedEvent>(data.clone()) {
+                                                    // Save unified event to file system
+                                                    match unified_events::save_unified_event(&d_id, &unified_event) {
+                                                        Ok(log_file) => {
+                                                            info!("Unified event saved to: {}", log_file);
+
+                                                            // Broadcast unified event to all connected clients
+                                                            let broadcast_message = serde_json::json!({
+                                                                "type": "unified_event",
+                                                                "device_id": d_id,
+                                                                "data": data,
+                                                                "timestamp": chrono::Utc::now().to_rfc3339()
+                                                            }).to_string();
+
+                                                            app_state_clone.broadcast_to_clients(&broadcast_message).await;
+                                                        }
+                                                        Err(e) => {
+                                                            error!("Failed to save unified event: {}", e);
+                                                        }
+                                                    }
+                                                } else {
+                                                    error!("Failed to parse unified event data");
+                                                }
+                                            }
+                                            websocket::WsMessage::UnifiedEventsBatch { device_id: d_id, data } => {
+                                                info!("Unified events batch received from {}: {:?}", d_id, data);
+
+                                                // Broadcast batch to all connected clients
+                                                let broadcast_message = serde_json::json!({
+                                                    "type": "unified_events_batch",
+                                                    "device_id": d_id,
+                                                    "data": data,
+                                                    "timestamp": chrono::Utc::now().to_rfc3339()
+                                                }).to_string();
+
+                                                app_state_clone.broadcast_to_clients(&broadcast_message).await;
+                                            }
+                                            websocket::WsMessage::RecordingEvent { device_id: d_id, data } => {
+                                                info!("Recording event received from {}: {:?}", d_id, data);
+
+                                                // Broadcast recording event to all connected clients
+                                                let broadcast_message = serde_json::json!({
+                                                    "type": "recording_event",
+                                                    "device_id": d_id,
+                                                    "data": data,
+                                                    "timestamp": chrono::Utc::now().to_rfc3339()
+                                                }).to_string();
+
+                                                app_state_clone.broadcast_to_clients(&broadcast_message).await;
+                                            }
+                                            websocket::WsMessage::Screenshot { device_id: d_id, data } => {
+                                                info!("Screenshot event received from {}: {:?}", d_id, data);
+
+                                                // Broadcast screenshot event to all connected clients
+                                                let broadcast_message = serde_json::json!({
+                                                    "type": "screenshot",
+                                                    "device_id": d_id,
+                                                    "data": data,
+                                                    "timestamp": chrono::Utc::now().to_rfc3339()
+                                                }).to_string();
+
+                                                app_state_clone.broadcast_to_clients(&broadcast_message).await;
+                                            }
                                             websocket::WsMessage::Error { .. } => {
                                                 error!("Error message received from device: {}", device_id);
                                             }
@@ -257,8 +356,16 @@ async fn ws_device(
                             }
                         }
                         Some(Err(e)) => {
-                            error!("WebSocket error for device {}: {:?}", device_id, e);
-                            break;
+                            // Check if it's an overflow error
+                            let error_msg = format!("{:?}", e);
+                            if error_msg.contains("Overflow") || error_msg.contains("overflow") {
+                                warn!("WebSocket buffer overflow for device {} - rate limiting detected", device_id);
+                                // Don't break immediately, try to continue
+                                continue;
+                            } else {
+                                error!("WebSocket error for device {}: {:?}", device_id, e);
+                                break;
+                            }
                         }
                         None => {
                             info!("WebSocket stream ended for device: {}", device_id);
@@ -268,9 +375,18 @@ async fn ws_device(
                 }
                 // Handle outgoing messages (commands to send to device)
                 Some(msg) = rx.recv() => {
+                    // Add small delay to prevent flooding
+                    tokio::time::sleep(tokio::time::Duration::from_millis(10)).await;
                     if let Err(e) = session.text(msg).await {
-                        error!("Failed to send message to device {}: {:?}", device_id, e);
-                        break;
+                        let error_msg = format!("{:?}", e);
+                        if error_msg.contains("Overflow") || error_msg.contains("overflow") {
+                            warn!("Message buffer overflow for device {}, will retry", device_id);
+                            // Don't break on overflow, just continue
+                            continue;
+                        } else {
+                            error!("Failed to send message to device {}: {:?}", device_id, e);
+                            break;
+                        }
                     }
                 }
             }
@@ -360,8 +476,16 @@ async fn ws_client(
                             }
                         }
                         Some(Err(e)) => {
-                            error!("WebSocket error for client {}: {:?}", client_id, e);
-                            break;
+                            // Check if it's an overflow error
+                            let error_msg = format!("{:?}", e);
+                            if error_msg.contains("Overflow") || error_msg.contains("overflow") {
+                                warn!("WebSocket buffer overflow for client {} - rate limiting detected", client_id);
+                                // Don't break immediately, try to continue
+                                continue;
+                            } else {
+                                error!("WebSocket error for client {}: {:?}", client_id, e);
+                                break;
+                            }
                         }
                         None => {
                             info!("WebSocket stream ended for client: {}", client_id);
@@ -371,9 +495,18 @@ async fn ws_client(
                 }
                 // Handle outgoing messages (command results, etc.) to send to client
                 Some(msg) = rx.recv() => {
+                    // Add small delay to prevent flooding
+                    tokio::time::sleep(tokio::time::Duration::from_millis(10)).await;
                     if let Err(e) = session.text(msg).await {
-                        error!("Failed to send message to client {}: {:?}", client_id, e);
-                        break;
+                        let error_msg = format!("{:?}", e);
+                        if error_msg.contains("Overflow") || error_msg.contains("overflow") {
+                            warn!("Message buffer overflow for client {}, will retry", client_id);
+                            // Don't break on overflow, just continue
+                            continue;
+                        } else {
+                            error!("Failed to send message to client {}: {:?}", client_id, e);
+                            break;
+                        }
                     }
                 }
             }
@@ -418,8 +551,15 @@ async fn main() -> std::io::Result<()> {
     // Initialize database
     let db = database::Database::new(&db_path).await;
 
-    // Try to migrate, but don't fail if it doesn't work
-    let _ = db.migrate().await;
+    // Migrate database schema
+    info!("Running database migrations...");
+    match db.migrate().await {
+        Ok(_) => info!("Database migrations completed successfully"),
+        Err(e) => {
+            error!("Database migration failed: {:?}", e);
+            eprintln!("Database migration failed: {:?}", e);
+        }
+    }
 
     let app_state = AppState {
         devices: Arc::new(std::sync::RwLock::new(Vec::new())),
@@ -454,6 +594,50 @@ async fn main() -> std::io::Result<()> {
             .route(
                 "/api/devices/{device_id}/commands",
                 web::get().to(devices::get_device_commands),
+            )
+            .route(
+                "/api/recordings/upload",
+                web::post().to(recordings::upload_recording),
+            )
+            .route(
+                "/api/recordings/{device_id}",
+                web::get().to(recordings::list_recordings),
+            )
+            .route(
+                "/api/screenshots/upload",
+                web::post().to(screenshots::upload_screenshot),
+            )
+            .route(
+                "/api/screenshots/{device_id}",
+                web::get().to(screenshots::list_screenshots),
+            )
+            .route(
+                "/api/screenshots/{device_id}/stats",
+                web::get().to(screenshots::get_screenshot_stats),
+            )
+            .route(
+                "/api/anomalies/{device_id}",
+                web::get().to(anomalies::list_anomalies),
+            )
+            .route(
+                "/api/anomalies/{device_id}/stats",
+                web::get().to(anomalies::get_anomaly_stats),
+            )
+            .route(
+                "/api/unified-events/{device_id}",
+                web::post().to(unified_events::handle_unified_event),
+            )
+            .route(
+                "/api/unified-events/{device_id}/batch",
+                web::post().to(unified_events::handle_unified_events_batch),
+            )
+            .route(
+                "/api/unified-events/{device_id}",
+                web::get().to(unified_events::list_unified_events),
+            )
+            .route(
+                "/api/unified-events/{device_id}/stats",
+                web::get().to(unified_events::get_unified_event_stats),
             )
             .route("/ws/device/{device_id}", web::get().to(ws_device))
             .route("/ws/client", web::get().to(ws_client))

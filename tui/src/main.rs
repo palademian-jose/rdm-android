@@ -1,6 +1,5 @@
 use anyhow::Result;
 use crossterm::{
-    event::{Event, KeyCode},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
@@ -53,7 +52,7 @@ async fn main() -> Result<()> {
     api_client.set_token(&token);
 
     // Set up WebSocket channel before spawning the connection task
-    let (ws_tx, mut ws_rx) = unbounded_channel::<WsMessage>();
+    let (ws_tx, ws_rx) = unbounded_channel::<WsMessage>();
     let ws_sender = Arc::new(Mutex::new(ws_tx));
     api_client.set_ws_sender(ws_sender.clone());
 

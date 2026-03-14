@@ -1,10 +1,10 @@
 use anyhow::Result;
 use ratatui::{
     backend::{Backend, CrosstermBackend},
-    layout::{Alignment, Constraint, Direction, Layout, Margin},
+    layout::{Alignment, Constraint, Direction, Layout},
     style::{Color, Modifier, Style},
-    text::{Line, Span, Text},
-    widgets::{Block, Borders, List, ListItem, Paragraph, Wrap, Table, Row, Cell},
+    text::{Line, Span},
+    widgets::{Block, Borders, List, ListItem, Paragraph, Wrap, Table, Row},
     Frame, Terminal,
 };
 use crossterm::event::{KeyCode, KeyEvent, Event};
@@ -925,7 +925,7 @@ impl App {
 
         // Calculate visible area for scrolling
         let output_area = chunks[1];
-        let output_height = output_area.height.saturating_sub(2) as usize; // Subtract border
+        let _output_height = output_area.height.saturating_sub(2) as usize; // Subtract border
 
         let output_paragraph = Paragraph::new(output)
             .block(

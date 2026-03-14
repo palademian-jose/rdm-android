@@ -1,0 +1,226 @@
+warning: unused variable: `app_state`
+  --> src/screenshots.rs:29:5
+   |
+29 |     app_state: web::Data<crate::AppState>,
+   |     ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_app_state`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `app_state`
+   --> src/screenshots.rs:170:5
+    |
+170 |     app_state: web::Data<crate::AppState>,
+    |     ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_app_state`
+
+warning: unused variable: `source_name`
+   --> src/unified_events.rs:310:21
+    |
+310 |                 let source_name = entry.file_name().to_string_lossy().to_string();
+    |                     ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_source_name`
+
+warning: variable `authenticated` is assigned to, but never used
+   --> src/main.rs:117:13
+    |
+117 |         let mut authenticated = false;
+    |             ^^^^^^^^^^^^^^^^^
+    |
+    = note: consider using `_authenticated` instead
+
+warning: value assigned to `authenticated` is never read
+   --> src/main.rs:132:49
+    |
+132 | ...                   authenticated = true;
+    |                       ^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_token` is never used
+  --> src/auth.rs:94:8
+   |
+94 | pub fn verify_token(token: &str) -> Result<Claims> {
+   |        ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `hash_password` is never used
+   --> src/auth.rs:104:8
+    |
+104 | pub fn hash_password(password: &str) -> Result<String> {
+    |        ^^^^^^^^^^^^^
+
+warning: function `verify_password` is never used
+   --> src/auth.rs:109:8
+    |
+109 | pub fn verify_password(password: &str, hash: &str) -> Result<bool> {
+    |        ^^^^^^^^^^^^^^^
+
+warning: method `get_device` is never used
+   --> src/database.rs:156:18
+    |
+ 48 | impl Database {
+    | ------------- method in this implementation
+...
+156 |     pub async fn get_device(&self, device_id: &str) -> Result<Option<Device>> {
+    |                  ^^^^^^^^^^
+
+warning: struct `UnifiedEventsBatch` is never constructed
+  --> src/unified_events.rs:29:12
+   |
+29 | pub struct UnifiedEventsBatch {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: `rdm-server` (bin "rdm-server") generated 10 warnings (run `cargo fix --bin "rdm-server" -p rdm-server` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.13s
+     Running `target/release/rdm-server`
+[2m2026-03-11T05:18:39.059696Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m 🚀 RDM Server starting on 0.0.0.0:8443
+Database URL: sqlite:database/rdm.db
+[2m2026-03-11T05:18:39.060023Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Running database migrations...
+[2m2026-03-11T05:18:39.060594Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Database migrations completed successfully
+[2m2026-03-11T05:18:39.060746Z[0m [32m INFO[0m [2mactix_server::builder[0m[2m:[0m starting 12 workers
+[2m2026-03-11T05:18:39.060756Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m Actix runtime found; starting in Actix runtime
+[2m2026-03-11T05:18:39.060760Z[0m [32m INFO[0m [2mactix_server::server[0m[2m:[0m starting service: "actix-web-service-0.0.0.0:8443", workers: 12, listening on: 0.0.0.0:8443
+[2m2026-03-11T05:18:41.105269Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket connection request for device: fdad1a18dee8b293
+[2m2026-03-11T05:18:42.084159Z[0m [33m WARN[0m [2mrdm_server[0m[2m:[0m WebSocket buffer overflow for device fdad1a18dee8b293 - rate limiting detected
+[2m2026-03-11T05:18:53.157166Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:19:32.581554Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:19:38.556141Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket stream ended for device: fdad1a18dee8b293
+[2m2026-03-11T05:21:56.830346Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket connection request for device: fdad1a18dee8b293
+[2m2026-03-11T05:21:58.409729Z[0m [33m WARN[0m [2mrdm_server[0m[2m:[0m WebSocket buffer overflow for device fdad1a18dee8b293 - rate limiting detected
+[2m2026-03-11T05:22:06.535140Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206524985)}
+[2m2026-03-11T05:22:06.535202Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:22:06.535207Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:22:06.565852Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206525001)}
+[2m2026-03-11T05:22:06.565903Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:22:06.565908Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:22:08.149329Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206526627)}
+[2m2026-03-11T05:22:08.149400Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:22:08.149408Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:22:08.180748Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206526629)}
+[2m2026-03-11T05:22:08.180814Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:22:08.180820Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:22:29.464497Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket stream ended for device: fdad1a18dee8b293
+[2m2026-03-11T05:22:36.011864Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket connection request for device: fdad1a18dee8b293
+[2m2026-03-11T05:22:39.140303Z[0m [33m WARN[0m [2mrdm_server[0m[2m:[0m WebSocket buffer overflow for device fdad1a18dee8b293 - rate limiting detected
+[2m2026-03-11T05:22:45.762363Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206564189)}
+[2m2026-03-11T05:22:45.762417Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:22:45.762435Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:22:45.806269Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206564193)}
+[2m2026-03-11T05:22:45.806324Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:22:45.806329Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:22:47.195739Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206565621)}
+[2m2026-03-11T05:22:47.195787Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:22:47.195792Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:22:47.232567Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206565623)}
+[2m2026-03-11T05:22:47.232620Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:22:47.232625Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:23:10.098069Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket stream ended for device: fdad1a18dee8b293
+[2m2026-03-11T05:23:17.581148Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket connection request for device: fdad1a18dee8b293
+[2m2026-03-11T05:23:20.685725Z[0m [33m WARN[0m [2mrdm_server[0m[2m:[0m WebSocket buffer overflow for device fdad1a18dee8b293 - rate limiting detected
+[2m2026-03-11T05:23:27.253562Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206605671)}
+[2m2026-03-11T05:23:27.253616Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:23:27.253620Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:23:27.407450Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206605674)}
+[2m2026-03-11T05:23:27.407503Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:23:27.407507Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:23:28.835221Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206607263)}
+[2m2026-03-11T05:23:28.835279Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:23:28.835283Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:23:28.870839Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206607265)}
+[2m2026-03-11T05:23:28.870912Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:23:28.870916Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:24:20.551963Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:25:20.560399Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:26:20.567773Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:27:20.573447Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:28:20.580036Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:28:28.204955Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206906633)}
+[2m2026-03-11T05:28:28.205009Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:28:28.205013Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:28:28.243935Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206906636)}
+[2m2026-03-11T05:28:28.243964Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:28:28.243968Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:28:29.896140Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773206908313)}
+[2m2026-03-11T05:28:29.896191Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:28:29.896195Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:28:29.926349Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773206908315)}
+[2m2026-03-11T05:28:29.926406Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:28:29.926411Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:29:20.592275Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:30:20.593600Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:31:20.601355Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:32:20.605813Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:33:20.614255Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:33:29.260524Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773207207680)}
+[2m2026-03-11T05:33:29.260571Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:33:29.260575Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:33:29.303466Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773207207682)}
+[2m2026-03-11T05:33:29.303494Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:33:29.303498Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:33:30.982328Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773207209411)}
+[2m2026-03-11T05:33:30.982365Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:33:30.982369Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:33:31.020531Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773207209408)}
+[2m2026-03-11T05:33:31.020561Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:33:31.020565Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:34:20.621122Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:35:20.624488Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:36:20.626064Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:37:20.639733Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:38:20.651117Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:38:30.372237Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773207508788)}
+[2m2026-03-11T05:38:30.372285Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:38:30.372289Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:38:30.410191Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773207508790)}
+[2m2026-03-11T05:38:30.410218Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:38:30.410222Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:38:32.107284Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773207510533)}
+[2m2026-03-11T05:38:32.107337Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T05:38:32.107341Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:38:32.146052Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773207510534)}
+[2m2026-03-11T05:38:32.146103Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T05:38:32.146108Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T05:39:20.658524Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:40:20.664082Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T05:41:20.649627Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:03:22.104148Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket stream ended for device: fdad1a18dee8b293
+[2m2026-03-11T11:03:41.363843Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket connection request for device: fdad1a18dee8b293
+[2m2026-03-11T11:04:12.012432Z[0m [33m WARN[0m [2mrdm_server[0m[2m:[0m WebSocket buffer overflow for device fdad1a18dee8b293 - rate limiting detected
+[2m2026-03-11T11:08:39.024840Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:11:43.493304Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773227486676)}
+[2m2026-03-11T11:11:43.493391Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T11:11:43.493398Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:11:43.541345Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773227486677)}
+[2m2026-03-11T11:11:43.541423Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T11:11:43.541429Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:12:00.257729Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773227518178)}
+[2m2026-03-11T11:12:00.257795Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T11:12:00.257800Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:12:00.300707Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773227518180)}
+[2m2026-03-11T11:12:00.300738Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T11:12:00.300742Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:15:27.801104Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:22:45.214410Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:28:24.301800Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:31:51.700640Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:37:43.471684Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket stream ended for device: fdad1a18dee8b293
+[2m2026-03-11T11:38:49.481211Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket connection request for device: fdad1a18dee8b293
+[2m2026-03-11T11:39:46.881173Z[0m [33m WARN[0m [2mrdm_server[0m[2m:[0m WebSocket buffer overflow for device fdad1a18dee8b293 - rate limiting detected
+[2m2026-03-11T11:42:29.566859Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:47:21.526615Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773229639891)}
+[2m2026-03-11T11:47:21.526670Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T11:47:21.526674Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:47:21.837606Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773229639892)}
+[2m2026-03-11T11:47:21.837659Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T11:47:21.837664Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:47:24.884650Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Root hiding app detected: com.topjohnwu.magisk"), "severity": String("HIGH"), "source": String("com.topjohnwu.magisk"), "timestamp": Number(1773229642825)}
+[2m2026-03-11T11:47:24.884703Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Root hiding app detected: com.topjohnwu.magisk
+[2m2026-03-11T11:47:24.884707Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:47:24.934095Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly received from fdad1a18dee8b293: Object {"anomaly_type": String("ROOT_EVASION"), "message": String("Xposed framework detected - possible root evasion"), "severity": String("HIGH"), "source": String("system"), "timestamp": Number(1773229642826)}
+[2m2026-03-11T11:47:24.934147Z[0m [32m INFO[0m [2mrdm_server::anomalies[0m[2m:[0m Saved anomaly log for device fdad1a18dee8b293: ROOT_EVASION - Xposed framework detected - possible root evasion
+[2m2026-03-11T11:47:24.934151Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Anomaly log saved to: recordings/fdad1a18dee8b293/anomalies/anomalies_2026-03-11.jsonl
+[2m2026-03-11T11:48:31.589438Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:48:31.628051Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:51:49.808065Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T11:51:50.133478Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m Heartbeat received from: fdad1a18dee8b293
+[2m2026-03-11T12:55:22.307687Z[0m [32m INFO[0m [2mrdm_server[0m[2m:[0m WebSocket stream ended for device: fdad1a18dee8b293

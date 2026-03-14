@@ -1,12 +1,10 @@
-use anyhow::{anyhow, Result};
-use chrono::{DateTime, Utc};
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
 use tokio::sync::RwLock;
-use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
-use tracing::{info, error, warn, debug};
+use tracing::{info, error, debug};
 
-use crate::client::{ApiClient, Device};
+use crate::client::ApiClient;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
